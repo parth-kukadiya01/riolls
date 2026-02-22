@@ -1,0 +1,243 @@
+.page {
+    background: var(--cream);
+    min-height: 100vh;
+    color: var(--charcoal);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo {
+    font-family: var(--font-sc);
+    font-size: 20px;
+    letter-spacing: 0.35em;
+    color: var(--charcoal);
+    padding-top: 40px;
+    animation: fadeUp 0.6s ease both;
+}
+
+.main {
+    max-width: 680px;
+    width: 100%;
+    padding: 60px 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.diamond {
+    margin-bottom: 40px;
+    animation: float 4s ease-in-out infinite;
+    filter: drop-shadow(0 8px 24px rgba(139, 92, 82, 0.2));
+}
+
+.eyebrow {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--rose);
+    display: block;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s 0.3s ease both;
+    opacity: 0;
+}
+
+.headline {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(36px, 5vw, 64px);
+    color: var(--charcoal);
+    animation: fadeUp 0.6s 0.4s ease both;
+    opacity: 0;
+}
+
+.headline em {
+    font-style: italic;
+    color: var(--rose);
+}
+
+.editorial {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 22px;
+    color: var(--stone);
+    margin: 12px 0 24px;
+    animation: fadeUp 0.6s 0.5s ease both;
+    opacity: 0;
+}
+
+.body {
+    font-family: var(--font-body);
+    font-size: 17px;
+    color: var(--stone);
+    line-height: 1.8;
+    max-width: 480px;
+    margin-bottom: 48px;
+    animation: fadeUp 0.6s 0.6s ease both;
+    opacity: 0;
+}
+
+.orderCard {
+    width: 100%;
+    max-width: 520px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    padding: 36px;
+    margin-bottom: 60px;
+    box-shadow: var(--shadow-sm);
+    animation: fadeUp 0.6s 0.7s ease both;
+    opacity: 0;
+}
+
+.refLabel {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--rose);
+    display: block;
+    margin-bottom: 6px;
+}
+
+.refNum {
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: var(--charcoal);
+    display: block;
+    margin-bottom: 20px;
+}
+
+.specRow {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.specKey {
+    font-family: var(--font-sc);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--stone);
+}
+
+.specVal {
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--charcoal);
+}
+
+.orderTotal {
+    text-align: right;
+    margin-top: 20px;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 26px;
+    color: var(--rose);
+}
+
+.nextTitle {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--rose);
+    margin-bottom: 28px;
+    display: block;
+    animation: fadeUp 0.6s 0.8s ease both;
+    opacity: 0;
+}
+
+.nextGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    width: 100%;
+    margin-bottom: 60px;
+    animation: fadeUp 0.6s 0.9s ease both;
+    opacity: 0;
+}
+
+.nextCard {
+    background: var(--white);
+    border: 1px solid var(--border);
+    padding: 24px 20px;
+    text-align: center;
+}
+
+.nextIcon {
+    font-size: 20px;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.nextCardTitle {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--rose);
+    display: block;
+    margin-bottom: 8px;
+}
+
+.nextCardBody {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--stone);
+    line-height: 1.6;
+}
+
+.ctas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    animation: fadeUp 0.6s 1.0s ease both;
+    opacity: 0;
+}
+
+.ctaBtn {
+    display: inline-block;
+    padding: 14px 36px;
+    background: var(--charcoal);
+    color: var(--white);
+    font-family: var(--font-sc);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    transition: background 0.2s;
+}
+
+.ctaBtn:hover {
+    background: var(--rose);
+}
+
+.ctaLink {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    color: var(--rose);
+}
+
+.ctaLink:hover {
+    text-decoration: underline;
+}
+
+.quote {
+    margin-top: 60px;
+    border-top: 1px solid var(--border);
+    padding-top: 32px;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--muted);
+    animation: fadeUp 0.6s 1.1s ease both;
+    opacity: 0;
+}
+
+@media (max-width: 768px) {
+    .main {
+        padding: 40px 20px;
+    }
+
+    .nextGrid {
+        grid-template-columns: 1fr;
+    }
+}

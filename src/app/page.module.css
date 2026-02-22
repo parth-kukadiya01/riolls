@@ -1,0 +1,438 @@
+/* ── Homepage — Light Professional Theme ── */
+
+/* Hero */
+.hero {
+    min-height: 100vh;
+    background: linear-gradient(150deg, #FFFFFF 0%, #F8F5F2 45%, #F2EBE5 100%);
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding-top: var(--nav-height);
+    border-bottom: 1px solid var(--border);
+}
+
+.heroGlow {
+    position: absolute;
+    top: 10%;
+    right: 20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(ellipse, rgba(139, 92, 82, 0.07) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.heroContent {
+    position: relative;
+    z-index: 1;
+    padding: 80px var(--gutter);
+    max-width: 680px;
+}
+
+.heroEyebrow {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 32px;
+}
+
+.heroLine {
+    width: 40px;
+    height: 1px;
+    background: var(--rose);
+    flex-shrink: 0;
+}
+
+.heroEyebrowText {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--rose);
+    white-space: nowrap;
+}
+
+.heroH1 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: var(--text-hero);
+    color: var(--charcoal);
+    line-height: 0.95;
+}
+
+.heroH1 em {
+    font-style: italic;
+    color: var(--rose);
+}
+
+.heroSub {
+    font-family: var(--font-body);
+    font-size: 18px;
+    color: var(--stone);
+    line-height: 1.8;
+    margin: 28px 0 44px;
+    max-width: 480px;
+}
+
+.heroCtas {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.ctaDark {
+    padding: 16px 40px;
+    background: var(--charcoal);
+    color: var(--white);
+    font-family: var(--font-sc);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    transition: background 0.25s;
+    display: inline-block;
+}
+
+.ctaDark:hover {
+    background: var(--rose);
+}
+
+.ctaGhost {
+    padding: 16px 40px;
+    border: 1px solid rgba(26, 26, 26, 0.25);
+    color: var(--charcoal);
+    font-family: var(--font-sc);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    transition: all 0.25s;
+    display: inline-block;
+}
+
+.ctaGhost:hover {
+    border-color: var(--rose);
+    color: var(--rose);
+}
+
+.heroDiamond {
+    position: absolute;
+    right: 12%;
+    top: 50%;
+    transform: translateY(-50%);
+    animation: float 6s ease-in-out infinite;
+    filter: drop-shadow(0 12px 32px rgba(139, 92, 82, 0.15));
+}
+
+.heroScroll {
+    position: absolute;
+    bottom: 40px;
+    left: var(--gutter);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.heroScrollLine {
+    width: 1px;
+    height: 50px;
+    background: var(--rose);
+    animation: scrollLine 2s ease-in-out infinite;
+}
+
+.heroScrollText {
+    font-family: var(--font-sc);
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--stone);
+}
+
+/* Collections */
+.collections {
+    padding: var(--space-xl) var(--gutter);
+    background: var(--white);
+}
+
+.sectionHeader {
+    text-align: center;
+    margin-bottom: 56px;
+}
+
+.eyebrow {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: var(--rose);
+    display: block;
+    margin-bottom: 16px;
+}
+
+.sectionH2 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: var(--text-h2);
+    color: var(--charcoal);
+}
+
+.collectionsGrid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+
+.collectionCard {
+    aspect-ratio: 3/4;
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid var(--border);
+}
+
+.collectionCard:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.collectionCard::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(26, 26, 26, 0.55) 0%, transparent 55%);
+}
+
+.collectionLabel {
+    position: relative;
+    z-index: 1;
+}
+
+.collectionName {
+    font-family: var(--font-sc);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: #F8F6F4;
+    display: block;
+}
+
+.collectionCount {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 14px;
+    color: rgba(248, 246, 244, 0.7);
+    display: block;
+    margin-top: 4px;
+}
+
+/* Featured */
+.featured {
+    padding: var(--space-xl) var(--gutter);
+    background: var(--cream);
+}
+
+.productsGrid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+}
+
+.viewAllWrap {
+    text-align: center;
+    margin-top: 48px;
+}
+
+.viewAll {
+    font-family: var(--font-sc);
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--charcoal);
+    border-bottom: 1px solid rgba(26, 26, 26, 0.3);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.viewAll:hover {
+    color: var(--rose);
+    border-color: var(--rose);
+}
+
+/* AI Banner */
+.aiBanner {
+    background: var(--light);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 520px;
+}
+
+.aiBannerLeft {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--space-xl) var(--gutter);
+}
+
+.aiH2 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: var(--text-h1);
+    color: var(--charcoal);
+    margin: 20px 0 24px;
+    line-height: 1.05;
+}
+
+.aiBannerBody {
+    font-family: var(--font-body);
+    font-size: 18px;
+    color: var(--stone);
+    line-height: 1.8;
+    max-width: 440px;
+    margin-bottom: 40px;
+}
+
+.aiCta {
+    display: inline-block;
+    padding: 16px 40px;
+    background: var(--charcoal);
+    color: var(--white);
+    font-family: var(--font-sc);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    transition: background 0.25s;
+}
+
+.aiCta:hover {
+    background: var(--rose);
+}
+
+.aiBannerRight {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.aiRings {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.aiRing1,
+.aiRing2,
+.aiRing3 {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(139, 92, 82, 0.2);
+    animation: breathe 4s ease-in-out infinite;
+}
+
+.aiRing1 {
+    width: 100%;
+    height: 100%;
+}
+
+.aiRing2 {
+    width: 72%;
+    height: 72%;
+    animation-delay: 0.5s;
+}
+
+.aiRing3 {
+    width: 44%;
+    height: 44%;
+    animation-delay: 1s;
+}
+
+.aiDiamond {
+    animation: float 5s ease-in-out infinite;
+    filter: drop-shadow(0 8px 20px rgba(139, 92, 82, 0.2));
+}
+
+/* Bespoke CTA */
+.bespokeCta {
+    padding: var(--space-xl) var(--gutter);
+    background: var(--white);
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.bespokeBody {
+    font-family: var(--font-body);
+    font-size: 19px;
+    color: var(--stone);
+    max-width: 520px;
+    margin: 20px auto 40px;
+    line-height: 1.75;
+}
+
+.bespokeBtn {
+    display: inline-block;
+    padding: 16px 48px;
+    background: var(--charcoal);
+    color: var(--white);
+    font-family: var(--font-sc);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    transition: background 0.25s;
+}
+
+.bespokeBtn:hover {
+    background: var(--rose);
+}
+
+@media (max-width: 1200px) {
+    .collectionsGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .productsGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .aiBanner {
+        grid-template-columns: 1fr;
+    }
+
+    .aiBannerRight {
+        padding: 60px;
+    }
+}
+
+@media (max-width: 768px) {
+    .heroContent {
+        padding: 60px 20px;
+    }
+
+    .heroDiamond {
+        display: none;
+    }
+
+    .heroScroll {
+        display: none;
+    }
+
+    .collections,
+    .featured,
+    .bespokeCta {
+        padding: 60px 20px;
+    }
+
+    .collectionsGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .productsGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .aiBannerLeft {
+        padding: 60px 20px;
+    }
+}

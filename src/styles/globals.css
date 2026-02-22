@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css2?family=Bellefair&family=Roboto+Mono:wght@300;400;500&display=swap');
+
+/* ── Design Tokens ─────────────────────────────── */
+:root {
+    /* Backgrounds */
+    --white: #FFFFFF;
+    --cream: #F7F7F7;
+    /* Main page background — off-white matte */
+    --light: #EFEFEF;
+    /* Alternate section background */
+    --blush: #E6E6E6;
+    /* Subtle element / input background */
+    --border: #D4D4D4;
+    /* All borders and dividers */
+
+    /* Text hierarchy */
+    --charcoal: #111111;
+    /* Primary headings */
+    --body-color: #3D3D3D;
+    /* Body copy */
+    --stone: #6B6B6B;
+    /* Secondary / muted labels */
+    --muted: #A0A0A0;
+    /* Placeholders, very muted */
+
+    /* Accent — dark charcoal / slate (replaces rose) */
+    --rose: #333333;
+    /* Primary accent — dark matte grey */
+    --rose-light: #555555;
+    /* Lighter accent */
+    --rose-pale: #EBEBEB;
+    /* Very pale accent background */
+
+    /* Legacy mappings */
+    --gold: #333333;
+    --gold-light: #555555;
+    --deep: #1A1A1A;
+    /* Footer / deep elements — near black */
+
+    /* Typography */
+    --font-display: 'Bellefair', Georgia, serif;
+    /* --font-sc: 'Roboto Mono', monospace; */
+    --font-sc: 'Cormorant SC', Georgia, serif;
+    /* --font-body: 'Roboto Mono', monospace; */
+    --font-body: 'EB Garamond', Georgia, serif;
+
+    /* Type scale */
+    --text-hero: clamp(52px, 7.5vw, 100px);
+    --text-h1: clamp(38px, 5vw, 68px);
+    --text-h2: clamp(26px, 3.5vw, 48px);
+
+    /* Layout */
+    --max-width: 1440px;
+    --gutter: 80px;
+    --nav-height: 72px;
+    --space-xl: 112px;
+    --space-lg: 72px;
+    --space-md: 48px;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 4px rgba(26, 26, 26, 0.06);
+    --shadow-md: 0 4px 20px rgba(26, 26, 26, 0.08);
+    --shadow-lg: 0 12px 48px rgba(26, 26, 26, 0.12);
+
+    /* Motion */
+    --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ── Reset ─────────────────────────────────────── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background: var(--cream);
+    color: var(--charcoal);
+    font-family: var(--font-body);
+    line-height: 1.65;
+    min-height: 100vh;
+}
+
+button {
+    background: none;
+    border: none;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img,
+video {
+    display: block;
+    max-width: 100%;
+}
+
+/* ── Keyframes ──────────────────────────────────── */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-12px);
+    }
+}
+
+@keyframes breathe {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.45;
+    }
+
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.75);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes dotPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.35;
+    }
+
+    50% {
+        transform: scale(1.5);
+        opacity: 1;
+    }
+}
+
+@keyframes scrollLine {
+    0% {
+        height: 0;
+        opacity: 0;
+    }
+
+    40% {
+        height: 50px;
+        opacity: 1;
+    }
+
+    100% {
+        height: 50px;
+        opacity: 0;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Utility ─────────────────────────────────────  */
+.container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+}
+
+@media (max-width: 1024px) {
+    :root {
+        --gutter: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --gutter: 20px;
+        --space-xl: 60px;
+        --space-lg: 40px;
+        --space-md: 24px;
+
+        /* Tighter mobile text scale to prevent overflow */
+        --text-hero: clamp(40px, 10vw, 52px);
+        --text-h1: clamp(32px, 8vw, 38px);
+        --text-h2: clamp(24px, 6vw, 28px);
+    }
+}

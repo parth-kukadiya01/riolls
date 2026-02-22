@@ -1,0 +1,348 @@
+.page {
+    min-height: 100vh;
+    background: var(--white);
+}
+
+/* ── Hero ── */
+.hero {
+    background: var(--white);
+    padding: 80px 60px 40px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.heroInner {
+    max-width: 720px;
+}
+
+.eyebrow {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    color: var(--stone);
+    display: block;
+    margin-bottom: 24px;
+}
+
+.heroH1 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(40px, 6vw, 64px);
+    color: var(--charcoal);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 24px;
+}
+
+.heroSub {
+    font-family: var(--font-body);
+    font-size: 18px;
+    color: var(--stone);
+    line-height: 1.8;
+}
+
+/* Image */
+.imageSection {
+    padding: 0 60px;
+    max-width: 1400px;
+    margin: 0 auto 40px;
+}
+
+.fullImageWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 21 / 9;
+    background: var(--light);
+}
+
+.fullImage {
+    object-fit: cover;
+}
+
+/* Tabs Menu */
+.tabsMenu {
+    border-bottom: 1px solid var(--border);
+    padding: 0 60px;
+    display: flex;
+    justify-content: center;
+    background: var(--white);
+    position: sticky;
+    top: var(--nav-height);
+    z-index: 10;
+}
+
+.tabsInner {
+    display: flex;
+    gap: 40px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.tabsInner::-webkit-scrollbar {
+    display: none;
+}
+
+.tabLink,
+.tabActive {
+    font-family: var(--font-sc);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    padding: 20px 0;
+    white-space: nowrap;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.tabLink {
+    color: var(--stone);
+}
+
+.tabLink:hover {
+    color: var(--charcoal);
+}
+
+.tabActive {
+    color: var(--charcoal);
+    border-bottom-color: var(--charcoal);
+}
+
+/* ── Content ── */
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--white);
+}
+
+.article {
+    padding: 80px 60px;
+    max-width: 1400px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+.grayBlock {
+    background: var(--cream);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.sectionHeader {
+    max-width: 600px;
+}
+
+.sectionHeaderCenter {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.sectionTitle {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 36px;
+    color: var(--charcoal);
+    margin-bottom: 16px;
+}
+
+.sectionIntro {
+    font-family: var(--font-display);
+    font-size: 20px;
+    color: var(--stone);
+    line-height: 1.6;
+}
+
+.text {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--body-color);
+    line-height: 1.8;
+}
+
+.textCenter {
+    font-family: var(--font-body);
+    font-size: 18px;
+    color: var(--body-color);
+    line-height: 1.8;
+    text-align: center;
+}
+
+/* 4Cs Grid */
+.grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+}
+
+.csCard {
+    padding: 40px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    display: flex;
+    flex-direction: column;
+}
+
+.csIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid var(--charcoal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-sc);
+    font-size: 14px;
+    color: var(--charcoal);
+    margin-bottom: 24px;
+}
+
+.csTitle {
+    font-family: var(--font-display);
+    font-size: 24px;
+    color: var(--charcoal);
+    margin-bottom: 16px;
+}
+
+.proTip {
+    margin-top: auto;
+    padding-top: 24px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--stone);
+    line-height: 1.6;
+    border-top: 1px solid var(--border);
+}
+
+.proTip strong {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--charcoal);
+    display: block;
+    margin-bottom: 4px;
+}
+
+/* Shapes Grid */
+.shapesGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.shapeCard {
+    background: var(--white);
+    border: 1px solid var(--border);
+    padding: 32px 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.shapeIconMock {
+    color: var(--stone);
+    margin-bottom: 16px;
+}
+
+.shapeName {
+    font-family: var(--font-sc);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    color: var(--charcoal);
+    margin-bottom: 8px;
+}
+
+.shapeDesc {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--stone);
+    line-height: 1.6;
+}
+
+/* Cert Grid */
+.certGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    margin-top: 24px;
+}
+
+.certCard {
+    text-align: center;
+}
+
+.certImageWrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    background: var(--white);
+    margin-bottom: 20px;
+}
+
+.certImage {
+    object-fit: contain;
+}
+
+.certName {
+    font-family: var(--font-sc);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--charcoal);
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.certDesc {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--stone);
+    line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .shapesGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .certGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        padding: 60px 24px 32px;
+    }
+
+    .imageSection,
+    .tabsMenu {
+        padding: 0 24px;
+    }
+
+    .fullImageWrapper {
+        aspect-ratio: 16 / 9;
+    }
+
+    .article {
+        padding: 60px 24px;
+    }
+
+    .grid2 {
+        grid-template-columns: 1fr;
+    }
+
+    .shapesGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .certGrid {
+        grid-template-columns: 1fr;
+        gap: 48px;
+    }
+}

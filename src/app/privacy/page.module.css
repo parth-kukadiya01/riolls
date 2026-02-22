@@ -1,0 +1,151 @@
+.page {
+    min-height: 100vh;
+    background: var(--white);
+}
+
+/* ── Hero ── */
+.hero {
+    background: var(--cream);
+    padding: 100px 60px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.heroInner {
+    max-width: 640px;
+}
+
+.eyebrow {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: var(--rose);
+    display: block;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+}
+
+.heroH1 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(48px, 6vw, 64px);
+    color: var(--charcoal);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 24px;
+}
+
+.heroSub {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--stone);
+}
+
+/* ── Content ── */
+.content {
+    padding: 100px 60px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.textBlock {
+    font-family: var(--font-body);
+    color: var(--stone);
+    line-height: 1.8;
+    font-size: 17px;
+}
+
+.intro {
+    font-size: 19px;
+    margin-bottom: 24px;
+    color: var(--charcoal);
+}
+
+/* Headings */
+.heading {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 32px;
+    color: var(--charcoal);
+    margin: 64px 0 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.subheading {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 24px;
+    color: var(--charcoal);
+    margin: 32px 0 16px;
+}
+
+/* Paragraphs & Lists */
+.textBlock p {
+    margin-bottom: 24px;
+}
+
+.list {
+    list-style-type: disc;
+    padding-left: 24px;
+    margin-bottom: 32px;
+}
+
+.list li {
+    margin-bottom: 12px;
+    padding-left: 8px;
+}
+
+.list li::marker {
+    color: var(--muted);
+}
+
+/* Links */
+.link {
+    color: var(--charcoal);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition: color 0.2s;
+}
+
+.link:hover {
+    color: var(--rose);
+}
+
+/* Contact Block */
+.contactBlock {
+    background: var(--cream);
+    padding: 32px;
+    border: 1px solid var(--border);
+    margin-top: 24px;
+}
+
+.contactBlock p {
+    margin-bottom: 8px;
+    color: var(--charcoal);
+}
+
+.contactBlock p:last-child {
+    margin-bottom: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero {
+        padding: 60px 24px 32px;
+    }
+
+    .content {
+        padding: 60px 24px;
+    }
+
+    .heading {
+        font-size: 28px;
+        margin-top: 48px;
+    }
+}

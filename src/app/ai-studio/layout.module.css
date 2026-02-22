@@ -1,0 +1,103 @@
+.shell {
+    min-height: 100vh;
+    background: var(--deep);
+}
+
+.topBar {
+    height: 56px;
+    background: rgba(13, 11, 9, 0.97);
+    border-bottom: 1px solid rgba(201, 169, 110, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 60px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    gap: 20px;
+}
+
+.back {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    color: var(--stone);
+    text-decoration: none;
+    transition: color 0.2s;
+    white-space: nowrap;
+}
+
+.back:hover {
+    color: var(--gold);
+}
+
+.stepList {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.stepItem {
+    display: flex;
+    align-items: center;
+}
+
+.stepLink {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    padding: 4px 8px;
+    transition: opacity 0.2s;
+}
+
+.stepLink:hover .stepNum {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.stepNum {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid rgba(201, 169, 110, 0.35);
+    font-family: var(--font-sc);
+    font-size: 9px;
+    color: var(--stone);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.stepLabel {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    color: var(--stone);
+    letter-spacing: 0.15em;
+    transition: color 0.2s;
+}
+
+.stepConnector {
+    width: 28px;
+    height: 1px;
+    background: rgba(201, 169, 110, 0.2);
+    margin: 0 2px;
+}
+
+.brand {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .topBar {
+        padding: 0 20px;
+    }
+
+    .stepLabel {
+        display: none;
+    }
+}

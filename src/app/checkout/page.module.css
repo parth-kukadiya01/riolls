@@ -1,0 +1,410 @@
+.page {
+    background: var(--cream);
+    min-height: 100vh;
+    color: var(--charcoal);
+}
+
+/* Header */
+.header {
+    height: 64px;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 60px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    font-family: var(--font-sc);
+    font-size: 18px;
+    letter-spacing: 0.35em;
+    color: var(--charcoal);
+}
+
+.secure {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    color: var(--stone);
+    letter-spacing: 0.15em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Step bar */
+.stepBar {
+    padding: 16px 60px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    background: var(--white);
+}
+
+.stepBarItem {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.stepBarBtn {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--stone);
+    padding: 4px 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.stepBarActive {
+    color: var(--charcoal) !important;
+    border-bottom: 2px solid var(--rose);
+}
+
+.stepBarDone {
+    color: var(--rose) !important;
+}
+
+.stepBarSep {
+    color: var(--border);
+    margin: 0 4px;
+    font-size: 14px;
+}
+
+/* Layout */
+.layout {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    min-height: calc(100vh - 130px);
+}
+
+.left {
+    padding: 60px 80px;
+    background: var(--white);
+}
+
+.right {
+    padding: 48px 40px;
+    background: var(--cream);
+    border-left: 1px solid var(--border);
+}
+
+/* Form */
+.stepH2 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 30px;
+    color: var(--charcoal);
+    margin-bottom: 32px;
+}
+
+.row {
+    display: flex;
+    gap: 16px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 18px;
+    flex: 1;
+}
+
+.field label {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--stone);
+}
+
+.field input,
+.field select {
+    width: 100%;
+    padding: 13px 16px;
+    border: 1px solid var(--border);
+    background: var(--cream);
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--charcoal);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.field input:focus,
+.field select:focus {
+    border-color: var(--rose);
+}
+
+.field input::placeholder {
+    color: var(--muted);
+}
+
+.deliveryOpt {
+    border: 1px solid var(--border);
+    padding: 14px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 8px;
+    transition: border-color 0.2s;
+    background: var(--cream);
+}
+
+.deliveryOpt:hover {
+    border-color: rgba(139, 92, 82, 0.4);
+}
+
+.deliveryActive {
+    border-color: var(--rose) !important;
+    background: var(--rose-pale) !important;
+}
+
+.deliveryName {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--charcoal);
+    display: block;
+}
+
+.deliveryDesc {
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--stone);
+}
+
+.deliveryPrice {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--charcoal);
+}
+
+.payTabs {
+    display: flex;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+}
+
+.payTab {
+    font-family: var(--font-sc);
+    font-size: 11px;
+    color: var(--stone);
+    padding: 0 0 10px;
+    margin-right: 24px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s;
+}
+
+.payTabActive {
+    color: var(--charcoal) !important;
+    border-bottom-color: var(--rose) !important;
+}
+
+.stripNote {
+    font-family: var(--font-sc);
+    font-size: 9px;
+    color: var(--stone);
+    margin-top: 16px;
+}
+
+.next {
+    width: 100%;
+    padding: 17px;
+    background: var(--charcoal);
+    color: var(--white);
+    font-family: var(--font-sc);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    border: none;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s;
+}
+
+.next:hover {
+    background: var(--rose);
+}
+
+/* Review step */
+.reviewGroup {
+    margin-bottom: 24px;
+}
+
+.reviewRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.reviewLabel {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--rose);
+}
+
+.reviewEdit {
+    font-family: var(--font-sc);
+    font-size: 9px;
+    color: var(--stone);
+    text-decoration: underline;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: color 0.2s;
+}
+
+.reviewEdit:hover {
+    color: var(--charcoal);
+}
+
+.reviewValue {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--charcoal);
+}
+
+.placeOrder {
+    display: block;
+    width: 100%;
+    padding: 20px;
+    background: var(--rose);
+    color: var(--white);
+    font-family: var(--font-sc);
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    text-align: center;
+    margin-top: 24px;
+    transition: background 0.2s;
+}
+
+.placeOrder:hover {
+    background: var(--rose-light);
+}
+
+/* Order summary */
+.summaryTitle {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--rose);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+    display: block;
+}
+
+.summaryItem {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.summaryImg {
+    width: 52px;
+    height: 69px;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+    background: var(--blush);
+}
+
+.summaryInfo {
+    flex: 1;
+}
+
+.summaryName {
+    font-family: var(--font-display);
+    font-size: 16px;
+    color: var(--charcoal);
+    display: block;
+}
+
+.summaryMeta {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--stone);
+}
+
+.summaryPrice {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--charcoal);
+}
+
+.summaryDivider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 20px 0;
+}
+
+.summaryRow {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.summaryRow span {
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--stone);
+}
+
+.summaryTotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+    margin-top: 8px;
+}
+
+.summaryTotal span {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 26px;
+    color: var(--charcoal);
+}
+
+.summaryTotal span:first-child {
+    font-family: var(--font-sc);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    font-style: normal;
+}
+
+@media (max-width: 900px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .left {
+        padding: 40px 20px;
+    }
+
+    .right {
+        border-left: none;
+        border-top: 1px solid var(--border);
+        padding: 32px 20px;
+    }
+
+    .header,
+    .stepBar {
+        padding: 0 20px;
+    }
+}

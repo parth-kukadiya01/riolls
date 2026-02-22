@@ -1,0 +1,283 @@
+.page {
+    min-height: 100vh;
+    background: var(--white);
+}
+
+/* ── Hero ── */
+.hero {
+    background: var(--white);
+    padding: 80px 60px 40px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.heroInner {
+    max-width: 720px;
+}
+
+.eyebrow {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    color: var(--stone);
+    display: block;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+}
+
+.heroH1 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(40px, 6vw, 64px);
+    color: var(--charcoal);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 24px;
+}
+
+.heroSub {
+    font-family: var(--font-body);
+    font-size: 18px;
+    color: var(--stone);
+    line-height: 1.8;
+}
+
+/* Hero Image */
+.imageSection {
+    padding: 0 60px;
+    max-width: 1400px;
+    margin: 0 auto 40px;
+}
+
+.fullImageWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 21 / 9;
+    background: var(--light);
+}
+
+.fullImage {
+    object-fit: cover;
+}
+
+/* ── Navigation Menu ── */
+.navMenu {
+    border-bottom: 1px solid var(--border);
+    padding: 0 60px;
+    display: flex;
+    justify-content: center;
+    background: var(--white);
+    position: sticky;
+    top: var(--nav-height);
+    z-index: 10;
+}
+
+.navInner {
+    display: flex;
+    gap: 40px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.navInner::-webkit-scrollbar {
+    display: none;
+}
+
+.navLink {
+    font-family: var(--font-sc);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    padding: 20px 0;
+    white-space: nowrap;
+    text-decoration: none;
+    color: var(--stone);
+    transition: all 0.2s;
+}
+
+.navLink:hover {
+    color: var(--charcoal);
+}
+
+/* ── Content Sections ── */
+.content {
+    display: flex;
+    flex-direction: column;
+}
+
+.section {
+    padding: 100px 60px;
+    border-bottom: 1px solid var(--border);
+}
+
+.bgCream {
+    background: var(--cream);
+}
+
+.splitLayout {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+}
+
+.splitReverse {
+    direction: rtl;
+}
+
+.splitReverse>* {
+    direction: ltr;
+    /* Reset direction for child contents */
+}
+
+/* Typography Details */
+.sectionTitle {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 32px;
+    color: var(--charcoal);
+    margin-bottom: 32px;
+}
+
+.tabsHeader {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+}
+
+.tabActive {
+    font-family: var(--font-sc);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--charcoal);
+}
+
+.tabMuted {
+    font-family: var(--font-sc);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--stone);
+}
+
+.measureInstructions {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--stone);
+    line-height: 1.8;
+    margin-bottom: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.textLink {
+    color: var(--charcoal);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+/* Data Tables */
+.tableWrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.sizeTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--charcoal);
+}
+
+.sizeTable th {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 16px 8px;
+    border-top: 1px solid var(--charcoal);
+    border-bottom: 1px solid var(--charcoal);
+    text-align: left;
+    font-weight: normal;
+    color: var(--charcoal);
+}
+
+.sizeTable td {
+    padding: 16px 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.alignRight {
+    text-align: right !important;
+}
+
+/* Images */
+.imageContent {
+    width: 100%;
+}
+
+.splitImageWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    background: var(--light);
+}
+
+.splitImage {
+    object-fit: cover;
+}
+
+/* Center Block (Necklaces) */
+.centerContainer {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.sectionTitleCenter {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 32px;
+    color: var(--charcoal);
+    margin-bottom: 24px;
+}
+
+.centerText {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--stone);
+    line-height: 1.8;
+    margin-bottom: 16px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .splitLayout {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        direction: ltr;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        padding: 60px 24px 32px;
+    }
+
+    .imageSection,
+    .navMenu {
+        padding: 0 24px;
+    }
+
+    .fullImageWrapper {
+        aspect-ratio: 16 / 9;
+    }
+
+    .section {
+        padding: 60px 24px;
+    }
+}

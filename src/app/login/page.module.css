@@ -1,0 +1,163 @@
+.page {
+    min-height: 100vh;
+    background: var(--light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 480px;
+}
+
+.authBox {
+    background: var(--white);
+    padding: 64px 48px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.eyebrow {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--rose);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 24px;
+}
+
+.title {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 40px;
+    color: var(--charcoal);
+    margin-bottom: 12px;
+}
+
+.subtitle {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--stone);
+    line-height: 1.6;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.label {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--charcoal);
+}
+
+.passwordHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.forgotLink {
+    font-family: var(--font-sc);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--stone);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s;
+}
+
+.forgotLink:hover {
+    color: var(--charcoal);
+}
+
+.input {
+    width: 100%;
+    padding: 16px;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--charcoal);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input::placeholder {
+    color: var(--muted);
+}
+
+.input:focus {
+    border-color: var(--charcoal);
+}
+
+.submitBtn {
+    margin-top: 16px;
+    width: 100%;
+    padding: 18px;
+    background: var(--charcoal);
+    color: var(--white);
+    font-family: var(--font-sc);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    border: none;
+    cursor: pointer;
+    transition: background 0.25s;
+}
+
+.submitBtn:hover {
+    background: var(--rose);
+}
+
+.footer {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footerText {
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--stone);
+}
+
+.footerLink {
+    font-family: var(--font-sc);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--charcoal);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition: color 0.2s;
+}
+
+.footerLink:hover {
+    color: var(--rose);
+}
+
+@media (max-width: 768px) {
+    .authBox {
+        padding: 48px 32px;
+    }
+}

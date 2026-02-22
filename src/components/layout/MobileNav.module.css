@@ -1,0 +1,183 @@
+.backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    background: rgba(13, 11, 9, 0.52);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.backdrop.open {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 200;
+    background: var(--cream);
+    transform: translateX(100%);
+    transition: transform 0.35s var(--ease-spring);
+    display: flex;
+    flex-direction: column;
+}
+
+.overlay.open {
+    transform: translateX(0);
+}
+
+.header {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    border-bottom: 1px solid rgba(201, 169, 110, 0.18);
+    flex-shrink: 0;
+}
+
+.closeBtn,
+.cartIcon {
+    color: var(--charcoal);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    transition: color 0.2s;
+}
+
+.closeBtn:hover,
+.cartIcon:hover {
+    color: var(--gold);
+}
+
+.cartIcon {
+    position: relative;
+}
+
+.badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 16px;
+    height: 16px;
+    background: var(--gold);
+    color: var(--deep);
+    border-radius: 50%;
+    font-family: var(--font-sc);
+    font-size: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.headerLogo {
+    font-family: var(--font-sc);
+    font-size: 18px;
+    letter-spacing: 0.35em;
+    color: var(--charcoal);
+}
+
+.items {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.item {
+    border-bottom: 1px solid rgba(201, 169, 110, 0.15);
+}
+
+.mainLink {
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    cursor: pointer;
+    font-family: var(--font-sc);
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    text-decoration: none;
+}
+
+.mainLink:hover {
+    color: var(--gold);
+}
+
+.mainLink.gold {
+    color: var(--gold);
+}
+
+.accIcon {
+    font-family: var(--font-sc);
+    font-size: 18px;
+    color: var(--gold);
+    transition: transform 0.2s;
+}
+
+.accIcon.open {
+    transform: rotate(45deg);
+}
+
+.subItems {
+    background: rgba(201, 169, 110, 0.05);
+}
+
+.subLink {
+    height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 0 36px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--stone);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.subLink:hover {
+    color: var(--charcoal);
+}
+
+.bottom {
+    border-top: 1px solid rgba(201, 169, 110, 0.15);
+    padding: 24px 20px;
+    flex-shrink: 0;
+}
+
+.utils {
+    display: flex;
+    gap: 28px;
+    margin-bottom: 16px;
+}
+
+.utilLink {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--stone);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.utilLink:hover {
+    color: var(--charcoal);
+}
+
+.social {
+    font-family: var(--font-sc);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--stone);
+}
