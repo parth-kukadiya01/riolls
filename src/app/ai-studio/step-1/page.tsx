@@ -13,7 +13,7 @@ const questions = [
     {
         id: 'metal',
         question: 'Your preferred metal?',
-        answers: ['18k Yellow Gold', '18k White Gold', '18k Rose Gold', 'Platinum'],
+        answers: ['18k Yellow Gold', '18k White Gold', '18k Rose Gold'],
     },
     {
         id: 'stone',

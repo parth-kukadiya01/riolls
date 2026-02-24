@@ -6,7 +6,7 @@
 /* ── Hero ── */
 .hero {
     background: var(--white);
-    padding: 80px 60px 40px;
+    padding: var(--space-xl) var(--gutter) var(--space-md);
     display: flex;
     justify-content: center;
     text-align: center;

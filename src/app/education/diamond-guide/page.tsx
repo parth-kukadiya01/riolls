@@ -43,8 +43,6 @@ export default function DiamondBuyingGuide() {
                 <div className={styles.tabsInner}>
                     <span className={styles.tabActive}>Diamond Guide</span>
                     <Link href="#" className={styles.tabLink}>Gem Guide</Link>
-                    <Link href="#" className={styles.tabLink}>Size Guide</Link>
-                    <Link href="#" className={styles.tabLink}>Care Tips</Link>
                 </div>
             </div>
 

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import '@/styles/globals.css';
 import { CartProvider } from '@/context/CartContext';
+import { AuthProvider } from '@/context/AuthContext';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import CartDrawer from '@/components/cart/CartDrawer';
@@ -14,13 +15,15 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>
-        <CartProvider>
-          <Navbar />
-          <main>{children}</main>
-          <CartDrawer />
-          <Footer />
-        </CartProvider>
+      <body className="page-wrapper">
+        <AuthProvider>
+          <CartProvider>
+            <Navbar />
+            <main className="page-content">{children}</main>
+            <CartDrawer />
+            <Footer />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

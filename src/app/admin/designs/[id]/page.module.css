@@ -1,0 +1,192 @@
+.page {
+    width: 100%;
+    padding-bottom: 2rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.titleWrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.title {
+    font-family: var(--font-secondary);
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--dark);
+}
+
+.statusBadge {
+    padding: 0.35rem 0.875rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+}
+
+.statusBadge.pending {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.statusBadge.contacted {
+    background: #fff8e1;
+    color: #f57c00;
+}
+
+.statusBadge.quoted {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.statusBadge.accepted {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.statusBadge.in-production {
+    background: #f3e5f5;
+    color: #8e24aa;
+}
+
+.statusBadge.completed {
+    background: #eeeeee;
+    color: #666;
+}
+
+.statusBadge.rejected {
+    background: #eeeeee;
+    color: #666;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 0.875rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.cardTitle {
+    font-family: var(--font-secondary);
+    font-size: 1.25rem;
+    color: var(--dark);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+/* Detail Rows */
+.detailSection {
+    margin-bottom: 1.5rem;
+}
+
+.detailSection:last-child {
+    margin-bottom: 0;
+}
+
+.detailLabel {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #888;
+    margin-bottom: 0.25rem;
+}
+
+.detailValue {
+    font-size: 0.875rem;
+    color: var(--dark);
+    line-height: 1.5;
+    white-space: pre-wrap;
+}
+
+.imageGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.attachmentImg {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #eee;
+}
+
+/* Form inputs for status update */
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.select,
+.input,
+.textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: var(--font-secondary);
+    font-size: 0.875rem;
+    background: #fff;
+}
+
+.textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.btnPrimary {
+    padding: 0.75rem 1.5rem;
+    background: var(--dark);
+    color: #fff;
+    border: 1px solid var(--dark);
+    font-family: var(--font-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    width: 100%;
+}
+
+.btnPrimary:hover {
+    opacity: 0.9;
+}
+
+.btnPrimary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

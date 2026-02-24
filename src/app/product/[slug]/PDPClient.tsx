@@ -20,16 +20,19 @@ export default function PDPClient({ product }: { product: Product }) {
         { id: 'yellow-gold', label: '18k Yellow Gold', color: '#C9A96E' },
         { id: 'white-gold', label: '18k White Gold', color: '#D8D8D8' },
         { id: 'rose-gold', label: '18k Rose Gold', color: '#E8A898' },
-        { id: 'platinum', label: 'Platinum', color: '#BCBCBC' },
     ];
 
     const handleAddToBag = () => {
-        addItem(product, {
+        // Use MongoDB _id when available (API product), fall back to static id
+        const productId = (product as any)._id ?? product.id;
+        addItem(productId, {
             metal: metals.find(m => m.id === selectedMetal)?.label,
         });
         setAdded(true);
         setTimeout(() => setAdded(false), 2000);
     };
+
+    const activeMetalLabel = metals.find(m => m.id === selectedMetal)?.label || '';
 
     return (
         <div className={styles.page}>
@@ -47,10 +50,20 @@ export default function PDPClient({ product }: { product: Product }) {
             <div className={styles.layout}>
                 {/* Gallery */}
                 <div className={styles.gallery}>
-                    <div className={styles.mainImg} style={{ background: product.gradient }}>
+                    <div className={styles.mainImg} style={{ background: product.gradient, position: 'relative' }}>
                         {product.badge && (
                             <span className={styles.badge}>{product.badge}</span>
                         )}
+                        <div style={{ position: 'absolute', top: '24px', left: '24px', display: 'flex', flexDirection: 'column', gap: '8px', zIndex: 2 }}>
+                            <span style={{ fontFamily: 'var(--font-sc)', fontSize: '11px', letterSpacing: '0.15em', color: 'var(--stone)' }}>
+                                METAL: <span style={{ color: 'var(--charcoal)', fontWeight: 500 }}>{activeMetalLabel.toUpperCase()}</span>
+                            </span>
+                            {!product.badge?.includes('Band') && ( /* Only show size if it's likely a diamond piece */
+                                <span style={{ fontFamily: 'var(--font-sc)', fontSize: '11px', letterSpacing: '0.15em', color: 'var(--stone)' }}>
+                                    SIZE: <span style={{ color: 'var(--charcoal)', fontWeight: 500 }}>{stoneSize.toFixed(2)} CT</span>
+                                </span>
+                            )}
+                        </div>
                     </div>
                     <div className={styles.thumbs}>
                         {[product.gradient, product.gradient_hover, product.gradient, product.gradient_hover].map((g, i) => (

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { bespokeApi } from '@/lib/api';
 import styles from './page.module.css';
+import ClientBespokeGallery from './ClientBespokeGallery';
 
 export const metadata: Metadata = { title: 'Bespoke Jewellery' };
 
@@ -11,14 +13,8 @@ export default function BespokePage() {
         { n: '03', title: 'The Making', body: 'A single goldsmith dedicates 8 to 12 weeks to your piece. No factory. No shortcuts. Just mastery.' },
     ];
 
-    const works = [
-        { name: 'Celestine Engagement Ring', gradient: 'radial-gradient(ellipse at 50%,#3d2b14,#1a1208)', tall: true },
-        { name: 'Aurora Necklace Suite', gradient: 'radial-gradient(ellipse at 50%,#1a2420,#0a1210)', tall: false },
-        { name: 'Sapphire Ear Drops', gradient: 'radial-gradient(ellipse at 50%,#2a1e2e,#130e17)', tall: false },
-        { name: 'Heritage Signet Ring', gradient: 'radial-gradient(ellipse at 50%,#2d2416,#161108)', tall: true },
-        { name: 'Bridal Parure Set', gradient: 'radial-gradient(ellipse at 50%,#1a2412,#0e1409)', tall: false },
-        { name: 'Ruby Anniversary Bracelet', gradient: 'radial-gradient(ellipse at 50%,#2a1a10,#12090a)', tall: true },
-    ];
+    // We delegates gallery to a client component because we need useEffect
+    // The rest of the page remains server-rendered (or default NextJS behavior)
 
     return (
         <>
@@ -59,19 +55,7 @@ export default function BespokePage() {
                     <span className={styles.eyebrow} style={{ color: 'var(--gold)' }}>Past Commissions</span>
                     <h2 className={styles.sectionH2} style={{ color: '#F5F0E8' }}>Each one, one of a kind.</h2>
                 </div>
-                <div className={styles.masonry}>
-                    {works.map(w => (
-                        <div
-                            key={w.name}
-                            className={`${styles.masonryItem} ${w.tall ? styles.masonryTall : ''}`}
-                            style={{ background: w.gradient }}
-                        >
-                            <div className={styles.masonryOverlay}>
-                                <span className={styles.masonryCaption}>{w.name}</span>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                <ClientBespokeGallery />
             </section>
 
             {/* CTA */}

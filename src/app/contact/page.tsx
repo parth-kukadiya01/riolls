@@ -11,7 +11,29 @@ export default function ContactPage() {
     const handle = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
         setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
-    const submit = (e: React.FormEvent) => { e.preventDefault(); setSent(true); };
+    const [submitting, setSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState('');
+
+    const submit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setSubmitError('');
+        setSubmitting(true);
+        try {
+            const { contactApi } = await import('@/lib/api');
+            await contactApi.submit({
+                name: form.name,
+                email: form.email,
+                phone: form.phone || undefined,
+                subject: form.subject,
+                message: form.message,
+            });
+            setSent(true);
+        } catch (err: any) {
+            setSubmitError(err.message || 'Failed to send. Please try again.');
+        } finally {
+            setSubmitting(false);
+        }
+    };
 
     return (
         <div className={styles.page} style={{ paddingTop: 'var(--nav-height)' }}>

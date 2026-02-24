@@ -1,0 +1,122 @@
+.page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #faf9f8;
+    background-image: radial-gradient(circle at top right, rgba(220, 207, 178, 0.1), transparent 40%),
+        radial-gradient(circle at bottom left, rgba(139, 92, 82, 0.05), transparent 40%);
+    padding: 2rem;
+}
+
+.card {
+    background: #fff;
+    width: 100%;
+    max-width: 440px;
+    padding: 3rem 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.logoText {
+    font-family: var(--font-primary);
+    font-size: 1.25rem;
+    letter-spacing: 0.15em;
+    color: #1a1a1a;
+}
+
+.title {
+    font-family: var(--font-secondary);
+    font-size: 1.5rem;
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--dark);
+}
+
+.error {
+    background: #fdf2f2;
+    color: #c93d3d;
+    padding: 0.75rem 1rem;
+    border-left: 2px solid #c93d3d;
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #666;
+}
+
+.input {
+    width: 100%;
+    padding: 0.875rem 0;
+    border: none;
+    border-bottom: 1px solid #e0e0e0;
+    font-family: var(--font-secondary);
+    font-size: 1rem;
+    background: transparent;
+    transition: border-color 0.3s;
+}
+
+.input:focus {
+    outline: none;
+    border-bottom-color: var(--dark);
+}
+
+.input::placeholder {
+    color: #b0b0b0;
+}
+
+.submitBtn {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 1rem;
+    background: var(--dark);
+    color: #fff;
+    border: none;
+    font-family: var(--font-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.submitBtn:hover {
+    opacity: 0.9;
+}
+
+.submitBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #888;
+}

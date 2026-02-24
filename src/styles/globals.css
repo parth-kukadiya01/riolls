@@ -35,6 +35,7 @@
     --gold: #333333;
     --gold-light: #555555;
     --deep: #1A1A1A;
+    --dark: #1A1A1A;
     /* Footer / deep elements — near black */
 
     /* Typography */
@@ -215,6 +216,23 @@ video {
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 0 var(--gutter);
+}
+
+.page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-content {
+    flex: 1;
+    /* Add top spacing so content doesn't crash into the nav */
+    padding-top: var(--nav-height);
+}
+
+.section-padding {
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-xl);
 }
 
 @media (max-width: 1024px) {

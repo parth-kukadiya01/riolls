@@ -1,0 +1,26 @@
+.adminLayout {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--light);
+}
+
+.mainContent {
+    flex: 1;
+    margin-left: 260px;
+    /* Width of sidebar */
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+@media (max-width: 991px) {
+    .mainContent {
+        margin-left: 0;
+        padding: 1.5rem;
+        padding-top: 5rem;
+    }
+}
+
+.loginWrapper {
+    min-height: 100vh;
+    background-color: var(--light);
+}

@@ -1,0 +1,161 @@
+.page {
+    width: 100%;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+}
+
+.title {
+    font-family: var(--font-secondary);
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 0.875rem;
+}
+
+.controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.filterSelect {
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: var(--font-secondary);
+    font-size: 0.875rem;
+    background-color: #fff;
+    min-width: 150px;
+}
+
+.tableContainer {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th {
+    text-align: left;
+    padding: 1rem 1.5rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #666;
+    border-bottom: 1px solid #eee;
+    background: #faf9f8;
+}
+
+.table td {
+    padding: 1rem 1.5rem;
+    font-size: 0.875rem;
+    color: var(--dark);
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.table tr:last-child td {
+    border-bottom: none;
+}
+
+.requestLink {
+    font-weight: 500;
+    color: var(--dark);
+    text-decoration: none;
+}
+
+.requestLink:hover {
+    color: var(--gold);
+}
+
+.clientInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.clientEmail {
+    font-size: 0.75rem;
+    color: #888;
+}
+
+.budget {
+    font-family: var(--font-secondary);
+}
+
+/* Badges */
+.badge {
+    padding: 0.25rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.badge.pending {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.badge.contacted {
+    background: #fff8e1;
+    color: #f57c00;
+}
+
+.badge.quoted {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.badge.accepted {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.badge.in-production {
+    background: #f3e5f5;
+    color: #8e24aa;
+}
+
+.badge.completed {
+    background: #eeeeee;
+    color: #666;
+}
+
+.badge.rejected {
+    background: #eeeeee;
+    color: #666;
+}
+
+.actionBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--gold);
+    transition: color 0.2s;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+}
+
+.actionBtn:hover {
+    color: var(--dark);
+}

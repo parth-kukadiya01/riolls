@@ -1,14 +1,81 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
+import { userApi, ordersApi, addressesApi } from '@/lib/api';
 import styles from './page.module.css';
 
-type Tab = 'profile' | 'orders' | 'designs' | 'addresses';
+type Tab = 'profile' | 'orders' | 'designs' | 'enquiries' | 'addresses';
 
 export default function ProfilePage() {
+    const { user, logout, loading: authLoading, refreshProfile } = useAuth();
+    const router = useRouter();
     const [activeTab, setActiveTab] = useState<Tab>('profile');
     const [isEditing, setIsEditing] = useState(false);
+
+    // Profile edit form
+    const [editForm, setEditForm] = useState({ firstName: '', lastName: '', phone: '' });
+
+    // Data for tabs
+    const [orders, setOrders] = useState<any[]>([]);
+    const [designs, setDesigns] = useState<any[]>([]);
+    const [enquiries, setEnquiries] = useState<any[]>([]);
+    const [addresses, setAddresses] = useState<any[]>([]);
+    const [tabLoading, setTabLoading] = useState(false);
+
+    // Redirect if not logged in
+    useEffect(() => {
+        if (!authLoading && !user) router.push('/login');
+    }, [authLoading, user, router]);
+
+    // Pre-fill edit form when user loads
+    useEffect(() => {
+        if (user) {
+            setEditForm({
+                firstName: user.firstName,
+                lastName: user.lastName,
+                phone: user.phone ?? '',
+            });
+        }
+    }, [user]);
+
+    // Load tab data
+    useEffect(() => {
+        if (!user) return;
+        setTabLoading(true);
+        if (activeTab === 'orders') {
+            ordersApi.list().then((res: any) => setOrders(res.data?.items ?? [])).finally(() => setTabLoading(false));
+        } else if (activeTab === 'designs') {
+            userApi.getDesigns().then((res: any) => setDesigns(res.data ?? [])).finally(() => setTabLoading(false));
+        } else if (activeTab === 'enquiries') {
+            userApi.getEnquiries().then((res: any) => setEnquiries(res.data ?? [])).finally(() => setTabLoading(false));
+        } else if (activeTab === 'addresses') {
+            addressesApi.list().then((res: any) => setAddresses(res.data ?? [])).finally(() => setTabLoading(false));
+        } else {
+            setTabLoading(false);
+        }
+    }, [activeTab, user]);
+
+    const handleSaveProfile = async (e: React.FormEvent) => {
+        e.preventDefault();
+        await userApi.updateProfile(editForm);
+        await refreshProfile();
+        setIsEditing(false);
+    };
+
+    const handleLogout = () => {
+        logout();
+        router.push('/');
+    };
+
+    if (authLoading || !user) {
+        return <div style={{ paddingTop: 'var(--nav-height)', textAlign: 'center', padding: '4rem' }}>Loading…</div>;
+    }
+
+    const formatPrice = (p: number) => `£ ${p.toLocaleString('en-GB')}`;
+    const formatDate = (d: string) => new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
     const renderContent = () => {
         switch (activeTab) {
@@ -16,20 +83,22 @@ export default function ProfilePage() {
                 return (
                     <>
                         <h2 className={styles.sectionTitle}>Account Overview</h2>
-
                         {isEditing ? (
-                            <form className={styles.editForm} onSubmit={(e) => { e.preventDefault(); setIsEditing(false); }}>
+                            <form className={styles.editForm} onSubmit={handleSaveProfile}>
                                 <div className={styles.inputGroup}>
-                                    <label className={styles.label}>Full Name</label>
-                                    <input type="text" className={styles.input} defaultValue="Jane Doe" required />
+                                    <label className={styles.label}>First Name</label>
+                                    <input type="text" className={styles.input} value={editForm.firstName}
+                                        onChange={e => setEditForm(f => ({ ...f, firstName: e.target.value }))} required />
                                 </div>
                                 <div className={styles.inputGroup}>
-                                    <label className={styles.label}>Email Address</label>
-                                    <input type="email" className={styles.input} defaultValue="jane.doe@example.com" required />
+                                    <label className={styles.label}>Last Name</label>
+                                    <input type="text" className={styles.input} value={editForm.lastName}
+                                        onChange={e => setEditForm(f => ({ ...f, lastName: e.target.value }))} required />
                                 </div>
                                 <div className={styles.inputGroup}>
                                     <label className={styles.label}>Phone Number</label>
-                                    <input type="tel" className={styles.input} defaultValue="+44 7700 900077" />
+                                    <input type="tel" className={styles.input} value={editForm.phone}
+                                        onChange={e => setEditForm(f => ({ ...f, phone: e.target.value }))} />
                                 </div>
                                 <div className={styles.formActions}>
                                     <button type="button" className={styles.cancelBtn} onClick={() => setIsEditing(false)}>Cancel</button>
@@ -38,7 +107,6 @@ export default function ProfilePage() {
                             </form>
                         ) : (
                             <div className={styles.cardGroup}>
-                                {/* Personal Details Card */}
                                 <div className={styles.card}>
                                     <div className={styles.cardHeader}>
                                         <h3 className={styles.cardTitle}>Personal Details</h3>
@@ -47,15 +115,15 @@ export default function ProfilePage() {
                                     <div className={styles.cardBody}>
                                         <div className={styles.infoRow}>
                                             <span className={styles.label}>Name</span>
-                                            <span className={styles.value}>Jane Doe</span>
+                                            <span className={styles.value}>{user.firstName} {user.lastName}</span>
                                         </div>
                                         <div className={styles.infoRow}>
                                             <span className={styles.label}>Email</span>
-                                            <span className={styles.value}>jane.doe@example.com</span>
+                                            <span className={styles.value}>{user.email}</span>
                                         </div>
                                         <div className={styles.infoRow}>
                                             <span className={styles.label}>Phone</span>
-                                            <span className={styles.value}>+44 7700 900077</span>
+                                            <span className={styles.value}>{user.phone || '—'}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -63,99 +131,190 @@ export default function ProfilePage() {
                         )}
                     </>
                 );
+
             case 'orders':
                 return (
                     <>
                         <h2 className={styles.sectionTitle}>Order History</h2>
-                        <div className={styles.ordersList}>
+                        {tabLoading ? (
+                            <p>Loading orders…</p>
+                        ) : orders.length === 0 ? (
                             <div className={styles.emptyState}>
-                                <p>You haven't placed any orders yet.</p>
+                                <p>You haven&apos;t placed any orders yet.</p>
                                 <Link href="/shop" className={styles.shopBtn}>Explore Collections</Link>
                             </div>
-                        </div>
+                        ) : (
+                            <div className={styles.ordersList}>
+                                {orders.map((o: any) => (
+                                    <div key={o._id} className={styles.card}>
+                                        <div className={styles.cardHeader}>
+                                            <h3 className={styles.cardTitle}>Order #{o.orderNumber}</h3>
+                                            <span style={{ fontSize: '0.8rem', textTransform: 'capitalize', padding: '0.2rem 0.6rem', background: '#f4ede4', borderRadius: '4px' }}>{o.status}</span>
+                                        </div>
+                                        <div className={styles.cardBody}>
+                                            <div className={styles.infoRow}>
+                                                <span className={styles.label}>Date</span>
+                                                <span className={styles.value}>{formatDate(o.createdAt)}</span>
+                                            </div>
+                                            <div className={styles.infoRow}>
+                                                <span className={styles.label}>Total</span>
+                                                <span className={styles.value}>{formatPrice(o.total)}</span>
+                                            </div>
+                                            <div className={styles.infoRow}>
+                                                <span className={styles.label}>Items</span>
+                                                <span className={styles.value}>{o.items?.length ?? 0}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </>
                 );
+
             case 'designs':
                 return (
                     <>
                         <h2 className={styles.sectionTitle}>Saved Designs</h2>
-                        <div className={styles.ordersList}>
+                        {tabLoading ? (
+                            <p>Loading designs…</p>
+                        ) : designs.length === 0 ? (
                             <div className={styles.emptyState}>
-                                <p>You have no saved bespoke designs or AI Studio creations.</p>
+                                <p>You have no saved bespoke designs.</p>
                                 <Link href="/ai-studio/step-1" className={styles.shopBtn}>Open AI Studio</Link>
                             </div>
-                        </div>
+                        ) : (
+                            <div className={styles.cardGroup}>
+                                {designs.map((d: any) => (
+                                    <div key={d._id} className={styles.card}>
+                                        <div className={styles.cardHeader}>
+                                            <h3 className={styles.cardTitle}>#{d.requestNumber}</h3>
+                                            <span style={{ fontSize: '0.8rem', textTransform: 'capitalize' }}>{d.status}</span>
+                                        </div>
+                                        <div className={styles.cardBody}>
+                                            <div className={styles.infoRow}><span className={styles.label}>Type</span><span className={styles.value}>{d.pieceType}</span></div>
+                                            <div className={styles.infoRow}><span className={styles.label}>Metal</span><span className={styles.value}>{d.metal}</span></div>
+                                            <div className={styles.infoRow}><span className={styles.label}>Est. Price</span><span className={styles.value}>£{d.estimatedPriceLow?.toLocaleString()} – £{d.estimatedPriceHigh?.toLocaleString()}</span></div>
+
+                                            {/* AI Generated / Reference Images */}
+                                            {d.styleProfile?.referenceImages && d.styleProfile.referenceImages.length > 0 && (
+                                                <div style={{ marginTop: '1rem', borderTop: '1px solid #eee', paddingTop: '1rem' }}>
+                                                    <span className={styles.label} style={{ display: 'block', marginBottom: '0.5rem' }}>AI Generated / Reference Images</span>
+                                                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                                        {d.styleProfile.referenceImages.map((img: string, i: number) => (
+                                                            <a key={i} href={img} target="_blank" rel="noopener noreferrer">
+                                                                <img src={img} alt="Design reference" style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #eee' }} />
+                                                            </a>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </>
                 );
+
+            case 'enquiries':
+                return (
+                    <>
+                        <h2 className={styles.sectionTitle}>My Enquiries</h2>
+                        {tabLoading ? (
+                            <p>Loading enquiries…</p>
+                        ) : enquiries.length === 0 ? (
+                            <div className={styles.emptyState}>
+                                <p>You have no open enquiries.</p>
+                                <Link href="/contact" className={styles.shopBtn}>Contact Us</Link>
+                            </div>
+                        ) : (
+                            <div className={styles.cardGroup}>
+                                {enquiries.map((e: any) => (
+                                    <div key={e._id} className={styles.card}>
+                                        <div className={styles.cardHeader}>
+                                            <h3 className={styles.cardTitle}>{e.subject}</h3>
+                                            <span style={{ fontSize: '0.8rem', textTransform: 'capitalize', padding: '0.2rem 0.6rem', background: e.status === 'resolved' ? '#ecfdf5' : '#fef2f2', color: e.status === 'resolved' ? '#065f46' : '#991b1b', borderRadius: '4px' }}>
+                                                {e.status}
+                                            </span>
+                                        </div>
+                                        <div className={styles.cardBody}>
+                                            <div className={styles.infoRow}>
+                                                <span className={styles.label}>Date</span>
+                                                <span className={styles.value}>{formatDate(e.createdAt)}</span>
+                                            </div>
+                                            <p style={{ margin: '1rem 0', fontSize: '0.9rem', color: '#444', lineHeight: 1.5 }}>
+                                                {e.message}
+                                            </p>
+                                            {e.adminNotes && (
+                                                <div style={{ background: '#fafafa', padding: '1rem', borderRadius: '4px', borderLeft: '3px solid var(--gold)', marginTop: '1rem' }}>
+                                                    <span className={styles.label} style={{ display: 'block', marginBottom: '0.5rem' }}>Response from Riolls:</span>
+                                                    <p style={{ margin: 0, fontSize: '0.875rem' }}>{e.adminNotes}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </>
+                );
+
             case 'addresses':
                 return (
                     <>
                         <h2 className={styles.sectionTitle}>Saved Addresses</h2>
-                        <div className={styles.cardGroup}>
-                            <div className={styles.card}>
-                                <div className={styles.cardHeader}>
-                                    <h3 className={styles.cardTitle}>Default Address</h3>
-                                    <button className={styles.editBtn}>Edit</button>
-                                </div>
-                                <div className={styles.cardBody}>
-                                    <p className={styles.addressLine}>Jane Doe</p>
-                                    <p className={styles.addressLine}>123 Mayfair Boulevard</p>
-                                    <p className={styles.addressLine}>London</p>
-                                    <p className={styles.addressLine}>W1J 8DD</p>
-                                    <p className={styles.addressLine}>United Kingdom</p>
-                                </div>
+                        {tabLoading ? (
+                            <p>Loading addresses…</p>
+                        ) : (
+                            <div className={styles.cardGroup}>
+                                {addresses.map((a: any) => (
+                                    <div key={a._id} className={styles.card}>
+                                        <div className={styles.cardHeader}>
+                                            <h3 className={styles.cardTitle}>{a.label ?? 'Address'}{a.isDefault && ' (Default)'}</h3>
+                                        </div>
+                                        <div className={styles.cardBody}>
+                                            <p className={styles.addressLine}>{a.fullName}</p>
+                                            <p className={styles.addressLine}>{a.address1}</p>
+                                            {a.address2 && <p className={styles.addressLine}>{a.address2}</p>}
+                                            <p className={styles.addressLine}>{a.city}</p>
+                                            <p className={styles.addressLine}>{a.postcode}</p>
+                                            <p className={styles.addressLine}>{a.country}</p>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                            <div className={styles.card} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', borderStyle: 'dashed' }}>
-                                <span className={styles.addAddressText}>+ Add New Address</span>
-                            </div>
-                        </div>
+                        )}
                     </>
                 );
-            default:
-                return null;
         }
     };
 
     return (
         <div className={styles.page} style={{ paddingTop: 'calc(var(--nav-height) + 40px)' }}>
             <div className={styles.container}>
-                {/* Sidebar / Nav */}
+                {/* Sidebar */}
                 <aside className={styles.sidebar}>
                     <div className={styles.userInfo}>
-                        <h1 className={styles.userName}>Jane Doe</h1>
-                        <p className={styles.userEmail}>jane.doe@example.com</p>
+                        <h1 className={styles.userName}>{user.firstName} {user.lastName}</h1>
+                        <p className={styles.userEmail}>{user.email}</p>
                     </div>
 
                     <nav className={styles.nav}>
-                        <button
-                            className={activeTab === 'profile' ? styles.navLinkActive : styles.navLink}
-                            onClick={() => { setActiveTab('profile'); setIsEditing(false); }}
-                        >
-                            My Profile
-                        </button>
-                        <button
-                            className={activeTab === 'orders' ? styles.navLinkActive : styles.navLink}
-                            onClick={() => { setActiveTab('orders'); setIsEditing(false); }}
-                        >
-                            Order History
-                        </button>
-                        <button
-                            className={activeTab === 'designs' ? styles.navLinkActive : styles.navLink}
-                            onClick={() => { setActiveTab('designs'); setIsEditing(false); }}
-                        >
-                            Saved Designs
-                        </button>
-                        <button
-                            className={activeTab === 'addresses' ? styles.navLinkActive : styles.navLink}
-                            onClick={() => { setActiveTab('addresses'); setIsEditing(false); }}
-                        >
-                            Addresses
-                        </button>
-                        <Link href="/login" className={styles.signOut}>Sign Out</Link>
+                        {(['profile', 'orders', 'designs', 'enquiries', 'addresses'] as Tab[]).map(tab => (
+                            <button
+                                key={tab}
+                                className={activeTab === tab ? styles.navLinkActive : styles.navLink}
+                                onClick={() => { setActiveTab(tab); setIsEditing(false); }}
+                            >
+                                {tab === 'profile' ? 'My Profile' : tab === 'orders' ? 'Order History' : tab === 'designs' ? 'Saved Designs' : tab === 'enquiries' ? 'Enquiries' : 'Addresses'}
+                            </button>
+                        ))}
+                        <button className={styles.signOut} onClick={handleLogout}>Sign Out</button>
                     </nav>
                 </aside>
 
-                {/* Main Content Area */}
+                {/* Main */}
                 <main className={styles.main}>
                     {renderContent()}
                 </main>

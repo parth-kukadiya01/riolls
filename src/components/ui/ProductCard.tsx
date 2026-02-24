@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 import type { Product } from '@/lib/products';
 import { formatPrice } from '@/lib/products';
@@ -15,6 +16,9 @@ export default function ProductCard({ product }: Props) {
     const { addItem } = useCart();
     const [wishlisted, setWishlisted] = useState(product.is_wishlisted ?? false);
 
+    // Prefer MongoDB _id when available (API products), fallback to static id
+    const productId = product._id ?? product.id;
+
     const handleWishlist = (e: React.MouseEvent) => {
         e.preventDefault();
         setWishlisted(w => !w);
@@ -22,15 +26,29 @@ export default function ProductCard({ product }: Props) {
 
     const handleQuickAdd = (e: React.MouseEvent) => {
         e.preventDefault();
-        addItem(product);
+        addItem(productId);
     };
+
+    // Show first image if available, else gradient
+    const hasImage = product.images && product.images.length > 0;
 
     return (
         <Link href={`/product/${product.slug}`} className={styles.card}>
             {/* Image area */}
             <div className={styles.image}>
-                <div className={styles.imgMain} style={{ background: product.gradient }} />
-                <div className={styles.imgHover} style={{ background: product.gradient_hover }} />
+                {hasImage ? (
+                    <img
+                        src={product.images![0]}
+                        alt={product.name}
+                        className={styles.imgMain}
+                        style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                    />
+                ) : (
+                    <>
+                        <div className={styles.imgMain} style={{ background: product.gradient }} />
+                        <div className={styles.imgHover} style={{ background: product.gradient_hover }} />
+                    </>
+                )}
 
                 {product.badge && (
                     <span className={`${styles.badge} ${product.badge === 'Last Piece' ? styles.badgeLast : styles.badgeNew}`}>
@@ -49,7 +67,7 @@ export default function ProductCard({ product }: Props) {
                 </button>
 
                 <div className={styles.quickActions}>
-                    <button className={styles.qaBtn} onClick={handleQuickAdd}>♡ &nbsp;Add to Bag</button>
+                    <button className={styles.qaBtn} onClick={handleQuickAdd}>♡&nbsp;Add to Bag</button>
                     <div className={styles.qaDivider} />
                     <button className={styles.qaBtn} onClick={e => e.preventDefault()}>Quick View</button>
                 </div>
@@ -57,7 +75,7 @@ export default function ProductCard({ product }: Props) {
 
             {/* Info */}
             <div className={styles.info}>
-                <span className={styles.category}>{product.category}</span>
+                <span className={styles.category}>{typeof product.category === 'string' ? product.category : product.category}</span>
                 <div className={styles.name}>{product.name}</div>
                 <span className={`${styles.price} ${product.price === null ? styles.poa : ''}`}>
                     {formatPrice(product.price)}

@@ -3,53 +3,82 @@
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect, Suspense } from 'react';
 import ProductCard from '@/components/ui/ProductCard';
-import { PRODUCTS } from '@/lib/products';
-import type { Category, Metal, Stone, Product } from '@/lib/products';
+import { productsApi, categoriesApi } from '@/lib/api';
 import styles from './page.module.css';
-
-const METALS: Metal[] = ['yellow-gold', 'white-gold', 'rose-gold', 'platinum'];
-const STONES: Stone[] = ['diamond', 'ruby', 'sapphire', 'emerald', 'pearl'];
-const CATS: Category[] = ['rings', 'necklaces', 'earrings', 'bracelets'];
 
 function ShopContent() {
     const sp = useSearchParams();
 
+    const [products, setProducts] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [total, setTotal] = useState(0);
+    const [page, setPage] = useState(1);
+
+    // Dynamic Filter Options
+    const [dbCategories, setDbCategories] = useState<{ name: string, slug: string }[]>([]);
+    const [dbMetals, setDbMetals] = useState<string[]>([]);
+    const [dbStones, setDbStones] = useState<string[]>([]);
+
     const [filters, setFilters] = useState<{
-        cat: Category | null;
-        metal: Metal | null;
-        stone: Stone | null;
-        minPrice: number;
+        cat: string | null;
+        metal: string | null;
+        stone: string | null;
         maxPrice: number;
     }>({
-        cat: (sp.get('cat') as Category) || null,
+        cat: (sp.get('cat')) || null,
         metal: null,
-        stone: (sp.get('stone') as Stone) || null,
-        minPrice: 0,
+        stone: (sp.get('stone')) || null,
         maxPrice: 20000,
     });
-    const [sort, setSort] = useState<'featured' | 'price-asc' | 'price-desc'>('featured');
+    const [sort, setSort] = useState<'featured' | 'price' | '-price'>('featured');
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
+    // Re-read category from URL params
     useEffect(() => {
-        setFilters(f => ({ ...f, cat: (sp.get('cat') as Category) || null }));
+        setFilters(f => ({ ...f, cat: sp.get('cat') || null }));
     }, [sp]);
 
-    let filtered: Product[] = PRODUCTS.filter(p => {
-        if (filters.cat && p.category !== filters.cat) return false;
-        if (filters.metal && p.metal !== filters.metal) return false;
-        if (filters.stone && p.stone !== filters.stone) return false;
-        if (p.price !== null && (p.price < filters.minPrice || p.price > filters.maxPrice)) return false;
-        return true;
-    });
+    // Fetch categories on mount
+    useEffect(() => {
+        categoriesApi.list().then((res: any) => {
+            const items = res.data ?? [];
+            setDbCategories(items.map((i: any) => ({ name: i.name, slug: i.slug || i.name.toLowerCase().replace(/\s+/g, '-') })));
+        }).catch(() => { });
+    }, []);
 
-    if (sort === 'price-asc') filtered = [...filtered].sort((a, b) => (a.price ?? 99999) - (b.price ?? 99999));
-    if (sort === 'price-desc') filtered = [...filtered].sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
+    // Fetch products whenever filters / sort / page change
+    useEffect(() => {
+        setLoading(true);
+        const params: Record<string, string | number> = { page, limit: 24, sort };
+        if (filters.cat) params.category = filters.cat;
+        if (filters.metal) params.metal = filters.metal;
+        if (filters.stone) params.stone = filters.stone;
+        if (filters.maxPrice < 20000) params.maxPrice = filters.maxPrice;
 
-    const toggle = <K extends keyof typeof filters>(key: K, val: (typeof filters)[K]) => {
+        productsApi
+            .list(params)
+            .then((res: any) => {
+                const items = res.data?.items ?? [];
+                setProducts(items);
+                setTotal(res.data?.total ?? 0);
+
+                // If no specific metal/stone filter is active, extract the available ones dynamically
+                if (!filters.metal && !filters.stone) {
+                    const metals = Array.from(new Set(items.map((p: any) => p.metal).filter(Boolean)));
+                    const stones = Array.from(new Set(items.map((p: any) => p.stone).filter(Boolean)));
+                    if (metals.length) setDbMetals(metals as string[]);
+                    if (stones.length) setDbStones(stones as string[]);
+                }
+            })
+            .catch(() => setProducts([]))
+            .finally(() => setLoading(false));
+    }, [filters, sort, page]);
+
+    const toggle = <K extends keyof typeof filters>(key: K, val: (typeof filters)[K]) =>
         setFilters(f => ({ ...f, [key]: f[key] === val ? null : val }));
-    };
 
-    const clear = () => setFilters({ cat: null, metal: null, stone: null, minPrice: 0, maxPrice: 20000 });
+    const clear = () =>
+        setFilters({ cat: null, metal: null, stone: null, maxPrice: 20000 });
 
     return (
         <div className={styles.page} style={{ paddingTop: 'var(--nav-height)' }}>
@@ -70,17 +99,17 @@ function ShopContent() {
 
                     <div className={styles.filterGroup}>
                         <span className={styles.filterLabel}>Category</span>
-                        {CATS.map(c => (
-                            <label key={c} className={styles.filterItem}>
-                                <input type="checkbox" checked={filters.cat === c} onChange={() => toggle('cat', c)} />
-                                <span style={{ textTransform: 'capitalize' }}>{c}</span>
+                        {dbCategories.map(c => (
+                            <label key={c.slug} className={styles.filterItem}>
+                                <input type="checkbox" checked={filters.cat === c.slug} onChange={() => toggle('cat', c.slug)} />
+                                <span style={{ textTransform: 'capitalize' }}>{c.name}</span>
                             </label>
                         ))}
                     </div>
 
                     <div className={styles.filterGroup}>
                         <span className={styles.filterLabel}>Metal</span>
-                        {METALS.map(m => (
+                        {dbMetals.map((m: string) => (
                             <label key={m} className={styles.filterItem}>
                                 <input type="checkbox" checked={filters.metal === m} onChange={() => toggle('metal', m)} />
                                 <span style={{ textTransform: 'capitalize' }}>{m.replace('-', ' ')}</span>
@@ -90,7 +119,7 @@ function ShopContent() {
 
                     <div className={styles.filterGroup}>
                         <span className={styles.filterLabel}>Stone</span>
-                        {STONES.map(s => (
+                        {dbStones.map((s: string) => (
                             <label key={s} className={styles.filterItem}>
                                 <input type="checkbox" checked={filters.stone === s} onChange={() => toggle('stone', s)} />
                                 <span style={{ textTransform: 'capitalize' }}>{s}</span>
@@ -121,7 +150,7 @@ function ShopContent() {
                             <button className={styles.filterToggle} onClick={() => setSidebarOpen(o => !o)}>
                                 {sidebarOpen ? '✕ Filters' : '⊞ Filters'}
                             </button>
-                            <span className={styles.resultCount}>{filtered.length} pieces</span>
+                            <span className={styles.resultCount}>{loading ? '…' : `${total} pieces`}</span>
                         </div>
                         <select
                             className={styles.sortSelect}
@@ -129,8 +158,8 @@ function ShopContent() {
                             onChange={e => setSort(e.target.value as typeof sort)}
                         >
                             <option value="featured">Featured</option>
-                            <option value="price-asc">Price: Low → High</option>
-                            <option value="price-desc">Price: High → Low</option>
+                            <option value="price">Price: Low → High</option>
+                            <option value="-price">Price: High → Low</option>
                         </select>
                     </div>
 
@@ -144,14 +173,42 @@ function ShopContent() {
                     )}
 
                     {/* Grid */}
-                    {filtered.length === 0 ? (
+                    {loading ? (
+                        <div className={styles.emptyState}><p>Loading collection…</p></div>
+                    ) : products.length === 0 ? (
                         <div className={styles.emptyState}>
                             <p>No pieces match your filters.</p>
                             <button className={styles.clearBtn} onClick={clear}>Clear Filters</button>
                         </div>
                     ) : (
                         <div className={styles.grid}>
-                            {filtered.map(p => <ProductCard key={p.id} product={p} />)}
+                            {products.map((p: any) => (
+                                <ProductCard key={p._id} product={{
+                                    id: p._id,
+                                    slug: p.slug,
+                                    name: p.name,
+                                    category: p.category?.slug ?? p.category ?? '',
+                                    price: p.price,
+                                    metal: p.metal,
+                                    stone: p.stone,
+                                    badge: p.badge,
+                                    description: p.description,
+                                    stone_detail: p.stoneDetail,
+                                    gradient: 'linear-gradient(145deg,#ddd5c4,#c8bba8)',
+                                    gradient_hover: 'linear-gradient(145deg,#c8b89a,#b8a880)',
+                                    is_wishlisted: p.isWishlisted,
+                                    images: p.images,
+                                }} />
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Pagination */}
+                    {!loading && total > 24 && (
+                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginTop: '2rem' }}>
+                            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}>← Prev</button>
+                            <span style={{ lineHeight: '2' }}>Page {page} of {Math.ceil(total / 24)}</span>
+                            <button onClick={() => setPage(p => p + 1)} disabled={page >= Math.ceil(total / 24)}>Next →</button>
                         </div>
                     )}
                 </div>

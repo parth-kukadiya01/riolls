@@ -39,21 +39,32 @@ export default function CartDrawer() {
                         </div>
                     ) : (
                         <>
-                            {items.map(item => (
-                                <div key={item.product.id} className={styles.item}>
-                                    <div
-                                        className={styles.itemImg}
-                                        style={{ background: item.product.gradient }}
-                                    />
-                                    <div className={styles.itemInfo}>
-                                        <span className={styles.itemCategory}>{item.product.category}</span>
-                                        <span className={styles.itemName}>{item.product.name}</span>
-                                        {item.metal && <span className={styles.itemOpts}>{item.metal}{item.size ? ` · Size ${item.size}` : ''}</span>}
-                                        <span className={styles.itemPrice}>{formatPrice(item.product.price)}</span>
-                                        <button className={styles.removeBtn} onClick={() => removeItem(item.product.id)}>Remove</button>
+                            {items.map(item => {
+                                // Support both API CartProduct and legacy Product shapes
+                                const prod = item.product as any;
+                                const itemId = item._id;
+                                const name = prod.name ?? '';
+                                const price = prod.price ?? null;
+                                const img = prod.images?.[0];
+                                const gradient = prod.gradient ?? 'linear-gradient(145deg,#ddd5c4,#c8bba8)';
+                                const catRaw = prod.category;
+                                const catLabel = typeof catRaw === 'object' ? catRaw?.name : catRaw ?? '';
+                                return (
+                                    <div key={itemId} className={styles.item}>
+                                        <div
+                                            className={styles.itemImg}
+                                            style={img ? { backgroundImage: `url(${img})`, backgroundSize: 'cover', backgroundPosition: 'center' } : { background: gradient }}
+                                        />
+                                        <div className={styles.itemInfo}>
+                                            <span className={styles.itemCategory}>{catLabel}</span>
+                                            <span className={styles.itemName}>{name}</span>
+                                            {item.metal && <span className={styles.itemOpts}>{item.metal}{item.size ? ` · Size ${item.size}` : ''}</span>}
+                                            <span className={styles.itemPrice}>{formatPrice(price)}</span>
+                                            <button className={styles.removeBtn} onClick={() => removeItem(itemId)}>Remove</button>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                             <div className={styles.freeShip}>✓ &nbsp;Free insured delivery on all orders</div>
                         </>
                     )}

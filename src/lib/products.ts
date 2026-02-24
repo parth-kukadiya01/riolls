@@ -6,16 +6,19 @@ export interface Product {
   id: string;
   slug: string;
   name: string;
-  category: Category;
+  category: Category | string; // string for API category slugs
   price: number | null; // null = Price on Application
-  metal: Metal;
-  stone: Stone;
-  badge?: 'New In' | 'Last Piece';
+  metal: Metal | string;
+  stone: Stone | string;
+  badge?: 'New In' | 'Last Piece' | string;
   description: string;
   stone_detail: string;
   gradient: string; // CSS gradient for placeholder
   gradient_hover: string;
   is_wishlisted?: boolean;
+  // API fields
+  _id?: string;        // MongoDB id from backend
+  images?: string[];   // product image URLs from backend
 }
 
 export const PRODUCTS: Product[] = [

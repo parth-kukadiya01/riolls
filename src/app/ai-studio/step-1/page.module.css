@@ -331,7 +331,7 @@
 
 /* Results */
 .results {
-    padding: 60px var(--gutter);
+    padding: var(--space-lg) var(--gutter);
 }
 
 .resultsHeader {
@@ -847,7 +847,7 @@
     }
 
     .builder {
-        padding: 40px 20px;
+        padding: var(--space-md) var(--gutter);
     }
 
     .designGrid {
@@ -855,10 +855,10 @@
     }
 
     .container {
-        padding: 60px 20px;
+        padding: var(--space-lg) var(--gutter);
     }
 
     .results {
-        padding: 40px 20px;
+        padding: var(--space-md) var(--gutter);
     }
 }

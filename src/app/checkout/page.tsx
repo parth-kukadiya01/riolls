@@ -2,14 +2,17 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import { formatPrice } from '@/lib/products';
+import { ordersApi, getToken } from '@/lib/api';
 import styles from './page.module.css';
 
 type Step = 1 | 2 | 3 | 4;
 
 export default function CheckoutPage() {
-    const { items, subtotal } = useCart();
+    const { items, subtotal, clearCart } = useCart();
+    const router = useRouter();
     const [step, setStep] = useState<Step>(1);
     const [form, setForm] = useState({
         firstName: '', lastName: '', email: '', phone: '',
@@ -18,9 +21,34 @@ export default function CheckoutPage() {
         delivery: 'free',
     });
     const [payTab, setPayTab] = useState('Card');
+    const [placing, setPlacing] = useState(false);
+    const [orderError, setOrderError] = useState('');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+    };
+
+    const handlePlaceOrder = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        setOrderError('');
+        setPlacing(true);
+        try {
+            if (getToken()) {
+                const deliveryCostMap: Record<string, number> = { free: 0, express: 2500, next: 4500 };
+                await ordersApi.place({
+                    contact: { firstName: form.firstName, lastName: form.lastName, email: form.email, phone: form.phone },
+                    delivery: { address1: form.address1, address2: form.address2, city: form.city, postcode: form.postcode, country: form.country },
+                    deliveryMethod: form.delivery,
+                    deliveryCost: deliveryCostMap[form.delivery] ?? 0,
+                });
+                await clearCart();
+            }
+            router.push('/confirmation');
+        } catch (err: any) {
+            setOrderError(err.message || 'Failed to place order. Please try again.');
+        } finally {
+            setPlacing(false);
+        }
     };
 
     return (
@@ -57,21 +85,21 @@ export default function CheckoutPage() {
                             <h2 className={styles.stepH2}>Contact details</h2>
                             <div className={styles.row}>
                                 <div className={styles.field}>
-                                    <label>First Name *</label>
-                                    <input name="firstName" value={form.firstName} onChange={handleChange} placeholder="Sarah" />
+                                    <label htmlFor="firstName">First Name *</label>
+                                    <input id="firstName" name="firstName" value={form.firstName} onChange={handleChange} placeholder="Sarah" autoComplete="given-name" />
                                 </div>
                                 <div className={styles.field}>
-                                    <label>Last Name *</label>
-                                    <input name="lastName" value={form.lastName} onChange={handleChange} placeholder="Williams" />
+                                    <label htmlFor="lastName">Last Name *</label>
+                                    <input id="lastName" name="lastName" value={form.lastName} onChange={handleChange} placeholder="Williams" autoComplete="family-name" />
                                 </div>
                             </div>
                             <div className={styles.field}>
-                                <label>Email *</label>
-                                <input name="email" type="email" value={form.email} onChange={handleChange} placeholder="sarah@email.com" />
+                                <label htmlFor="email">Email *</label>
+                                <input id="email" name="email" type="email" value={form.email} onChange={handleChange} placeholder="sarah@email.com" autoComplete="email" />
                             </div>
                             <div className={styles.field}>
-                                <label>Phone</label>
-                                <input name="phone" type="tel" value={form.phone} onChange={handleChange} placeholder="+44 ..." />
+                                <label htmlFor="phone">Phone</label>
+                                <input id="phone" name="phone" type="tel" value={form.phone} onChange={handleChange} placeholder="+44 ..." autoComplete="tel" />
                             </div>
                             <button className={styles.next} onClick={() => setStep(2)}>Continue to Delivery →</button>
                         </div>
@@ -82,26 +110,26 @@ export default function CheckoutPage() {
                         <div>
                             <h2 className={styles.stepH2}>Delivery address</h2>
                             <div className={styles.field}>
-                                <label>Address *</label>
-                                <input name="address1" value={form.address1} onChange={handleChange} placeholder="14 Mayfair Gardens" />
+                                <label htmlFor="address1">Address *</label>
+                                <input id="address1" name="address1" value={form.address1} onChange={handleChange} placeholder="14 Mayfair Gardens" autoComplete="address-line1" />
                             </div>
                             <div className={styles.field}>
-                                <label>Address Line 2</label>
-                                <input name="address2" value={form.address2} onChange={handleChange} placeholder="Apt / Suite" />
+                                <label htmlFor="address2">Address Line 2</label>
+                                <input id="address2" name="address2" value={form.address2} onChange={handleChange} placeholder="Apt / Suite" autoComplete="address-line2" />
                             </div>
                             <div className={styles.row}>
                                 <div className={styles.field}>
-                                    <label>City *</label>
-                                    <input name="city" value={form.city} onChange={handleChange} placeholder="London" />
+                                    <label htmlFor="city">City *</label>
+                                    <input id="city" name="city" value={form.city} onChange={handleChange} placeholder="London" autoComplete="address-level2" />
                                 </div>
                                 <div className={styles.field}>
-                                    <label>Postcode *</label>
-                                    <input name="postcode" value={form.postcode} onChange={handleChange} placeholder="W1K 1AA" />
+                                    <label htmlFor="postcode">Postcode *</label>
+                                    <input id="postcode" name="postcode" value={form.postcode} onChange={handleChange} placeholder="W1K 1AA" autoComplete="postal-code" />
                                 </div>
                             </div>
                             <div className={styles.field}>
-                                <label>Country</label>
-                                <select name="country" value={form.country} onChange={handleChange}>
+                                <label htmlFor="country">Country</label>
+                                <select id="country" name="country" value={form.country} onChange={handleChange} autoComplete="country-name">
                                     {['United Kingdom', 'United States', 'France', 'Germany', 'Australia'].map(c => <option key={c}>{c}</option>)}
                                 </select>
                             </div>
@@ -140,14 +168,23 @@ export default function CheckoutPage() {
                                 ))}
                             </div>
                             <div className={styles.field}>
-                                <label>Card Number</label>
-                                <input name="cardNumber" value={form.cardNumber} onChange={handleChange} placeholder="1234 5678 9012 3456" />
+                                <label htmlFor="cardNumber">Card Number</label>
+                                <input id="cardNumber" name="cardNumber" value={form.cardNumber} onChange={handleChange} placeholder="1234 5678 9012 3456" autoComplete="cc-number" />
                             </div>
                             <div className={styles.row}>
-                                <div className={styles.field}><label>Expiry</label><input name="cardExpiry" value={form.cardExpiry} onChange={handleChange} placeholder="MM / YY" /></div>
-                                <div className={styles.field}><label>CVC</label><input name="cardCvc" value={form.cardCvc} onChange={handleChange} placeholder="123" /></div>
+                                <div className={styles.field}>
+                                    <label htmlFor="cardExpiry">Expiry</label>
+                                    <input id="cardExpiry" name="cardExpiry" value={form.cardExpiry} onChange={handleChange} placeholder="MM / YY" autoComplete="cc-exp" />
+                                </div>
+                                <div className={styles.field}>
+                                    <label htmlFor="cardCvc">CVC</label>
+                                    <input id="cardCvc" name="cardCvc" value={form.cardCvc} onChange={handleChange} placeholder="123" autoComplete="cc-csc" />
+                                </div>
                             </div>
-                            <div className={styles.field}><label>Name on Card</label><input name="cardName" value={form.cardName} onChange={handleChange} placeholder="Sarah Williams" /></div>
+                            <div className={styles.field}>
+                                <label htmlFor="cardName">Name on Card</label>
+                                <input id="cardName" name="cardName" value={form.cardName} onChange={handleChange} placeholder="Sarah Williams" autoComplete="cc-name" />
+                            </div>
                             <p className={styles.stripNote}>🔒 Secured by Stripe. We never store card details.</p>
                             <button className={styles.next} onClick={() => setStep(4)}>Continue to Review →</button>
                         </div>
@@ -170,9 +207,10 @@ export default function CheckoutPage() {
                                     <p className={styles.reviewValue}>{r.value || <span style={{ color: 'var(--stone)' }}>Not filled</span>}</p>
                                 </div>
                             ))}
-                            <Link href="/confirmation" className={styles.placeOrder}>
-                                PLACE ORDER · {formatPrice(subtotal)}
-                            </Link>
+                            {orderError && <p style={{ color: '#c0392b', marginBottom: '0.75rem', fontSize: '0.85rem' }}>{orderError}</p>}
+                            <button className={styles.placeOrder} onClick={handlePlaceOrder} disabled={placing}>
+                                {placing ? 'Placing Order…' : `PLACE ORDER · ${formatPrice(subtotal)}`}
+                            </button>
                         </div>
                     )}
                 </div>
@@ -180,16 +218,28 @@ export default function CheckoutPage() {
                 {/* Right: Summary */}
                 <aside className={styles.right}>
                     <p className={styles.summaryTitle}>Order Summary</p>
-                    {items.map(item => (
-                        <div key={item.product.id} className={styles.summaryItem}>
-                            <div className={styles.summaryImg} style={{ background: item.product.gradient }} />
-                            <div className={styles.summaryInfo}>
-                                <span className={styles.summaryName}>{item.product.name}</span>
-                                {item.metal && <span className={styles.summaryMeta}>{item.metal}</span>}
+                    {items.map(item => {
+                        const prod = item.product as any;
+                        const name = prod?.name ?? 'Item';
+                        const price = prod?.price ?? null;
+                        const img = prod?.images?.[0];
+                        const gradient = prod?.gradient ?? 'linear-gradient(145deg,#ddd5c4,#c8bba8)';
+                        return (
+                            <div key={item._id} className={styles.summaryItem}>
+                                <div
+                                    className={styles.summaryImg}
+                                    style={img
+                                        ? { backgroundImage: `url(${img})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                                        : { background: gradient }}
+                                />
+                                <div className={styles.summaryInfo}>
+                                    <span className={styles.summaryName}>{name}</span>
+                                    {item.metal && <span className={styles.summaryMeta}>{item.metal}</span>}
+                                </div>
+                                <span className={styles.summaryPrice}>{formatPrice(price)}</span>
                             </div>
-                            <span className={styles.summaryPrice}>{formatPrice(item.product.price)}</span>
-                        </div>
-                    ))}
+                        );
+                    })}
                     <div className={styles.summaryDivider} />
                     <div className={styles.summaryRow}><span>Subtotal</span><span>{formatPrice(subtotal)}</span></div>
                     <div className={styles.summaryRow}><span>Delivery</span><span>FREE</span></div>
