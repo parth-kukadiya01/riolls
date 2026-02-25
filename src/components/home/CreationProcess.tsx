@@ -85,7 +85,7 @@ export default function CreationProcess() {
                     <div className={`${styles.imageColumn} ${isVisible ? styles.imageAnimateIn : ''}`}>
                         <div className={styles.imageWrapper}>
                             <Image
-                                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='1000'%3E%3Crect width='100%25' height='100%25' fill='%23F5F5F5'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23A0A0A0' font-family='sans-serif' font-size='16'%3EAdmin Image: Creation Process%3C/text%3E%3C/svg%3E"
+                                src="https://res.cloudinary.com/dl6cdbdzl/image/upload/v1771992601/kateryna-hliznitsova-ceSCZzjTReg-unsplash_zjqcr7.jpg"
                                 alt="Our Creation Process"
                                 fill
                                 className={styles.image}

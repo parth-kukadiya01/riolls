@@ -3,9 +3,9 @@ import Link from 'next/link';
 import styles from './page.module.css';
 
 const IMAGES = {
-    hero: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='400'%3E%3Crect width='100%25' height='100%25' fill='%23EFEFEF'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23A0A0A0' font-family='sans-serif' font-size='16'%3EAdmin Image: Size Guide Hero%3C/text%3E%3C/svg%3E",
-    rings: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Crect width='100%25' height='100%25' fill='%23F5F5F5'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23A0A0A0' font-family='sans-serif' font-size='16'%3EAdmin Image: Rings Lifestyle%3C/text%3E%3C/svg%3E",
-    bracelets: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Crect width='100%25' height='100%25' fill='%23F5F5F5'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23A0A0A0' font-family='sans-serif' font-size='16'%3EAdmin Image: Bracelets Lifestyle%3C/text%3E%3C/svg%3E",
+    hero: "https://res.cloudinary.com/dl6cdbdzl/image/upload/v1771997169/buddy-an-bUQZomnihtI-unsplash_gfm2y4.jpg",
+    rings: "https://res.cloudinary.com/dl6cdbdzl/image/upload/v1771998724/Button_Back_Rings_-_Web_-_3_Homepage_Images_tq1dwr.webp",
+    bracelets: "https://res.cloudinary.com/dl6cdbdzl/image/upload/v1771999197/giustina-barison-yc8hHj3KqXA-unsplash_guq2lr.jpg",
 };
 
 export default function SizeGuide() {

@@ -59,8 +59,10 @@ export default function CartDrawer() {
                                             <span className={styles.itemCategory}>{catLabel}</span>
                                             <span className={styles.itemName}>{name}</span>
                                             {item.metal && <span className={styles.itemOpts}>{item.metal}{item.size ? ` · Size ${item.size}` : ''}</span>}
-                                            <span className={styles.itemPrice}>{formatPrice(price)}</span>
-                                            <button className={styles.removeBtn} onClick={() => removeItem(itemId)}>Remove</button>
+                                            <div className={styles.itemPriceRow}>
+                                                <span className={styles.itemPrice}>{formatPrice(price)}</span>
+                                                <button className={styles.itemRemove} onClick={() => removeItem(itemId)}>Remove</button>
+                                            </div>
                                         </div>
                                     </div>
                                 );

@@ -42,11 +42,11 @@ export default function Footer() {
                             value={newsEmail}
                             onChange={e => setNewsEmail(e.target.value)}
                             placeholder="Your email address"
-                            style={{ flex: 1, padding: '0.6rem 1rem', border: '1px solid rgba(255,255,255,0.2)', background: 'transparent', color: 'inherit', borderRadius: '2px', fontSize: '0.85rem' }}
+                            style={{ flex: 1, padding: '0.6rem 1rem', border: '1px solid black', background: 'transparent', color: 'inherit', borderRadius: '2px', fontSize: '0.85rem' }}
                         />
                         <button
                             type="submit"
-                            style={{ padding: '0.6rem 1.4rem', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', color: 'inherit', borderRadius: '2px', cursor: 'pointer', fontSize: '0.8rem', letterSpacing: '0.05em' }}
+                            style={{ padding: '0.6rem 1.4rem', background: 'rgba(255,255,255,0.15)', border: '1px solid black', color: 'inherit', borderRadius: '2px', cursor: 'pointer', fontSize: '0.8rem', letterSpacing: '0.05em' }}
                         >
                             Subscribe
                         </button>
@@ -83,24 +83,22 @@ export default function Footer() {
                     </span>
 
                     <div className={styles.socials}>
-                        <a href="#" aria-label="Instagram" className={styles.socialIcon}>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                        <a href="https://www.instagram.com/riollsjewels/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className={styles.socialIcon}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                                 <rect x="2" y="2" width="20" height="20" rx="5" /><circle cx="12" cy="12" r="5" /><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
                             </svg>
                         </a>
-                        <a href="#" aria-label="TikTok" className={styles.socialIcon}>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                                <path d="M9 12a4 4 0 104 4V4a5 5 0 005 5" />
+                        <a href="https://www.linkedin.com/in/riolls-jewels-b189a1387/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className={styles.socialIcon}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z" />
+                                <rect x="2" y="9" width="4" height="12" />
+                                <circle cx="4" cy="4" r="2" />
                             </svg>
                         </a>
-                        <a href="#" aria-label="Pinterest" className={styles.socialIcon}>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                                <circle cx="12" cy="12" r="10" /><path d="M9 15c-.5-1.5 0-3 .5-4s2.5-4 2.5-4 .5 2-1 4 1.5 4 3 1" />
-                            </svg>
-                        </a>
-                        <a href="#" aria-label="Facebook" className={styles.socialIcon}>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                                <path d="M18 2h-3a4 4 0 00-4 4v3H8v4h3v8h4v-8h3l1-4h-4V6a1 1 0 011-1h3z" />
+                        <a href="https://www.youtube.com/@riollsjewels" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className={styles.socialIcon}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33 2.78 2.78 0 001.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.33 29 29 0 00-.46-5.33z" />
+                                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
                             </svg>
                         </a>
                     </div>

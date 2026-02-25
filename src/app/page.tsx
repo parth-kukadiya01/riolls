@@ -105,10 +105,10 @@ export default function HomePage() {
                         <line x1="100" y1="95" x2="165" y2="232" />
                     </svg>
                 </div>
-                <div className={styles.heroScroll}>
+                {/* <div className={styles.heroScroll}>
                     <span className={styles.heroScrollLine} />
                     <span className={styles.heroScrollText}>Scroll to discover</span>
-                </div>
+                </div> */}
             </section>
 
             {/* ── Collections Strip ─────────────────── */}

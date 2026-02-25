@@ -145,10 +145,20 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                 // Let's assume the user will need to re-upload if they want to change using PUT? 
                 // Ah, `app/routers/upload.py` probably contains a standalone upload endpoint. We can upload images there, get URLs, then PUT the JSON body.
 
-                // For safety in this MVP, let's just submit the JSON for PUT.
-                // If we have new images to upload during an edit, we need to upload them. Let's send a POST to the `/upload/images` endpoint if it's there.
+                // If we have new images to upload during an edit, we upload them first to /upload
+                let uploadedImageUrls: string[] = [];
+                if (newImages.length > 0) {
+                    const imgForm = new FormData();
+                    newImages.forEach(file => imgForm.append('images', file));
+                    imgForm.append('folder', 'products');
 
-                // Let's try standard PUT first, ignoring new images or warning about it if there's no clear upload route.
+                    const uploadRes = await adminFetch('/upload', { method: 'POST', body: imgForm });
+                    if (!uploadRes.ok) {
+                        throw new Error('Failed to upload new images');
+                    }
+                    const uploadData = await uploadRes.json();
+                    uploadedImageUrls = uploadData.data?.urls || [];
+                }
 
                 // Actually, I can construct the payload:
                 const payload = {
@@ -159,7 +169,7 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                     minStoneSize: parseFloat(String(formData.minStoneSize)),
                     maxStoneSize: parseFloat(String(formData.maxStoneSize)),
                     availableMetals: formData.availableMetals.split(',').map(m => m.trim()).filter(Boolean),
-                    images: existingImages // For PUT, it only saves existing image strings.
+                    images: [...existingImages, ...uploadedImageUrls] // Combine existing and newly uploaded URLs
                 };
 
                 const res = await adminFetch(`/admin/products/${initialData._id}`, {
@@ -297,46 +307,46 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                 </div>
 
                 {/* Image Upload Area */}
-                {!isEdit && (
-                    <div className={styles.fullWidth}>
-                        <label className={styles.label} style={{ marginBottom: '0.5rem', display: 'block' }}>Product Images</label>
-                        <div
-                            className={`${styles.uploadArea} ${dragActive ? styles.dragActive : ''}`}
-                            onDragEnter={handleDrag}
-                            onDragLeave={handleDrag}
-                            onDragOver={handleDrag}
-                            onDrop={handleDrop}
-                            onClick={() => fileInputRef.current?.click()}
-                        >
-                            <svg className={styles.uploadIcon} width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="17 8 12 3 7 8"></polyline>
-                                <line x1="12" y1="3" x2="12" y2="15"></line>
-                            </svg>
-                            <p className={styles.uploadText}>Click or drag & drop images here</p>
-                            <p className={styles.uploadHint}>High quality JPG, PNG, WEBP</p>
-                            <input
-                                type="file"
-                                multiple
-                                accept="image/*"
-                                ref={fileInputRef}
-                                style={{ display: 'none' }}
-                                onChange={handleFileChange}
-                            />
-                        </div>
-
-                        {newImages.length > 0 && (
-                            <div className={styles.previewGrid}>
-                                {newImages.map((file, idx) => (
-                                    <div key={idx} className={styles.imagePreview}>
-                                        <img src={URL.createObjectURL(file)} className={styles.previewImg} alt="preview" />
-                                        <button type="button" className={styles.removeImgBtn} onClick={(e) => { e.stopPropagation(); removeNewImage(idx); }}>×</button>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+                <div className={styles.fullWidth}>
+                    <label className={styles.label} style={{ marginBottom: '0.5rem', display: 'block' }}>
+                        {isEdit ? 'Add More Product Images' : 'Product Images'}
+                    </label>
+                    <div
+                        className={`${styles.uploadArea} ${dragActive ? styles.dragActive : ''}`}
+                        onDragEnter={handleDrag}
+                        onDragLeave={handleDrag}
+                        onDragOver={handleDrag}
+                        onDrop={handleDrop}
+                        onClick={() => fileInputRef.current?.click()}
+                    >
+                        <svg className={styles.uploadIcon} width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <p className={styles.uploadText}>Click or drag & drop images here</p>
+                        <p className={styles.uploadHint}>High quality JPG, PNG, WEBP</p>
+                        <input
+                            type="file"
+                            multiple
+                            accept="image/*"
+                            ref={fileInputRef}
+                            style={{ display: 'none' }}
+                            onChange={handleFileChange}
+                        />
                     </div>
-                )}
+
+                    {newImages.length > 0 && (
+                        <div className={styles.previewGrid}>
+                            {newImages.map((file, idx) => (
+                                <div key={idx} className={styles.imagePreview}>
+                                    <img src={URL.createObjectURL(file)} className={styles.previewImg} alt="preview" />
+                                    <button type="button" className={styles.removeImgBtn} onClick={(e) => { e.stopPropagation(); removeNewImage(idx); }}>×</button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
 
                 {isEdit && existingImages.length > 0 && (
                     <div className={styles.fullWidth}>
@@ -350,7 +360,7 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                             ))}
                         </div>
                         <p className={styles.uploadHint} style={{ marginTop: '0.5rem' }}>
-                            Note: Replacing or adding new images during edit requires the standalone upload API. Currently, only removing existing images is supported in this mode.
+                            Upload new images above to add more. Remove current images to delete them completely.
                         </p>
                     </div>
                 )}

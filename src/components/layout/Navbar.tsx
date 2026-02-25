@@ -139,7 +139,7 @@ export default function Navbar() {
                             <Link href="/ai-studio/step-1">AI Design Studio</Link>
                             {/* <Link href="/search">Search</Link> */}
                         </div>
-                        <div className={styles.megaImg}>
+                        <div className={styles.megaImg} style={{ backgroundImage: 'url("https://res.cloudinary.com/dl6cdbdzl/image/upload/v1771999550/aleksandr-dalakian-dgXGLijwNOI-unsplash_zzfl3x.jpg")', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                             <span className={styles.megaImgCaption}>The Celestine Collection</span>
                         </div>
                     </div>
@@ -165,7 +165,7 @@ export default function Navbar() {
                             <Link href="/shop">New In</Link>
                             <Link href="/shop">Last Pieces</Link>
                         </div>
-                        <div className={styles.megaImg} style={{ background: 'linear-gradient(145deg,var(--light),var(--blush))' }}>
+                        <div className={styles.megaImg} style={{ backgroundImage: 'url("https://res.cloudinary.com/dl6cdbdzl/image/upload/v1771997169/buddy-an-bUQZomnihtI-unsplash_gfm2y4.jpg")', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                             <span className={styles.megaImgCaption}>The Aurora Collection</span>
                         </div>
                     </div>
@@ -193,7 +193,7 @@ export default function Navbar() {
                             <Link href="/ai-studio/step-1">AI Studio</Link>
                             {/* <Link href="/search">Search</Link> */}
                         </div>
-                        <div className={styles.megaImg} style={{ background: 'linear-gradient(145deg,var(--rose-pale),var(--blush))' }}>
+                        <div className={styles.megaImg} style={{ backgroundImage: 'url("https://res.cloudinary.com/dl6cdbdzl/image/upload/v1771998506/nataliya-melnychuk-oO0JAOJhquk-unsplash_mhgefc.jpg")' }}>
                             <span className={styles.megaImgCaption}>Stories from the Atelier</span>
                         </div>
                     </div>

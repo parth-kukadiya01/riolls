@@ -171,45 +171,45 @@ export default function CategoryForm({ initialData = null, isEdit = false }: Cat
                 </div>
 
                 {/* Image Upload Area */}
-                {!isEdit && (
-                    <div className={styles.formGroup} style={{ marginTop: '1rem' }}>
-                        <label className={styles.label} style={{ marginBottom: '0.5rem', display: 'block' }}>Category Image Cover</label>
-                        {!newImage && (
-                            <div
-                                className={`${styles.uploadArea} ${dragActive ? styles.dragActive : ''}`}
-                                onDragEnter={handleDrag}
-                                onDragLeave={handleDrag}
-                                onDragOver={handleDrag}
-                                onDrop={handleDrop}
-                                onClick={() => fileInputRef.current?.click()}
-                            >
-                                <svg className={styles.uploadIcon} width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                    <polyline points="17 8 12 3 7 8"></polyline>
-                                    <line x1="12" y1="3" x2="12" y2="15"></line>
-                                </svg>
-                                <p className={styles.uploadText}>Click or drag & drop image here</p>
-                                <p className={styles.uploadHint}>High quality JPG, PNG, WEBP</p>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    ref={fileInputRef}
-                                    style={{ display: 'none' }}
-                                    onChange={handleFileChange}
-                                />
-                            </div>
-                        )}
+                <div className={styles.formGroup} style={{ marginTop: '1rem' }}>
+                    <label className={styles.label} style={{ marginBottom: '0.5rem', display: 'block' }}>
+                        {isEdit ? 'Update Category Image Cover' : 'Category Image Cover'}
+                    </label>
+                    {!newImage && (
+                        <div
+                            className={`${styles.uploadArea} ${dragActive ? styles.dragActive : ''}`}
+                            onDragEnter={handleDrag}
+                            onDragLeave={handleDrag}
+                            onDragOver={handleDrag}
+                            onDrop={handleDrop}
+                            onClick={() => fileInputRef.current?.click()}
+                        >
+                            <svg className={styles.uploadIcon} width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <p className={styles.uploadText}>Click or drag & drop image here</p>
+                            <p className={styles.uploadHint}>High quality JPG, PNG, WEBP</p>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                ref={fileInputRef}
+                                style={{ display: 'none' }}
+                                onChange={handleFileChange}
+                            />
+                        </div>
+                    )}
 
-                        {newImage && (
-                            <div className={styles.previewContainer}>
-                                <img src={URL.createObjectURL(newImage)} className={styles.previewImg} alt="preview" />
-                                <button type="button" className={styles.removeImgBtn} onClick={(e) => { e.stopPropagation(); removeNewImage(); }}>×</button>
-                            </div>
-                        )}
-                    </div>
-                )}
+                    {newImage && (
+                        <div className={styles.previewContainer}>
+                            <img src={URL.createObjectURL(newImage)} className={styles.previewImg} alt="preview" />
+                            <button type="button" className={styles.removeImgBtn} onClick={(e) => { e.stopPropagation(); removeNewImage(); }}>×</button>
+                        </div>
+                    )}
+                </div>
 
-                {isEdit && existingImage && (
+                {isEdit && existingImage && !newImage && (
                     <div className={styles.formGroup} style={{ marginTop: '1rem' }}>
                         <label className={styles.label} style={{ marginBottom: '0.5rem', display: 'block' }}>Current Cover Image</label>
                         <div className={styles.previewContainer}>
@@ -217,7 +217,7 @@ export default function CategoryForm({ initialData = null, isEdit = false }: Cat
                             <button type="button" className={styles.removeImgBtn} onClick={() => removeExistingImage()}>×</button>
                         </div>
                         <p className={styles.uploadHint} style={{ marginTop: '0.5rem' }}>
-                            Note: Replacing images during edit relies on the standalone API. Remove to clear.
+                            Upload a new image above to replace this one. Remove to clear completely.
                         </p>
                     </div>
                 )}

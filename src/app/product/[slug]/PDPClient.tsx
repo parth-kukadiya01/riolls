@@ -1,20 +1,24 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import type { Product } from '@/lib/products';
 import { formatPrice } from '@/lib/products';
 import { useCart } from '@/context/CartContext';
+import { wishlistApi, getToken } from '@/lib/api';
 import styles from './PDP.module.css';
 
 export default function PDPClient({ product }: { product: Product }) {
+    const router = useRouter();
     const { addItem } = useCart();
     const [selectedMetal, setSelectedMetal] = useState(product.metal);
     const [activeTab, setActiveTab] = useState<string | null>(null);
     const [engraving, setEngraving] = useState('');
     const [stoneSize, setStoneSize] = useState(1.5);
-    const [wishlisted, setWishlisted] = useState(false);
+    const [wishlisted, setWishlisted] = useState(product.is_wishlisted ?? false);
     const [added, setAdded] = useState(false);
+    const [activeImageIdx, setActiveImageIdx] = useState(0);
 
     const metals = [
         { id: 'yellow-gold', label: '18k Yellow Gold', color: '#C9A96E' },
@@ -32,7 +36,32 @@ export default function PDPClient({ product }: { product: Product }) {
         setTimeout(() => setAdded(false), 2000);
     };
 
+    const handleWishlist = async () => {
+        const token = getToken();
+        if (!token) {
+            router.push('/login');
+            return;
+        }
+
+        const newStatus = !wishlisted;
+        setWishlisted(newStatus); // optimistic update
+
+        try {
+            const productId = (product as any)._id ?? product.id;
+            if (newStatus) {
+                await wishlistApi.add(productId);
+            } else {
+                await wishlistApi.remove(productId);
+            }
+        } catch (err: any) {
+            setWishlisted(!newStatus);
+            console.error('Wishlist error:', err);
+            alert(err.message || 'Failed to update wishlist. Please try again.');
+        }
+    };
+
     const activeMetalLabel = metals.find(m => m.id === selectedMetal)?.label || '';
+    const hasImages = product.images && product.images.length > 0;
 
     return (
         <div className={styles.page}>
@@ -50,26 +79,43 @@ export default function PDPClient({ product }: { product: Product }) {
             <div className={styles.layout}>
                 {/* Gallery */}
                 <div className={styles.gallery}>
-                    <div className={styles.mainImg} style={{ background: product.gradient, position: 'relative' }}>
+                    <div className={styles.mainImg} style={{ background: hasImages ? 'transparent' : product.gradient, position: 'relative', overflow: 'hidden' }}>
+                        {hasImages && (
+                            <img src={product.images![activeImageIdx]} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0 }} />
+                        )}
                         {product.badge && (
                             <span className={styles.badge}>{product.badge}</span>
                         )}
                         <div style={{ position: 'absolute', top: '24px', left: '24px', display: 'flex', flexDirection: 'column', gap: '8px', zIndex: 2 }}>
-                            <span style={{ fontFamily: 'var(--font-sc)', fontSize: '11px', letterSpacing: '0.15em', color: 'var(--stone)' }}>
-                                METAL: <span style={{ color: 'var(--charcoal)', fontWeight: 500 }}>{activeMetalLabel.toUpperCase()}</span>
+                            <span style={{ fontFamily: 'var(--font-sc)', fontSize: '11px', letterSpacing: '0.15em', color: hasImages ? 'var(--white)' : 'var(--stone)' }}>
+                                METAL: <span style={{ color: hasImages ? 'var(--white)' : 'var(--charcoal)', fontWeight: 500 }}>{activeMetalLabel.toUpperCase()}</span>
                             </span>
                             {!product.badge?.includes('Band') && ( /* Only show size if it's likely a diamond piece */
-                                <span style={{ fontFamily: 'var(--font-sc)', fontSize: '11px', letterSpacing: '0.15em', color: 'var(--stone)' }}>
-                                    SIZE: <span style={{ color: 'var(--charcoal)', fontWeight: 500 }}>{stoneSize.toFixed(2)} CT</span>
+                                <span style={{ fontFamily: 'var(--font-sc)', fontSize: '11px', letterSpacing: '0.15em', color: hasImages ? 'var(--white)' : 'var(--stone)' }}>
+                                    SIZE: <span style={{ color: hasImages ? 'var(--white)' : 'var(--charcoal)', fontWeight: 500 }}>{stoneSize.toFixed(2)} CT</span>
                                 </span>
                             )}
                         </div>
                     </div>
-                    <div className={styles.thumbs}>
-                        {[product.gradient, product.gradient_hover, product.gradient, product.gradient_hover].map((g, i) => (
-                            <div key={i} className={`${styles.thumb} ${i === 0 ? styles.thumbActive : ''}`} style={{ background: g }} />
-                        ))}
-                    </div>
+                    {hasImages && product.images!.length > 1 && (
+                        <div className={styles.thumbs}>
+                            {product.images!.map((img, i) => (
+                                <div
+                                    key={i}
+                                    className={`${styles.thumb} ${i === activeImageIdx ? styles.thumbActive : ''}`}
+                                    style={{ backgroundImage: `url(${img})`, backgroundSize: 'cover', backgroundPosition: 'center', cursor: 'pointer' }}
+                                    onClick={() => setActiveImageIdx(i)}
+                                />
+                            ))}
+                        </div>
+                    )}
+                    {!hasImages && (
+                        <div className={styles.thumbs}>
+                            {[product.gradient, product.gradient_hover, product.gradient, product.gradient_hover].map((g, i) => (
+                                <div key={i} className={`${styles.thumb} ${i === 0 ? styles.thumbActive : ''}`} style={{ background: g }} />
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Info Panel */}
@@ -150,7 +196,7 @@ export default function PDPClient({ product }: { product: Product }) {
                         </button>
                         <button
                             className={`${styles.wishlistBtn} ${wishlisted ? styles.wishlisted : ''}`}
-                            onClick={() => setWishlisted(w => !w)}
+                            onClick={handleWishlist}
                             aria-label="Add to wishlist"
                         >
                             <svg width="18" height="18" viewBox="0 0 24 24" fill={wishlisted ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.5">
