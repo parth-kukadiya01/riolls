@@ -26,7 +26,7 @@ export function removeToken(): void {
 export async function apiFetch<T = unknown>(
     endpoint: string,
     options: RequestInit = {},
-): Promise<{ success: boolean; data?: T; message?: string }> {
+): Promise<{ success: boolean; data?: T; message?: string; pagination?: { page: number; limit: number; total: number; totalPages: number } }> {
     const token = getToken();
 
     const headers: Record<string, string> = {
@@ -70,6 +70,16 @@ export const authApi = {
         apiFetch('/auth/register', {
             method: 'POST',
             body: JSON.stringify({ firstName, lastName, email, password }),
+        }),
+    verifyOtp: (email: string, otp: string) =>
+        apiFetch('/auth/verify-otp', {
+            method: 'POST',
+            body: JSON.stringify({ email, otp }),
+        }),
+    googleLogin: (credential: string) =>
+        apiFetch('/auth/google', {
+            method: 'POST',
+            body: JSON.stringify({ credential }),
         }),
     forgotPassword: (email: string) =>
         apiFetch('/auth/forgot-password', {
@@ -201,10 +211,21 @@ export const categoriesApi = {
     list: () => apiFetch('/categories'),
 };
 
-/** Bespoke Works */
 export const bespokeApi = {
     list: (activeOnly: boolean = true) => apiFetch(`/bespoke?active_only=${activeOnly}`),
+    adminListAiConcepts: () => apiFetch('/bespoke/admin/ai-concepts'),
     create: (data: any) => apiFetch('/bespoke/admin', { method: 'POST', body: JSON.stringify(data) }),
     update: (id: string, data: any) => apiFetch(`/bespoke/admin/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
     delete: (id: string) => apiFetch(`/bespoke/admin/${id}`, { method: 'DELETE' }),
+};
+
+/** AI Studio */
+export const aiStudioApi = {
+    generateIdeas: (data: any) => apiFetch('/ai-studio/generate-ideas', { method: 'POST', body: JSON.stringify(data) }),
+    requestQuote: (data: any) => apiFetch('/designs/quote-request', { method: 'POST', body: JSON.stringify(data) }),
+};
+
+/** Appointments */
+export const appointmentApi = {
+    book: (data: any) => apiFetch('/appointments', { method: 'POST', body: JSON.stringify(data) }),
 };

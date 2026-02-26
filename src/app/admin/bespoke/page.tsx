@@ -17,8 +17,10 @@ interface BespokeWork {
 export default function AdminBespokePage() {
     const router = useRouter();
     const [works, setWorks] = useState<BespokeWork[]>([]);
+    const [aiConcepts, setAiConcepts] = useState<BespokeWork[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [activeTab, setActiveTab] = useState<'portfolio' | 'ai'>('portfolio');
 
     // Modal state
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,10 +41,18 @@ export default function AdminBespokePage() {
 
     const loadWorks = async () => {
         setLoading(true);
+        setError('');
         try {
-            const res = await bespokeApi.list(false); // get all, including inactive
-            setWorks((res.data as BespokeWork[]) || []);
+            const [portfolioRes, aiRes] = await Promise.all([
+                bespokeApi.list(false),
+                bespokeApi.adminListAiConcepts()
+            ]);
+            console.log('Loaded Portfolio:', portfolioRes);
+            console.log('Loaded AI Concepts:', aiRes);
+            setWorks((portfolioRes.data as BespokeWork[]) || []);
+            setAiConcepts((aiRes.data as BespokeWork[]) || []);
         } catch (err: any) {
+            console.error('Failed to load bespoke works:', err);
             setError(err.message || 'Failed to load bespoke works');
         } finally {
             setLoading(false);
@@ -65,15 +75,23 @@ export default function AdminBespokePage() {
         }
     };
 
-    const openModal = (work?: BespokeWork) => {
+    const openModal = (work?: BespokeWork, isAiPromotion = false) => {
         setFormError('');
-        if (work) {
+        if (work && !isAiPromotion) {
             setEditingWork(work);
             setName(work.name);
             setImage(work.image);
             setTall(work.tall);
             setOrder(work.order);
             setIsActive(work.isActive);
+        } else if (work && isAiPromotion) {
+            // Preparing to create a NEW permanent bespoke work from an AI concept
+            setEditingWork(null);
+            setName(work.name);
+            setImage(work.image);
+            setTall(false);
+            setOrder(works.length * 10);
+            setIsActive(true);
         } else {
             setEditingWork(null);
             setName('');
@@ -129,50 +147,86 @@ export default function AdminBespokePage() {
                 <button className={styles.primaryBtn} onClick={() => openModal()}>+ Add New Work</button>
             </div>
 
+            <div className={styles.tabs} style={{ display: 'flex', gap: '24px', marginBottom: '24px', borderBottom: '1px solid var(--border)' }}>
+                <button
+                    onClick={() => setActiveTab('portfolio')}
+                    style={{ padding: '12px 0', borderBottom: activeTab === 'portfolio' ? '2px solid var(--charcoal)' : '2px solid transparent', color: activeTab === 'portfolio' ? 'var(--charcoal)' : 'var(--stone)', background: 'none', borderTop: 'none', borderLeft: 'none', borderRight: 'none', cursor: 'pointer', fontFamily: 'var(--font-sc)', fontSize: '11px', letterSpacing: '0.15em', fontWeight: activeTab === 'portfolio' ? 600 : 400 }}
+                >
+                    Approved Portfolio
+                </button>
+                <button
+                    onClick={() => setActiveTab('ai')}
+                    style={{ padding: '12px 0', borderBottom: activeTab === 'ai' ? '2px solid var(--charcoal)' : '2px solid transparent', color: activeTab === 'ai' ? 'var(--charcoal)' : 'var(--stone)', background: 'none', borderTop: 'none', borderLeft: 'none', borderRight: 'none', cursor: 'pointer', fontFamily: 'var(--font-sc)', fontSize: '11px', letterSpacing: '0.15em', fontWeight: activeTab === 'ai' ? 600 : 400 }}
+                >
+                    AI Gallery ({aiConcepts.length})
+                </button>
+            </div>
+
             {error && <div className={styles.errorBanner}>{error}</div>}
 
-            <div className={styles.tableCard}>
-                <table className={styles.table}>
-                    <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Name</th>
-                            <th>Layout</th>
-                            <th>Order</th>
-                            <th>Status</th>
-                            <th style={{ textAlign: 'right' }}>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {works.map(w => (
-                            <tr key={w._id}>
-                                <td>
-                                    <img src={w.image} alt={w.name} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '4px' }} />
-                                </td>
-                                <td style={{ fontWeight: 500 }}>{w.name}</td>
-                                <td>{w.tall ? 'Tall (2 rows)' : 'Standard (1 row)'}</td>
-                                <td>{w.order}</td>
-                                <td>
-                                    <span style={{ color: w.isActive ? 'green' : 'red', fontSize: '12px', background: w.isActive ? '#ecfdf5' : '#fef2f2', padding: '2px 8px', borderRadius: '12px' }}>
-                                        {w.isActive ? 'Active' : 'Hidden'}
-                                    </span>
-                                </td>
-                                <td style={{ textAlign: 'right' }}>
-                                    <button className={styles.textBtn} onClick={() => openModal(w)}>Edit</button>
-                                    <button className={styles.textBtnDanger} onClick={() => handleDelete(w._id)}>Delete</button>
-                                </td>
-                            </tr>
-                        ))}
-                        {works.length === 0 && (
+            {activeTab === 'portfolio' && (
+                <div className={styles.tableCard}>
+                    <table className={styles.table}>
+                        <thead>
                             <tr>
-                                <td colSpan={6} style={{ textAlign: 'center', padding: '2rem', color: 'var(--stone)' }}>
-                                    No bespoke works found.
-                                </td>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Layout</th>
+                                <th>Order</th>
+                                <th>Status</th>
+                                <th style={{ textAlign: 'right' }}>Actions</th>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            {works.map(w => (
+                                <tr key={w._id}>
+                                    <td>
+                                        <img src={w.image} alt={w.name} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '4px' }} />
+                                    </td>
+                                    <td style={{ fontWeight: 500 }}>{w.name}</td>
+                                    <td>{w.tall ? 'Tall (2 rows)' : 'Standard (1 row)'}</td>
+                                    <td>{w.order}</td>
+                                    <td>
+                                        <span style={{ color: w.isActive ? 'green' : 'red', fontSize: '12px', background: w.isActive ? '#ecfdf5' : '#fef2f2', padding: '2px 8px', borderRadius: '12px' }}>
+                                            {w.isActive ? 'Active' : 'Hidden'}
+                                        </span>
+                                    </td>
+                                    <td style={{ textAlign: 'right' }}>
+                                        <button className={styles.textBtn} onClick={() => openModal(w)}>Edit</button>
+                                        <button className={styles.textBtnDanger} onClick={() => handleDelete(w._id)}>Delete</button>
+                                    </td>
+                                </tr>
+                            ))}
+                            {works.length === 0 && (
+                                <tr>
+                                    <td colSpan={6} style={{ textAlign: 'center', padding: '2rem', color: 'var(--stone)' }}>
+                                        No bespoke works found.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+
+            {activeTab === 'ai' && (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '20px' }}>
+                    {aiConcepts.map(c => (
+                        <div key={c._id} style={{ border: '1px solid var(--border)', background: 'var(--white)', padding: '16px', borderRadius: '4px', textAlign: 'center' }}>
+                            <img src={c.image} alt={c.name} style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', borderRadius: '4px', marginBottom: '16px' }} />
+                            <h3 style={{ fontFamily: 'var(--font-body)', fontSize: '14px', margin: '0 0 16px', color: 'var(--charcoal)' }}>{c.name}</h3>
+                            <button className={styles.primaryBtn} style={{ width: '100%', padding: '8px' }} onClick={() => openModal(c, true)}>
+                                Promote to Portfolio
+                            </button>
+                        </div>
+                    ))}
+                    {aiConcepts.length === 0 && (
+                        <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '4rem', color: 'var(--stone)' }}>
+                            No AI concepts generated yet.
+                        </div>
+                    )}
+                </div>
+            )}
 
             {/* Modal */}
             {isModalOpen && (

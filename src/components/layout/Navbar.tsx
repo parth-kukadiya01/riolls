@@ -17,13 +17,13 @@ export default function Navbar() {
     const [activeMega, setActiveMega] = useState<string | null>(null);
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    if (pathname?.startsWith('/admin')) return null;
-
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 60);
         window.addEventListener('scroll', onScroll, { passive: true });
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
+
+    if (pathname?.startsWith('/admin')) return null;
 
     const openMega = (id: string) => {
         if (closeTimer.current) clearTimeout(closeTimer.current);

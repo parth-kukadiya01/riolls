@@ -4,10 +4,11 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { GoogleLogin } from '@react-oauth/google';
 import styles from './page.module.css';
 
 export default function LoginPage() {
-    const { login, user, loading: authLoading } = useAuth();
+    const { login, googleLogin, user, loading: authLoading } = useAuth();
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -31,6 +32,21 @@ export default function LoginPage() {
             router.push(userData.role === 'admin' ? '/admin' : '/profile');
         } catch (err: any) {
             setError(err.message || 'Login failed. Please check your credentials.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleGoogleSuccess = async (credentialResponse: any) => {
+        setError('');
+        setLoading(true);
+        try {
+            if (credentialResponse.credential) {
+                const userData = await googleLogin(credentialResponse.credential);
+                router.push(userData.role === 'admin' ? '/admin' : '/profile');
+            }
+        } catch (err: any) {
+            setError(err.message || 'Google login failed.');
         } finally {
             setLoading(false);
         }
@@ -87,6 +103,22 @@ export default function LoginPage() {
                             {loading ? 'Signing in…' : 'Sign In'}
                         </button>
                     </form>
+
+                    <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                            <hr style={{ flex: 1, borderTop: '1px solid #ddd' }} />
+                            <span style={{ padding: '0 10px', color: '#888', fontSize: '0.85rem' }}>OR</span>
+                            <hr style={{ flex: 1, borderTop: '1px solid #ddd' }} />
+                        </div>
+                        <GoogleLogin
+                            onSuccess={handleGoogleSuccess}
+                            onError={() => setError('Google Login Failed')}
+                            theme="outline"
+                            size="large"
+                            shape="rectangular"
+                            width="100%"
+                        />
+                    </div>
 
                     <div className={styles.footer}>
                         <span className={styles.footerText}>New to Riolls Jewels?</span>

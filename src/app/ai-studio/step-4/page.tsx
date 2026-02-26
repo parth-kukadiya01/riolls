@@ -1,8 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import styles from './step.module.css';
+import { useAIStudio } from '@/context/AIStudioContext';
 
 const metals = [
     { id: 'yellow', label: 'Yellow Gold', color: '#C9A96E' },
@@ -21,6 +23,11 @@ const finishes = [
 ];
 
 export default function AIStep4() {
+    const router = useRouter();
+    const { state, updateCustomisations } = useAIStudio();
+
+    const selectedConcept = state.selectedConceptIndex !== null ? state.generatedConcepts[state.selectedConceptIndex] : null;
+
     const [selectedMetal, setSelectedMetal] = useState('yellow');
     const [selectedCut, setSelectedCut] = useState('Brilliant');
     const [selectedFinish, setSelectedFinish] = useState('hpol');
@@ -40,12 +47,21 @@ export default function AIStep4() {
             <div className={styles.twoCol}>
                 {/* Design preview */}
                 <div className={styles.preview}>
-                    <div className={styles.previewImg} style={{ background: 'radial-gradient(ellipse at 45%,#3d2b14,#1a1208)' }}>
-                        <svg width="80" height="96" viewBox="0 0 80 96" fill={`${metals.find(m => m.id === selectedMetal)?.color}33`} stroke={metals.find(m => m.id === selectedMetal)?.color} strokeWidth="0.6">
-                            <polygon points="40,4 76,24 62,92 18,92 4,24" />
-                            <polygon points="40,4 62,24 40,36 18,24" />
-                            <line x1="18" y1="24" x2="62" y2="24" />
-                        </svg>
+                    <div
+                        className={styles.previewImg}
+                        style={{
+                            background: selectedConcept?.image_data ? `url(${selectedConcept.image_data})` : 'radial-gradient(ellipse at 45%,#3d2b14,#1a1208)',
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                        }}
+                    >
+                        {!selectedConcept?.image_data && (
+                            <svg width="80" height="96" viewBox="0 0 80 96" fill={`${metals.find(m => m.id === selectedMetal)?.color}33`} stroke={metals.find(m => m.id === selectedMetal)?.color} strokeWidth="0.6">
+                                <polygon points="40,4 76,24 62,92 18,92 4,24" />
+                                <polygon points="40,4 62,24 40,36 18,24" />
+                                <line x1="18" y1="24" x2="62" y2="24" />
+                            </svg>
+                        )}
                     </div>
                     <div className={styles.priceEstimate}>
                         <span className={styles.priceLabel}>Estimated Range</span>
@@ -55,6 +71,9 @@ export default function AIStep4() {
 
                 {/* Controls */}
                 <div className={styles.builder}>
+                    <button type="button" onClick={() => router.push('/ai-studio/step-3')} className={styles.backBtn}>
+                        ← Back
+                    </button>
                     <div className={styles.builderHeader}>
                         <span className={styles.builderEyebrow}>Customise Your Piece</span>
                         <h2 className={styles.builderH2}>Finalise every detail.</h2>
@@ -132,7 +151,24 @@ export default function AIStep4() {
                         />
                     </div>
 
-                    <Link href="/ai-studio/step-5" className={styles.continueBtn}>Request a Quote →</Link>
+                    <button
+                        className={styles.continueBtn}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            updateCustomisations({
+                                finalMetal: metals.find(m => m.id === selectedMetal)?.label || 'Yellow Gold',
+                                stoneCut: selectedCut,
+                                stoneSize: stoneSize,
+                                finish: finishes.find(f => f.id === selectedFinish)?.label || 'High Polish',
+                                engraving: engraving,
+                                estimatedPriceLow: low,
+                                estimatedPriceHigh: high
+                            });
+                            router.push('/ai-studio/step-5');
+                        }}
+                    >
+                        Request a Quote →
+                    </button>
                 </div>
             </div>
         </div>

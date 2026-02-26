@@ -157,45 +157,116 @@
 
 .masonry {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     grid-template-rows: auto auto;
     gap: 12px;
-    margin-top: 48px;
+    margin-top: 32px;
 }
 
-.masonryItem {
+.galleryFilters {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+}
+
+.filterBtn {
+    padding: 8px 24px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 40px;
+    color: var(--stone);
+    font-family: var(--font-sc);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filterBtn:hover {
+    border-color: var(--rose);
+    color: var(--rose);
+}
+
+.filterBtnActive {
+    background: var(--rose);
+    border-color: var(--rose);
+    color: var(--white);
+}
+
+.card {
+    position: relative;
+    background: var(--white);
+    cursor: pointer;
+    display: block;
+    text-decoration: none;
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: inset 0 0 0 1px rgba(201, 169, 110, 0.35);
+}
+
+.image {
+    aspect-ratio: 3/4;
     position: relative;
     overflow: hidden;
-    cursor: pointer;
-    min-height: 260px;
-    border: 1px solid var(--border);
+    background: var(--blush);
 }
 
-.masonryTall {
-    grid-row: span 2;
-    min-height: 520px;
+.imgMain {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.4s, transform 0.65s;
 }
 
-.masonryOverlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(26, 26, 26, 0.4);
-    opacity: 0;
-    transition: opacity 0.3s;
+.card:hover .imgMain {
+    transform: scale(1.04);
+}
+
+.info {
+    padding: 16px 12px 20px;
+    text-align: center;
     display: flex;
-    align-items: flex-end;
-    padding: 20px;
+    flex-direction: column;
+    align-items: center;
 }
 
-.masonryItem:hover .masonryOverlay {
-    opacity: 1;
+.category {
+    font-family: var(--font-sc);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--stone);
+    display: block;
+    margin-bottom: 6px;
+    text-transform: capitalize;
 }
 
-.masonryCaption {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: 16px;
-    color: #F8F6F4;
+.name {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    color: var(--charcoal);
+    line-height: 1.4;
+    max-width: 90%;
+}
+
+.price {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--stone);
+    margin-top: 8px;
+    display: block;
+    text-decoration: underline;
+    opacity: 0.8;
+}
+
+.card:hover .price {
+    color: var(--rose);
 }
 
 /* CTA */
@@ -259,6 +330,12 @@
 .ctaBtnGhost:hover {
     border-color: var(--rose);
     color: var(--rose);
+}
+
+@media (max-width: 1200px) {
+    .masonry {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 @media (max-width: 900px) {

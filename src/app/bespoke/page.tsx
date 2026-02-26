@@ -28,7 +28,7 @@ export default function BespokePage() {
                     </div>
                     <h1 className={styles.heroH1}>A piece made<br />only for you.</h1>
                     <p className={styles.heroBody}>Commission a one-of-a-kind jewel, designed in close collaboration with our master goldsmiths over 8–12 weeks.</p>
-                    <Link href="/ai-studio/step-5" className={styles.heroCta}>Book a Private Consultation</Link>
+                    <Link href="/contact" className={styles.heroCta}>Book a Private Consultation</Link>
                 </div>
             </section>
 
@@ -63,8 +63,8 @@ export default function BespokePage() {
                 <h2 className={styles.ctaH2}>Begin your commission.</h2>
                 <p className={styles.ctaBody}>Our commissions are available worldwide. Begin with a complimentary consultation to discuss your vision, timeline, and budget.</p>
                 <div className={styles.ctaRow}>
-                    <Link href="/ai-studio/step-5" className={styles.ctaBtnGold}>Book a Consultation</Link>
-                    <button className={styles.ctaBtnGhost}>WhatsApp Us</button>
+                    <Link href="/contact" className={styles.ctaBtnGold}>Book a Consultation</Link>
+                    <a href="https://wa.me/message/CNVYZ7P7GP3SN1?text=Hello" target="_blank" rel="noopener noreferrer" className={styles.ctaBtnGhost}>WhatsApp Us</a>
                 </div>
             </section>
         </>

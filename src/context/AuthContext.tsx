@@ -26,7 +26,9 @@ interface AuthContextType {
     token: string | null;
     loading: boolean;
     login: (email: string, password: string) => Promise<UserProfile>;
-    register: (firstName: string, lastName: string, email: string, password: string) => Promise<UserProfile>;
+    register: (firstName: string, lastName: string, email: string, password: string) => Promise<void>;
+    verifyOtp: (email: string, otp: string) => Promise<UserProfile>;
+    googleLogin: (credential: string) => Promise<UserProfile>;
     logout: () => void;
     refreshProfile: () => Promise<void>;
 }
@@ -67,8 +69,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }, []);
 
     const register = useCallback(
-        async (firstName: string, lastName: string, email: string, password: string): Promise<UserProfile> => {
-            const res: any = await authApi.register(firstName, lastName, email, password);
+        async (firstName: string, lastName: string, email: string, password: string): Promise<void> => {
+            await authApi.register(firstName, lastName, email, password);
+            // Registration now requires OTP step, so we don't set user/token yet.
+        },
+        [],
+    );
+
+    const verifyOtp = useCallback(
+        async (email: string, otp: string): Promise<UserProfile> => {
+            const res: any = await authApi.verifyOtp(email, otp);
+            const { token: jwt, user: userData } = res.data;
+            setToken(jwt);
+            setTokenState(jwt);
+            setUser(userData);
+            return userData;
+        },
+        [],
+    );
+
+    const googleLogin = useCallback(
+        async (credential: string): Promise<UserProfile> => {
+            const res: any = await authApi.googleLogin(credential);
             const { token: jwt, user: userData } = res.data;
             setToken(jwt);
             setTokenState(jwt);
@@ -90,7 +112,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, token, loading, login, register, logout, refreshProfile }}>
+        <AuthContext.Provider value={{ user, token, loading, login, register, verifyOtp, googleLogin, logout, refreshProfile }}>
             {children}
         </AuthContext.Provider>
     );

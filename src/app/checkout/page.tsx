@@ -40,6 +40,14 @@ export default function CheckoutPage() {
                     delivery: { address1: form.address1, address2: form.address2, city: form.city, postcode: form.postcode, country: form.country },
                     deliveryMethod: form.delivery,
                     deliveryCost: deliveryCostMap[form.delivery] ?? 0,
+                    items: items.map(item => ({
+                        productId: item.product._id,
+                        quantity: item.quantity,
+                        size: item.size,
+                        metal: item.metal,
+                        stoneSize: item.stoneSize,
+                        engraving: item.engraving,
+                    })),
                 });
                 await clearCart();
             }
@@ -53,15 +61,7 @@ export default function CheckoutPage() {
 
     return (
         <div className={styles.page}>
-            <header className={styles.header}>
-                <Link href="/" className={styles.logo}>RIOLLS JEWELS</Link>
-                <div className={styles.secure}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                        <rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0110 0v4" />
-                    </svg>
-                    Secure Checkout
-                </div>
-            </header>
+
 
             {/* Step bar */}
             <div className={styles.stepBar}>

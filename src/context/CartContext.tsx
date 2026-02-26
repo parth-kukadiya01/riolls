@@ -4,6 +4,7 @@ import React, {
     createContext, useContext, useState, useEffect,
     useCallback, ReactNode,
 } from 'react';
+import { useRouter } from 'next/navigation';
 import { cartApi, getToken } from '@/lib/api';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -59,17 +60,13 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 // ─── Provider ─────────────────────────────────────────────────────────────────
 
 export function CartProvider({ children }: { children: ReactNode }) {
+    const router = useRouter();
     const [items, setItems] = useState<CartItem[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const fetchCart = useCallback(async () => {
         if (!getToken()) {
-            // guest: load from localStorage
-            try {
-                const raw = localStorage.getItem('rj_guest_cart');
-                if (raw) setItems(JSON.parse(raw));
-            } catch { }
             return;
         }
         try {
@@ -89,37 +86,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // Persist guest cart to localStorage
-    useEffect(() => {
-        if (!getToken()) {
-            localStorage.setItem('rj_guest_cart', JSON.stringify(items));
-        }
-    }, [items]);
-
     const addItem = useCallback(async (
         productId: string,
         opts?: { size?: string; metal?: string; quantity?: number; stoneSize?: number; engraving?: string },
     ) => {
         if (!getToken()) {
-            // Guest: local state only
-            setItems(prev => {
-                const exists = prev.find(i => i.product._id === productId);
-                if (exists) {
-                    return prev.map(i =>
-                        i.product._id === productId
-                            ? { ...i, quantity: i.quantity + (opts?.quantity ?? 1) }
-                            : i,
-                    );
-                }
-                return [...prev, {
-                    _id: productId + Date.now(),
-                    product: { _id: productId, slug: '', name: 'Product', price: null },
-                    quantity: opts?.quantity ?? 1,
-                    size: opts?.size,
-                    metal: opts?.metal,
-                }];
-            });
-            setIsOpen(true);
+            router.push('/login');
             return;
         }
         try {
@@ -129,35 +101,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
         } catch (err: any) {
             console.error('Add to cart error:', err.message);
         }
-    }, []);
+    }, [router]);
 
     const removeItem = useCallback(async (itemId: string) => {
-        if (!getToken()) {
-            setItems(prev => prev.filter(i => i._id !== itemId));
-            return;
-        }
+        if (!getToken()) return;
         const res: any = await cartApi.remove(itemId);
         setItems(res.data?.items ?? []);
     }, []);
 
     const updateItem = useCallback(async (itemId: string, data: { quantity?: number; size?: string; metal?: string }) => {
-        if (!getToken()) {
-            setItems(prev =>
-                data.quantity === 0
-                    ? prev.filter(i => i._id !== itemId)
-                    : prev.map(i => i._id === itemId ? { ...i, ...data } : i),
-            );
-            return;
-        }
+        if (!getToken()) return;
         const res: any = await cartApi.update(itemId, data);
         setItems(res.data?.items ?? []);
     }, []);
 
     const clearCart = useCallback(async () => {
-        if (!getToken()) {
-            setItems([]);
-            return;
-        }
+        if (!getToken()) return;
         await cartApi.clear();
         setItems([]);
     }, []);

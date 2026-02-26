@@ -181,6 +181,26 @@
     background: var(--white);
 }
 
+.backBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--stone);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 24px;
+    transition: color 0.2s;
+}
+
+.backBtn:hover {
+    color: var(--rose);
+}
+
 .builderHeader {
     margin-bottom: 40px;
 }

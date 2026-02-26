@@ -35,14 +35,9 @@ export default function AdminProducts() {
             const json = await res.json();
 
             if (res.ok) {
-                // The backend returns { success: true, data: { items: [], total: ..., totalPages: ... } }
-                if (json.data && json.data.items) {
-                    setProducts(json.data.items);
-                    setTotalPages(json.data.totalPages || 1);
-                } else {
-                    setProducts([]);
-                    setTotalPages(1);
-                }
+                // Backend returns { success: true, data: [...], pagination: { totalPages, ... } }
+                setProducts(Array.isArray(json.data) ? json.data : []);
+                setTotalPages(json.pagination?.totalPages || 1);
             } else {
                 console.error('Failed to fetch products', json);
                 setProducts([]);

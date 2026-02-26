@@ -37,10 +37,9 @@ export default function AdminOrders() {
             const res = await adminFetch(url);
             const json = await res.json();
             if (res.ok) {
-                // Backend returns paginated: { data: { items: [], total, totalPages } }
-                const payload = json.data;
-                setOrders(payload.items || []);
-                setTotalPages(payload.totalPages || 1);
+                // Backend returns: { data: [...], pagination: { totalPages, ... } }
+                setOrders(Array.isArray(json.data) ? json.data : []);
+                setTotalPages(json.pagination?.totalPages || 1);
             } else {
                 console.error('Failed to fetch orders:', json);
             }

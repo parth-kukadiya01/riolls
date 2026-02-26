@@ -58,9 +58,9 @@ function ShopContent() {
         productsApi
             .list(params)
             .then((res: any) => {
-                const items = res.data?.items ?? [];
+                const items = Array.isArray(res.data) ? res.data : [];
                 setProducts(items);
-                setTotal(res.data?.total ?? 0);
+                setTotal(res.pagination?.total ?? 0);
 
                 // If no specific metal/stone filter is active, extract the available ones dynamically
                 if (!filters.metal && !filters.stone) {
