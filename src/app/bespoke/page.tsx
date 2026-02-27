@@ -19,7 +19,7 @@ export default function BespokePage() {
     return (
         <>
             {/* Hero */}
-            <section className={styles.hero} style={{ paddingTop: 'var(--nav-height)' }}>
+            <section className={styles.hero}>
                 <div className={styles.heroOverlay} />
                 <div className={styles.heroContent}>
                     <div className={styles.heroBrow}>

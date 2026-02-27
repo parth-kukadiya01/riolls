@@ -172,7 +172,10 @@ export default function AdminBespokePage() {
         <div className={styles.container}>
             <div className={styles.header}>
                 <h1 className={styles.title}>Bespoke Portfolio</h1>
-                <button className={styles.primaryBtn} onClick={() => openModal()}>+ Add New Work</button>
+                <div style={{ display: 'flex', gap: '12px' }}>
+                    <button className={styles.secondaryBtn} onClick={() => router.push('/admin/designs')}>AI Product</button>
+                    <button className={styles.primaryBtn} onClick={() => openModal()}>+ Add New Work</button>
+                </div>
             </div>
 
             <div className={styles.tabs} style={{ display: 'flex', gap: '24px', marginBottom: '24px', borderBottom: '1px solid var(--border)' }}>

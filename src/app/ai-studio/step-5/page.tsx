@@ -2,17 +2,53 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styles from './step.module.css';
 import { useAIStudio } from '@/context/AIStudioContext';
+import { useAuth } from '@/context/AuthContext';
+import { COUNTRIES } from '@/utils/countries';
 
 export default function AIStep5() {
     const router = useRouter();
     const { state, submitQuote } = useAIStudio();
+    const { user } = useAuth();
     const [submitted, setSubmitted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
-    const [form, setForm] = useState({ name: '', email: '', phone: '', notes: '', preferredContact: 'Email' });
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    const [form, setForm] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        country: '',
+        countryCode: '+91',
+        notes: '',
+        preferredContact: 'Email'
+    });
+
+    // Close dropdown on click outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    // Pre-fill user info if logged in
+    useEffect(() => {
+        if (user) {
+            setForm(prev => ({
+                ...prev,
+                name: prev.name || `${user.firstName} ${user.lastName}`.trim(),
+                email: prev.email || user.email,
+            }));
+        }
+    }, [user]);
 
     const selectedConcept = state.selectedConceptIndex !== null ? state.generatedConcepts[state.selectedConceptIndex] : null;
 
@@ -30,15 +66,24 @@ export default function AIStep5() {
         setIsSubmitting(false);
     };
 
+    const handleCountrySelect = (c: typeof COUNTRIES[0]) => {
+        setForm(p => ({
+            ...p,
+            countryCode: c.code,
+            country: p.country || c.name // Auto-fill country if empty
+        }));
+        setDropdownOpen(false);
+    };
+
+    const currentCountry = COUNTRIES.find(c => c.code === form.countryCode) || { flag: '🌐', code: form.countryCode };
+
     if (submitted) {
         return (
             <div className={styles.page}>
                 <div className={styles.progressBar}><div className={styles.progressFill} style={{ width: '100%' }} /></div>
                 <div className={styles.successWrap}>
                     <div className={styles.checkCircle}>
-                        <svg width="28" height="22" viewBox="0 0 28 22" fill="none" stroke="var(--deep)" strokeWidth="2.5">
-                            <polyline points="2,11 10,19 26,3" />
-                        </svg>
+                        {/* Checkmark icon could go here */}
                     </div>
                     <h2 className={styles.successH2}>Your request has been received.</h2>
                     <p className={styles.successBody}>
@@ -71,7 +116,7 @@ export default function AIStep5() {
                                 }}
                             />
                             <div className={styles.specRow}>
-                                <span className={styles.specKey}>Piece</span>
+                                <span className={styles.specKey}>Name</span>
                                 <span className={styles.specVal}>{state.galleryReference.name}</span>
                             </div>
                             <div className={styles.specRow}>
@@ -138,23 +183,71 @@ export default function AIStep5() {
                     </div>
 
                     <form onSubmit={handleSubmit}>
-                        {[
-                            { id: 'name', label: 'Full Name *', type: 'text', placeholder: 'Sarah Williams' },
-                            { id: 'email', label: 'Email Address *', type: 'email', placeholder: 'sarah@email.com' },
-                            { id: 'phone', label: 'Phone', type: 'tel', placeholder: '+44 ...' },
-                        ].map(f => (
-                            <div key={f.id} className={styles.formField}>
-                                <label className={styles.formLabel}>{f.label}</label>
+                        <div className={styles.formField}>
+                            <label className={styles.formLabel}>Full Name *</label>
+                            <input
+                                type="text"
+                                placeholder="Sarah Williams"
+                                className={styles.formInput}
+                                value={form.name}
+                                onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
+                                required
+                            />
+                        </div>
+
+                        <div className={styles.formField}>
+                            <label className={styles.formLabel}>Email Address *</label>
+                            <input
+                                type="email"
+                                placeholder="sarah@email.com"
+                                className={styles.formInput}
+                                value={form.email}
+                                onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
+                                required
+                            />
+                        </div>
+
+                        <div className={styles.formField}>
+                            <label className={styles.formLabel}>Country *</label>
+                            <input
+                                type="text"
+                                placeholder="United Kingdom"
+                                className={styles.formInput}
+                                value={form.country}
+                                onChange={e => setForm(p => ({ ...p, country: e.target.value }))}
+                                required
+                            />
+                        </div>
+
+                        <div className={styles.formField}>
+                            <label className={styles.formLabel}>Phone Number</label>
+                            <div className={styles.phoneInputGroup}>
+                                <div className={styles.countryCodePrefix} onClick={() => setDropdownOpen(!dropdownOpen)} ref={dropdownRef}>
+                                    <span className={styles.flag}>{currentCountry.flag}</span>
+                                    <span>{currentCountry.code}</span>
+                                    <span style={{ fontSize: '10px', marginLeft: '4px' }}>▼</span>
+
+                                    {dropdownOpen && (
+                                        <div className={styles.countryDropdown}>
+                                            {COUNTRIES.map((c, idx) => (
+                                                <div key={idx} className={styles.countryOption} onClick={() => handleCountrySelect(c)}>
+                                                    <span className={styles.countryOptionFlag}>{c.flag}</span>
+                                                    <span className={styles.countryOptionName}>{c.name}</span>
+                                                    <span className={styles.countryOptionCode}>{c.code}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                                 <input
-                                    type={f.type}
-                                    placeholder={f.placeholder}
-                                    className={styles.formInput}
-                                    value={(form as Record<string, string>)[f.id]}
-                                    onChange={e => setForm(p => ({ ...p, [f.id]: e.target.value }))}
-                                    required={f.label.includes('*')}
+                                    type="tel"
+                                    placeholder="Number"
+                                    className={styles.phoneInput}
+                                    value={form.phone}
+                                    onChange={e => setForm(p => ({ ...p, phone: e.target.value }))}
                                 />
                             </div>
-                        ))}
+                        </div>
 
                         <div className={styles.formField}>
                             <label className={styles.formLabel}>Preferred Contact</label>

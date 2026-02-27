@@ -30,6 +30,7 @@ interface AIStudioContextType {
     generateIdeas: () => Promise<boolean>;
     submitQuote: (contactData: Record<string, string>) => Promise<boolean>;
     setGalleryReference: (piece: { name: string; image: string; type: string } | null) => void;
+    resetGeneration: () => void;
     reset: () => void;
 }
 
@@ -74,7 +75,7 @@ export function AIStudioProvider({ children }: { children: ReactNode }) {
         if (generatingRef.current) return false;
         generatingRef.current = true;
 
-        setState(prev => ({ ...prev, isGenerating: true, error: null }));
+        setState(prev => ({ ...prev, isGenerating: true, error: null, galleryReference: null }));
 
         try {
             const res = await aiStudioApi.generateIdeas(state.profile);
@@ -135,12 +136,25 @@ export function AIStudioProvider({ children }: { children: ReactNode }) {
         }
     };
 
+    const resetGeneration = () => {
+        setState(prev => ({
+            ...prev,
+            generatedConcepts: [],
+            styleAnalysis: '',
+            recommendedMaterials: [],
+            selectedConceptIndex: null,
+            error: null,
+            isGenerating: false,
+            galleryReference: null,
+        }));
+    };
+
     const reset = () => {
         setState(initialState);
     };
 
     return (
-        <AIStudioContext.Provider value={{ state, updateProfile, updateCustomisations, setSelectedConcept, generateIdeas, submitQuote, setGalleryReference, reset }}>
+        <AIStudioContext.Provider value={{ state, updateProfile, updateCustomisations, setSelectedConcept, generateIdeas, submitQuote, setGalleryReference, resetGeneration, reset }}>
             {children}
         </AIStudioContext.Provider>
     );

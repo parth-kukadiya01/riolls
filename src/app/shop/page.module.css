@@ -1,6 +1,6 @@
 .page {
     min-height: 100vh;
-    padding: 0 0 100px;
+    padding: 0 0 var(--space-xl);
 }
 
 .breadcrumb {
@@ -30,7 +30,7 @@
 }
 
 .sidebar {
-    padding: 40px 32px 40px 0;
+    padding: 24px 24px 24px 0;
     border-right: 1px solid rgba(201, 169, 110, 0.12);
     position: sticky;
     top: var(--nav-height);
@@ -116,7 +116,7 @@
 }
 
 .main {
-    padding: 40px 0 40px 48px;
+    padding: 24px 0 24px 32px;
 }
 
 .toolbar {
@@ -206,7 +206,7 @@
 }
 
 .emptyState {
-    padding: 80px 0;
+    padding: 40px 0;
     text-align: center;
 }
 

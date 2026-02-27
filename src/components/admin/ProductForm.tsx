@@ -366,11 +366,10 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                 </div>
 
                 <div className={styles.formGroup} style={{ gridColumn: '1 / -1' }}>
-                    <label className={styles.label}>Stone Detail *</label>
+                    <label className={styles.label}>Stone Detail</label>
                     <textarea
                         className={styles.textarea}
                         style={{ minHeight: '80px' }}
-                        required
                         value={formData.stoneDetail}
                         onChange={e => setFormData({ ...formData, stoneDetail: e.target.value })}
                     />
@@ -404,6 +403,7 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                         value={formData.badge}
                         onChange={e => setFormData({ ...formData, badge: e.target.value })}
                     >
+                        <option value="">None</option>
                         <option value="New In">New In</option>
                         <option value="Last Piece">Last Piece</option>
                         <option value="Best Seller">Best Seller</option>

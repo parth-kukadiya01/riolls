@@ -9,6 +9,7 @@
     justify-content: center;
     position: relative;
     overflow: hidden;
+    margin-top: calc(var(--nav-height) * -1);
     padding-top: var(--nav-height);
     border-bottom: 1px solid var(--border);
 }
@@ -268,7 +269,7 @@
     border-bottom: 1px solid var(--border);
     display: grid;
     grid-template-columns: 1fr 1fr;
-    min-height: 520px;
+    /* min-height: 520px; - Removed to improve responsiveness */
 }
 
 .aiBannerLeft {

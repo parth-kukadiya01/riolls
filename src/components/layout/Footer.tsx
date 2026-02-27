@@ -13,6 +13,7 @@ export default function Footer() {
     const [newsMsg, setNewsMsg] = useState('');
 
     if (pathname?.startsWith('/admin')) return null;
+    if (pathname?.startsWith('/ai-studio')) return null;
 
     const handleSubscribe = async (e: React.FormEvent) => {
         e.preventDefault();

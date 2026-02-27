@@ -11,7 +11,7 @@ const STYLE_TAGS = ['Romantic', 'Bold', 'Minimal', 'Editorial', 'Celestial', 'Vi
 
 export default function AIStep2() {
     const router = useRouter();
-    const { state, updateProfile } = useAIStudio();
+    const { state, updateProfile, resetGeneration } = useAIStudio();
     const { user } = useAuth();
 
     const dynamicTokens = useMemo(() => {
@@ -87,16 +87,10 @@ export default function AIStep2() {
         reader.readAsDataURL(file);
     };
 
-    // Convert preview selection to backend schema parameter names
     const handleGenerate = (e: React.MouseEvent) => {
         e.preventDefault();
 
-        if (!user) {
-            alert('Please sign in to generate your custom AI designs.');
-            router.push('/login');
-            return;
-        }
-
+        // Save current selections before doing anything else
         updateProfile({
             pieceType: selected.pieceType,
             metal: selected.metal,
@@ -110,6 +104,16 @@ export default function AIStep2() {
             ...(referenceImage ? { referenceImage } : {})
         });
 
+        resetGeneration();
+
+        if (!user) {
+            // User is not logged in. Use the existing login page flow.
+            // Pass the callback URL so they come back to step 3 after authenticating.
+            router.push(`/login?callbackUrl=${encodeURIComponent('/ai-studio/step-3')}`);
+            return;
+        }
+
+        // Already logged in, proceed to generate
         router.push('/ai-studio/step-3');
     };
 

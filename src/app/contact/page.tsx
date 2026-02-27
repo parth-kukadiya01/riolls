@@ -2,11 +2,13 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useAuth } from '@/context/AuthContext';
 import CustomDatePicker from '@/components/ui/CustomDatePicker';
 import CustomTimePicker from '@/components/ui/CustomTimePicker';
 import styles from './page.module.css';
 
 export default function ContactPage() {
+    const { user } = useAuth();
     const [mode, setMode] = useState<'enquiry' | 'appointment'>('enquiry');
 
     // Enquiry form state
@@ -44,6 +46,10 @@ export default function ContactPage() {
     const submit = async (e: React.FormEvent) => {
         e.preventDefault();
         setSubmitError('');
+        if (!user) {
+            setSubmitError('Please sign in to submit this form.');
+            return;
+        }
         setSubmitting(true);
         try {
             const { contactApi } = await import('@/lib/api');
@@ -65,6 +71,10 @@ export default function ContactPage() {
     const submitAppt = async (e: React.FormEvent) => {
         e.preventDefault();
         setSubmitError('');
+        if (!user) {
+            setSubmitError('Please sign in to book an appointment.');
+            return;
+        }
         setSubmitting(true);
         try {
             const { appointmentApi } = await import('@/lib/api');
@@ -78,7 +88,7 @@ export default function ContactPage() {
     };
 
     return (
-        <div className={styles.page} style={{ paddingTop: 'var(--nav-height)' }}>
+        <div className={styles.page}>
 
             {/* ── Hero ── */}
             <section className={styles.hero}>
@@ -181,6 +191,30 @@ export default function ContactPage() {
                         {mode === 'enquiry' ? "Fill in the form and we'll respond within 24 hours." : "Select your preferred date and time for a private consultation."}
                     </p>
 
+                    {!user && (
+                        <div style={{
+                            display: 'flex', alignItems: 'center', gap: '12px',
+                            background: '#fdf8f5', border: '1px solid #e8ddd8',
+                            borderRadius: '10px', padding: '14px 18px', marginBottom: '20px',
+                        }}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8B5C52" strokeWidth="1.6">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="8" x2="12" y2="12" />
+                                <line x1="12" y1="16" x2="12.01" y2="16" />
+                            </svg>
+                            <span style={{ fontSize: '0.875rem', color: '#5c4a43' }}>
+                                You need to be signed in to submit this form.{' '}
+                                <Link href="/login" style={{ color: '#8B5C52', fontWeight: 600, textDecoration: 'underline' }}>
+                                    Sign in
+                                </Link>
+                                {' '}or{' '}
+                                <Link href="/register" style={{ color: '#8B5C52', fontWeight: 600, textDecoration: 'underline' }}>
+                                    create an account
+                                </Link>.
+                            </span>
+                        </div>
+                    )}
+
                     {sent ? (
                         <div className={styles.success}>
                             <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
@@ -238,7 +272,7 @@ export default function ContactPage() {
                                 </button>
                                 <p className={styles.privacy}>
                                     By submitting you agree to our{' '}
-                                    <Link href="#" className={styles.privacyLink}>Privacy Policy</Link>.
+                                    <Link href="/privacy" className={styles.privacyLink}>Privacy Policy</Link>.
                                 </p>
                             </div>
                         </form>
@@ -393,7 +427,7 @@ export default function ContactPage() {
                                 </button>
                                 <p className={styles.privacy}>
                                     By submitting you agree to our{' '}
-                                    <Link href="#" className={styles.privacyLink}>Privacy Policy</Link>.
+                                    <Link href="/privacy" className={styles.privacyLink}>Privacy Policy</Link>.
                                 </p>
                             </div>
                         </form>
