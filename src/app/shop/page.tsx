@@ -91,7 +91,7 @@ function ShopContent() {
         setFilters({ cat: null, metal: null, metalColor: null, stone: null, maxPrice: 20000 });
 
     return (
-        <div className={styles.page} style={{ paddingTop: 'var(--nav-height)' }}>
+        <div className={styles.page}>
             {/* Breadcrumb */}
             <div className={styles.breadcrumb}>
                 <span>Home</span><span className={styles.sep}>/</span>

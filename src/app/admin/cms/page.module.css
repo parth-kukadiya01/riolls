@@ -7,7 +7,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .title {
@@ -28,8 +28,8 @@
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
     border: 1px solid rgba(0, 0, 0, 0.04);
-    padding: 2rem;
-    margin-bottom: 2rem;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
     max-width: 900px;
 }
 
@@ -37,7 +37,7 @@
     font-family: var(--font-secondary);
     font-size: 1.25rem;
     color: var(--dark);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid #eee;
 }
@@ -116,7 +116,7 @@
 .uploadArea {
     border: 2px dashed #ddd;
     border-radius: 8px;
-    padding: 2rem;
+    padding: 1.25rem;
     text-align: center;
     cursor: pointer;
     background: #faf9f8;
@@ -217,7 +217,7 @@
     color: #2e7d32;
     padding: 1rem;
     border-radius: 4px;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     font-size: 0.875rem;
     display: flex;
     align-items: center;

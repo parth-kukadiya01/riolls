@@ -1,7 +1,8 @@
 /* Blog page */
 .hero {
     background: linear-gradient(160deg, var(--white) 0%, var(--cream) 60%, var(--light) 100%);
-    padding: var(--space-xl) var(--gutter) 72px;
+    margin-top: calc(var(--nav-height) * -1);
+    padding: calc(var(--space-xl) + var(--nav-height)) var(--gutter) 72px;
     text-align: center;
     border-bottom: 1px solid var(--border);
 }

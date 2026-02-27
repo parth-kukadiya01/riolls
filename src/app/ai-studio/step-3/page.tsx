@@ -14,6 +14,14 @@ const loadingMessages = [
     'Finalising your designs…',
 ];
 
+const loadingSubMessages = [
+    'Comparing classical motifs with avant-garde forms',
+    'Calculating proportions for maximum brilliance',
+    'Selecting the optimal setting for your stones',
+    'Refining the silhouette and metal textures',
+    'Polishing the final photorealistic render',
+];
+
 const gradients = [
     'radial-gradient(ellipse at 45%,#3d2b14,#1a1208)',
     'radial-gradient(ellipse at 55%,#1a2420,#0a1210)',
@@ -24,42 +32,31 @@ export default function AIStep3() {
     const router = useRouter();
     const { state, generateIdeas, setSelectedConcept } = useAIStudio();
 
-    // phase: loading -> results, but if it fails we can show error
     const [phase, setPhase] = useState<'loading' | 'results' | 'error'>('loading');
     const [msgIdx, setMsgIdx] = useState(0);
 
     useEffect(() => {
-        let mounted = true;
-
-        const startGeneration = async () => {
-            if (state.generatedConcepts.length > 0) {
-                // Already generated (user went back and forward)
-                setPhase('results');
-                return;
-            }
-
-            const success = await generateIdeas();
-            if (mounted) {
-                if (success) {
-                    setPhase('results');
-                } else {
-                    setPhase('error');
-                }
-            }
-        };
-
-        startGeneration();
-
-        return () => { mounted = false; };
+        if (state.generatedConcepts.length === 0 && !state.isGenerating && !state.error) {
+            generateIdeas();
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // Cycling loading message effect
+    useEffect(() => {
+        if (state.generatedConcepts.length > 0) {
+            setPhase('results');
+        } else if (state.error) {
+            setPhase('error');
+        } else {
+            setPhase('loading');
+        }
+    }, [state.generatedConcepts, state.error, state.isGenerating]);
+
     useEffect(() => {
         if (phase !== 'loading') return;
         const interval = setInterval(() => {
             setMsgIdx(i => i >= loadingMessages.length - 1 ? i : i + 1);
-        }, 1500);
+        }, 3000); // Slower interval for readability
         return () => clearInterval(interval);
     }, [phase]);
 
@@ -69,27 +66,46 @@ export default function AIStep3() {
 
             {phase === 'loading' && (
                 <div className={styles.loading}>
-                    <div className={styles.loadingDiamond}>
-                        <svg width="80" height="96" viewBox="0 0 80 96" fill="rgba(201,169,110,0.15)" stroke="#C9A96E" strokeWidth="0.6">
-                            <polygon points="40,4 76,24 62,92 18,92 4,24" />
-                            <polygon points="40,4 62,24 40,36 18,24" />
-                            <line x1="18" y1="24" x2="62" y2="24" />
-                        </svg>
+                    <div className={styles.loaderAssembly}>
+                        <div className={styles.loaderRing}></div>
+                        <div className={styles.loaderRing2}></div>
+                        <div className={styles.loadingDiamond}>
+                            <svg width="60" height="72" viewBox="0 0 80 96" fill="rgba(201,169,110,0.15)" stroke="#C9A96E" strokeWidth="1">
+                                <polygon points="40,4 76,24 62,92 18,92 4,24" />
+                                <polygon points="40,4 62,24 40,36 18,24" />
+                                <line x1="18" y1="24" x2="62" y2="24" />
+                            </svg>
+                        </div>
                     </div>
-                    <p className={styles.loadingMsg}>{loadingMessages[msgIdx]}</p>
-                    <div className={styles.dots}>
-                        <span className={styles.dot} style={{ animationDelay: '0s' }} />
-                        <span className={styles.dot} style={{ animationDelay: '0.2s' }} />
-                        <span className={styles.dot} style={{ animationDelay: '0.4s' }} />
+
+                    <div className={styles.loadingMsgContainer}>
+                        <h3 className={styles.loadingMsg}>{loadingMessages[msgIdx]}</h3>
+                        <p className={styles.loadingSubmsg}>{loadingSubMessages[msgIdx]}</p>
+                        <div className={styles.dots}>
+                            <span className={styles.dot} />
+                            <span className={styles.dot} />
+                            <span className={styles.dot} />
+                        </div>
                     </div>
                 </div>
             )}
 
             {phase === 'error' && (
                 <div className={styles.loading}>
-                    <h2 className={styles.resultsH2}>Generation Failed</h2>
-                    <p>{state.error}</p>
-                    <div className={styles.resultsActions} style={{ marginTop: '2rem' }}>
+                    <div className={styles.loadingDiamond} style={{ animation: 'none', opacity: 0.5 }}>
+                        <svg width="80" height="96" viewBox="0 0 80 96" fill="rgba(168,142,94,0.05)" stroke="#A88E5E" strokeWidth="0.6">
+                            <polygon points="40,4 76,24 62,92 18,92 4,24" />
+                            <polygon points="40,4 62,24 40,36 18,24" />
+                            <line x1="18" y1="24" x2="62" y2="24" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 className={styles.resultsH2} style={{ textAlign: 'center', marginBottom: '12px' }}>Generation Paused</h2>
+                        <p style={{ color: 'var(--stone)', textAlign: 'center', maxWidth: '400px' }}>
+                            {state.error || "We encountered an issue while crafting your designs. Our AI goldsmith needs a moment."}
+                        </p>
+                    </div>
+                    <div className={styles.resultsActions} style={{ marginTop: '1rem' }}>
                         <button className={styles.regenBtn} onClick={() => { setPhase('loading'); generateIdeas(); }}>
                             Try Again
                         </button>

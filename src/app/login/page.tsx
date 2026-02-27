@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { GoogleLogin } from '@react-oauth/google';
 import styles from './page.module.css';
@@ -10,6 +10,9 @@ import styles from './page.module.css';
 export default function LoginPage() {
     const { login, googleLogin, user, loading: authLoading } = useAuth();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get('callbackUrl') || undefined;
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -18,9 +21,9 @@ export default function LoginPage() {
     // Redirect already-logged-in users away from /login
     useEffect(() => {
         if (!authLoading && user) {
-            router.replace(user.role === 'admin' ? '/admin' : '/profile');
+            router.replace(callbackUrl || (user.role === 'admin' ? '/admin' : '/profile'));
         }
-    }, [user, authLoading, router]);
+    }, [user, authLoading, router, callbackUrl]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -28,8 +31,8 @@ export default function LoginPage() {
         setLoading(true);
         try {
             const userData = await login(email, password);
-            // Admin users go straight to the dashboard
-            router.push(userData.role === 'admin' ? '/admin' : '/profile');
+            // Check for callback, otherwise admin users go to dashboard, regular to profile
+            router.push(callbackUrl || (userData.role === 'admin' ? '/admin' : '/profile'));
         } catch (err: any) {
             setError(err.message || 'Login failed. Please check your credentials.');
         } finally {
@@ -43,7 +46,7 @@ export default function LoginPage() {
         try {
             if (credentialResponse.credential) {
                 const userData = await googleLogin(credentialResponse.credential);
-                router.push(userData.role === 'admin' ? '/admin' : '/profile');
+                router.push(callbackUrl || (userData.role === 'admin' ? '/admin' : '/profile'));
             }
         } catch (err: any) {
             setError(err.message || 'Google login failed.');

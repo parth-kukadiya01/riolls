@@ -7,7 +7,8 @@
 .hero {
     background: var(--cream);
     border-bottom: 1px solid var(--border);
-    padding: 56px 60px 52px;
+    margin-top: calc(var(--nav-height) * -1);
+    padding: calc(56px + var(--nav-height)) 60px 52px;
 }
 
 .heroInner {
@@ -48,7 +49,7 @@
 
 .cards {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
 }
 
 .card {
@@ -405,6 +406,7 @@
         border-bottom: none;
     }
 }
+
 /* ── Custom Date Picker ── */
 .datePickerWrap {
     background: var(--white);
@@ -530,7 +532,7 @@
 .timeSlot {
     border: 1px solid var(--border);
     /* Soft mint green border based on screenshot vibe, adapting to theme: */
-    border-color: #72C3A7; 
+    border-color: #72C3A7;
     background: transparent;
     color: var(--stone);
     font-family: var(--font-body);

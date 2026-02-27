@@ -34,6 +34,23 @@
     background: var(--deep);
 }
 
+.secondaryBtn {
+    background: none;
+    color: var(--charcoal);
+    border: 1px solid var(--charcoal);
+    padding: 10px 24px;
+    font-family: var(--font-sc);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.secondaryBtn:hover {
+    background: var(--charcoal);
+    color: var(--white);
+}
+
 .tableCard {
     background: var(--white);
     border: 1px solid var(--border);

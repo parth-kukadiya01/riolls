@@ -1,7 +1,8 @@
 /* Reviews page */
 .hero {
     background: var(--white);
-    padding: var(--space-xl) var(--gutter) 60px;
+    margin-top: calc(var(--nav-height) * -1);
+    padding: calc(var(--space-xl) + var(--nav-height)) var(--gutter) 60px;
     text-align: center;
     border-bottom: 1px solid var(--border);
 }

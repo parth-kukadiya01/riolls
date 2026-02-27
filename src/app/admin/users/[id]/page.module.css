@@ -7,7 +7,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .titleWrapper {
@@ -65,15 +65,15 @@
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
     border: 1px solid rgba(0, 0, 0, 0.04);
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
 }
 
 .cardTitle {
     font-family: var(--font-secondary);
     font-size: 1.25rem;
     color: var(--dark);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid #eee;
 }
@@ -89,7 +89,7 @@
     justify-content: center;
     font-family: var(--font-secondary);
     font-size: 2rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .detailRow {
