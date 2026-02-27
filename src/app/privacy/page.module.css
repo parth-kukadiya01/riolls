@@ -6,7 +6,8 @@
 /* ── Hero ── */
 .hero {
     background: var(--cream);
-    padding: 100px 60px;
+    margin-top: calc(var(--nav-height) * -1);
+    padding: calc(100px + var(--nav-height)) 60px 100px;
     display: flex;
     justify-content: center;
     text-align: center;

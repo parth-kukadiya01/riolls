@@ -52,11 +52,11 @@
 
     /* Layout */
     --max-width: 1440px;
-    --gutter: 80px;
+    --gutter: 40px;
     --nav-height: 72px;
-    --space-xl: 112px;
-    --space-lg: 72px;
-    --space-md: 48px;
+    --space-xl: 64px;
+    --space-lg: 48px;
+    --space-md: 32px;
 
     /* Shadows */
     --shadow-sm: 0 1px 4px rgba(26, 26, 26, 0.06);
@@ -230,6 +230,14 @@ video {
     padding-top: var(--nav-height);
 }
 
+.page-content.no-nav-offset {
+    padding-top: 0;
+}
+
+body.admin-mode .page-content {
+    padding-top: 0 !important;
+}
+
 .section-padding {
     padding-top: var(--space-xl);
     padding-bottom: var(--space-xl);
@@ -237,16 +245,16 @@ video {
 
 @media (max-width: 1024px) {
     :root {
-        --gutter: 40px;
+        --gutter: 32px;
     }
 }
 
 @media (max-width: 768px) {
     :root {
-        --gutter: 20px;
-        --space-xl: 60px;
-        --space-lg: 40px;
-        --space-md: 24px;
+        --gutter: 16px;
+        --space-xl: 40px;
+        --space-lg: 32px;
+        --space-md: 20px;
 
         /* Tighter mobile text scale to prevent overflow */
         --text-hero: clamp(40px, 10vw, 52px);

@@ -7,7 +7,8 @@
 .hero {
     background: var(--cream);
     border-bottom: 1px solid var(--border);
-    padding: 80px 60px 60px;
+    margin-top: calc(var(--nav-height) * -1);
+    padding: calc(80px + var(--nav-height)) 60px 60px;
     display: flex;
     justify-content: center;
     text-align: center;

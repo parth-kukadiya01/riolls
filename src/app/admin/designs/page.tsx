@@ -9,9 +9,10 @@ interface DesignRequest {
     _id: string;
     userId: any;
     status: string;
-    styleProfile: any;
-    contactDetails: any;
-    budgetRange: any;
+    name: string;
+    email: string;
+    pieceType: string;
+    budget: string;
     createdAt: string;
 }
 
@@ -90,18 +91,15 @@ export default function AdminDesignRequests() {
                             <tr><td colSpan={6} style={{ textAlign: 'center', color: '#888' }}>No design requests found.</td></tr>
                         ) : (
                             requests.map(req => {
-                                let cName = 'Anonymous';
-                                let cEmail = 'N/A';
-                                if (req.contactDetails) {
-                                    cName = `${req.contactDetails.firstName} ${req.contactDetails.lastName}`;
-                                    cEmail = req.contactDetails.email;
-                                } else if (req.userId && typeof req.userId === 'object') {
+                                let cName = req.name || 'Anonymous';
+                                let cEmail = req.email || 'N/A';
+                                if (!req.name && req.userId && typeof req.userId === 'object') {
                                     cName = `${req.userId.firstName} ${req.userId.lastName}`;
                                     cEmail = req.userId.email;
                                 }
 
-                                const type = req.styleProfile?.jewelryType || 'Custom Piece';
-                                const budgetStr = req.budgetRange?.range || 'Not Specified';
+                                const type = req.pieceType || 'Custom Piece';
+                                const budgetStr = req.budget || 'Not Specified';
 
                                 return (
                                     <tr key={req._id}>

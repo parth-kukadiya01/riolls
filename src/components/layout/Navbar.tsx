@@ -24,6 +24,7 @@ export default function Navbar() {
     }, []);
 
     if (pathname?.startsWith('/admin')) return null;
+    if (pathname?.startsWith('/ai-studio')) return null;
 
     const openMega = (id: string) => {
         if (closeTimer.current) clearTimeout(closeTimer.current);
@@ -150,20 +151,20 @@ export default function Navbar() {
                     <div className={styles.mega} onMouseEnter={keepMega} onMouseLeave={closeMega}>
                         <div className={styles.megaCol}>
                             <span className={styles.megaTitle}>Featured</span>
-                            <Link href="/shop">Celestine Collection</Link>
-                            <Link href="/shop">Aurora Series</Link>
-                            <Link href="/shop">Tempest Line</Link>
+                            <Link href="/shop?collection=celestine">Celestine Collection</Link>
+                            <Link href="/shop?collection=aurora">Aurora Series</Link>
+                            <Link href="/shop?collection=tempest">Tempest Line</Link>
                         </div>
                         <div className={styles.megaCol}>
                             <span className={styles.megaTitle}>By Occasion</span>
-                            <Link href="/shop">Bridal &amp; Engagement</Link>
-                            <Link href="/shop">Anniversary Gifts</Link>
-                            <Link href="/shop">High Jewellery</Link>
+                            <Link href="/shop?collection=bridal">Bridal &amp; Engagement</Link>
+                            <Link href="/shop?collection=anniversary">Anniversary Gifts</Link>
+                            <Link href="/shop?collection=high-jewellery">High Jewellery</Link>
                         </div>
                         <div className={styles.megaCol}>
                             <span className={styles.megaTitle}>New &amp; Limited</span>
-                            <Link href="/shop">New In</Link>
-                            <Link href="/shop">Last Pieces</Link>
+                            <Link href="/shop?collection=new-in">New In</Link>
+                            <Link href="/shop?collection=last-pieces">Last Pieces</Link>
                         </div>
                         <div className={styles.megaImg} style={{ backgroundImage: 'url("https://res.cloudinary.com/dl6cdbdzl/image/upload/v1771997169/buddy-an-bUQZomnihtI-unsplash_gfm2y4.jpg")', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                             <span className={styles.megaImgCaption}>The Aurora Collection</span>

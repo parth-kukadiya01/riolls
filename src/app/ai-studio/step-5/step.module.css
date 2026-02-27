@@ -740,6 +740,99 @@
     resize: vertical;
 }
 
+.phoneInputGroup {
+    display: flex;
+    align-items: stretch;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    transition: border-color 0.2s;
+}
+
+.phoneInputGroup:focus-within {
+    border-color: var(--rose);
+}
+
+.countryCodePrefix {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 12px;
+    border-right: 1px solid var(--border);
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--stone);
+    white-space: nowrap;
+    user-select: none;
+    cursor: pointer;
+    position: relative;
+    background: var(--cream);
+}
+
+.countryCodePrefix:hover {
+    background: #f0ebe4;
+}
+
+.countryDropdown {
+    position: absolute;
+    top: calc(100% + 1px);
+    left: -1px;
+    width: 200px;
+    max-height: 250px;
+    overflow-y: auto;
+    background: var(--white);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-md);
+    z-index: 50;
+}
+
+.countryOption {
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--charcoal);
+    transition: background 0.2s;
+}
+
+.countryOption:hover {
+    background: var(--rose-pale);
+}
+
+.countryOptionFlag {
+    font-size: 16px;
+    width: 24px;
+}
+
+.countryOptionName {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.countryOptionCode {
+    color: var(--stone);
+    font-size: 12px;
+}
+
+.flag {
+    font-size: 16px;
+}
+
+.phoneInput {
+    flex: 1;
+    padding: 12px 16px;
+    background: none;
+    border: none;
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--charcoal);
+    outline: none;
+}
+
 .contactBtns {
     display: flex;
     gap: 8px;

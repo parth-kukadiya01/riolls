@@ -3,7 +3,7 @@
 }
 
 .header {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .title {
@@ -23,7 +23,7 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 @media (max-width: 1200px) {
@@ -40,7 +40,7 @@
 
 .kpiCard {
     background: #fff;
-    padding: 1.5rem;
+    padding: 1.25rem;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
     border: 1px solid rgba(0, 0, 0, 0.04);
@@ -90,7 +90,7 @@
 
 .section {
     background: #fff;
-    padding: 1.5rem;
+    padding: 1.25rem;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
     border: 1px solid rgba(0, 0, 0, 0.04);
@@ -99,7 +99,7 @@
 .sectionTitle {
     font-family: var(--font-secondary);
     font-size: 1.25rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     color: var(--dark);
 }
 
