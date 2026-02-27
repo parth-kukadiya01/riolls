@@ -1,10 +1,11 @@
 'use client';
 
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import type { Product } from '@/lib/products';
 import { formatPrice } from '@/lib/products';
 import { useCart } from '@/context/CartContext';
+import { wishlistApi, getToken } from '@/lib/api';
 import styles from './ProductCard.module.css';
 
 interface Props {
@@ -12,25 +13,78 @@ interface Props {
 }
 
 export default function ProductCard({ product }: Props) {
+    const router = useRouter();
     const { addItem } = useCart();
     const [wishlisted, setWishlisted] = useState(product.is_wishlisted ?? false);
 
-    const handleWishlist = (e: React.MouseEvent) => {
+    // Prefer MongoDB _id when available (API products), fallback to static id
+    const productId = product._id ?? product.id;
+
+    const handleCardClick = (e: React.MouseEvent) => {
+        const target = e.target as HTMLElement;
+        if (target.closest('button')) return; // Ignore if clicking a button
+        router.push(`/product/${product.slug}`);
+    };
+
+    const handleWishlist = async (e: React.MouseEvent) => {
         e.preventDefault();
-        setWishlisted(w => !w);
+        e.stopPropagation();
+
+        const token = getToken();
+        if (!token) {
+            router.push('/login');
+            return;
+        }
+
+        const newStatus = !wishlisted;
+        setWishlisted(newStatus); // Optimistic UI update
+
+        try {
+            if (newStatus) {
+                await wishlistApi.add(productId);
+            } else {
+                await wishlistApi.remove(productId);
+            }
+        } catch (err: any) {
+            // Revert state on failure
+            setWishlisted(!newStatus);
+            console.error('Wishlist error:', err);
+            alert(err.message || 'Failed to update wishlist. Please try again.');
+        }
     };
 
     const handleQuickAdd = (e: React.MouseEvent) => {
         e.preventDefault();
-        addItem(product);
+        e.stopPropagation();
+        addItem(productId);
     };
 
+    const handleQuickView = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        router.push(`/product/${product.slug}`);
+    };
+
+    // Show first image if available, else gradient
+    const hasImage = product.images && product.images.length > 0;
+
     return (
-        <Link href={`/product/${product.slug}`} className={styles.card}>
+        <div onClick={handleCardClick} className={styles.card} style={{ cursor: 'pointer' }}>
             {/* Image area */}
             <div className={styles.image}>
-                <div className={styles.imgMain} style={{ background: product.gradient }} />
-                <div className={styles.imgHover} style={{ background: product.gradient_hover }} />
+                {hasImage ? (
+                    <img
+                        src={product.images![0]}
+                        alt={product.name}
+                        className={styles.imgMain}
+                        style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                    />
+                ) : (
+                    <>
+                        <div className={styles.imgMain} style={{ background: product.gradient }} />
+                        <div className={styles.imgHover} style={{ background: product.gradient_hover }} />
+                    </>
+                )}
 
                 {product.badge && (
                     <span className={`${styles.badge} ${product.badge === 'Last Piece' ? styles.badgeLast : styles.badgeNew}`}>
@@ -49,20 +103,20 @@ export default function ProductCard({ product }: Props) {
                 </button>
 
                 <div className={styles.quickActions}>
-                    <button className={styles.qaBtn} onClick={handleQuickAdd}>♡ &nbsp;Add to Bag</button>
+                    <button className={styles.qaBtn} onClick={handleQuickAdd}>♡&nbsp;Add to Bag</button>
                     <div className={styles.qaDivider} />
-                    <button className={styles.qaBtn} onClick={e => e.preventDefault()}>Quick View</button>
+                    <button className={styles.qaBtn} onClick={handleQuickView}>Quick View</button>
                 </div>
             </div>
 
             {/* Info */}
             <div className={styles.info}>
-                <span className={styles.category}>{product.category}</span>
+                <span className={styles.category}>{typeof product.category === 'string' ? product.category : product.category}</span>
                 <div className={styles.name}>{product.name}</div>
                 <span className={`${styles.price} ${product.price === null ? styles.poa : ''}`}>
                     {formatPrice(product.price)}
                 </span>
             </div>
-        </Link>
+        </div>
     );
 }

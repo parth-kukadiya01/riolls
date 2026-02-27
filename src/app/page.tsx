@@ -1,17 +1,74 @@
+'use client';
+
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import ProductCard from '@/components/ui/ProductCard';
 import CreationProcess from '@/components/home/CreationProcess';
-import { PRODUCTS } from '@/lib/products';
+import { productsApi, categoriesApi } from '@/lib/api';
 import styles from './page.module.css';
 
-export const metadata: Metadata = {
-    title: 'Riolls Jewels — Luxury Handcrafted Jewellery',
-    description: 'Luxury handcrafted jewellery — Rings, Necklaces, Earrings from the Riolls Jewels atelier.',
+// Gradient fallbacks keyed by category slug
+const CAT_GRADS: Record<string, string> = {
+    rings: 'radial-gradient(ellipse at 50% 40%,#3d2b14,#1a1208)',
+    necklaces: 'radial-gradient(ellipse at 50% 40%,#1a2420,#0a1210)',
+    earrings: 'radial-gradient(ellipse at 50% 40%,#2a1e2e,#130e17)',
+    bracelets: 'radial-gradient(ellipse at 50% 40%,#2d2416,#141008)',
+    'high-jewellery': 'radial-gradient(ellipse at 50% 40%,#1a1a10,#0a0a06)',
+    default: 'radial-gradient(ellipse at 50% 40%,#2a2520,#121009)',
 };
 
+// No fallback categories — real DB data only
+
 export default function HomePage() {
-    const featuredProducts = PRODUCTS.slice(0, 5);
+    const [collections, setCollections] = useState<any[]>([]);
+    const [featuredProducts, setFeatured] = useState<any[]>([]);
+    const [loadedCats, setLoadedCats] = useState(false);
+    const [loadedProducts, setLoadedProducts] = useState(false);
+
+    // Fetch categories with product counts
+    useEffect(() => {
+        categoriesApi
+            .list()
+            .then((res: any) => {
+                const cats: any[] = res.data ?? [];
+                if (cats.length > 0) {
+                    setCollections(cats);
+                }
+            })
+            .catch(() => { })
+            .finally(() => setLoadedCats(true));
+    }, []);
+
+    // Fetch featured / new-in products
+    useEffect(() => {
+        productsApi
+            .list({ page: 1, limit: 5, sort: '-createdAt' })
+            .then((res: any) => {
+                const items: any[] = Array.isArray(res.data) ? res.data : [];
+                if (items.length > 0) {
+                    setFeatured(items.map((p: any) => ({
+                        id: p._id,
+                        _id: p._id,
+                        slug: p.slug,
+                        name: p.name,
+                        category: p.category?.slug ?? p.category ?? '',
+                        price: p.price,
+                        metal: p.metal ?? '',
+                        stone: p.stone ?? '',
+                        badge: p.badge,
+                        description: p.description ?? '',
+                        stone_detail: p.stoneDetail ?? '',
+                        gradient: 'linear-gradient(145deg,#ddd5c4,#c8bba8)',
+                        gradient_hover: 'linear-gradient(145deg,#c8b89a,#b8a880)',
+                        is_wishlisted: p.isWishlisted,
+                        images: p.images,
+                    })));
+                }
+            })
+            .catch(() => { })
+            .finally(() => setLoadedProducts(true));
+    }, []);
 
     return (
         <>
@@ -48,10 +105,10 @@ export default function HomePage() {
                         <line x1="100" y1="95" x2="165" y2="232" />
                     </svg>
                 </div>
-                <div className={styles.heroScroll}>
+                {/* <div className={styles.heroScroll}>
                     <span className={styles.heroScrollLine} />
                     <span className={styles.heroScrollText}>Scroll to discover</span>
-                </div>
+                </div> */}
             </section>
 
             {/* ── Collections Strip ─────────────────── */}
@@ -61,25 +118,28 @@ export default function HomePage() {
                     <h2 className={styles.sectionH2}>A world of jewellery awaits.</h2>
                 </div>
                 <div className={styles.collectionsGrid}>
-                    {[
-                        { name: 'Rings', count: '48 pieces', grad: 'radial-gradient(ellipse at 50% 40%,#3d2b14,#1a1208)', slug: 'rings' },
-                        { name: 'Necklaces', count: '31 pieces', grad: 'radial-gradient(ellipse at 50% 40%,#1a2420,#0a1210)', slug: 'necklaces' },
-                        { name: 'Earrings', count: '26 pieces', grad: 'radial-gradient(ellipse at 50% 40%,#2a1e2e,#130e17)', slug: 'earrings' },
-                        { name: 'Bracelets', count: '19 pieces', grad: 'radial-gradient(ellipse at 50% 40%,#2d2416,#141008)', slug: 'bracelets' },
-                        { name: 'High Jewellery', count: '8 pieces', grad: 'radial-gradient(ellipse at 50% 40%,#1a1a10,#0a0a06)', slug: null },
-                    ].map(col => (
-                        <Link
-                            key={col.name}
-                            href={col.slug ? `/shop?cat=${col.slug}` : '/shop'}
-                            className={styles.collectionCard}
-                            style={{ background: col.grad }}
-                        >
-                            <div className={styles.collectionLabel}>
-                                <span className={styles.collectionName}>{col.name}</span>
-                                <span className={styles.collectionCount}>{col.count}</span>
-                            </div>
-                        </Link>
-                    ))}
+                    {collections.length === 0 ? (
+                        <p style={{ gridColumn: '1/-1', textAlign: 'center', opacity: 0.6, padding: '2rem' }}>Loading collections…</p>
+                    ) : collections.map(col => {
+                        const slug = col.slug ?? col.name?.toLowerCase().replace(/\s+/g, '-');
+                        const grad = CAT_GRADS[slug] ?? CAT_GRADS.default;
+                        const count = col.productCount != null
+                            ? `${col.productCount} piece${col.productCount !== 1 ? 's' : ''}`
+                            : col.count ?? '';
+                        return (
+                            <Link
+                                key={col.name ?? col._id}
+                                href={slug ? `/shop?cat=${slug}` : '/shop'}
+                                className={styles.collectionCard}
+                                style={{ background: col.image ? `url(${col.image}) center/cover` : grad }}
+                            >
+                                <div className={styles.collectionLabel}>
+                                    <span className={styles.collectionName}>{col.name}</span>
+                                    {count && <span className={styles.collectionCount}>{count}</span>}
+                                </div>
+                            </Link>
+                        );
+                    })}
                 </div>
             </section>
 
@@ -90,9 +150,20 @@ export default function HomePage() {
                     <h2 className={styles.sectionH2}>Editor&apos;s selection.</h2>
                 </div>
                 <div className={styles.productsGrid}>
-                    {featuredProducts.map(p => (
-                        <ProductCard key={p.id} product={p} />
-                    ))}
+                    {!loadedProducts ? (
+                        // Skeleton placeholders while loading
+                        Array.from({ length: 5 }).map((_, i) => (
+                            <div key={i} style={{ height: '380px', background: 'linear-gradient(145deg,#ede8e2,#e2dbd3)', borderRadius: '4px', opacity: 0.5 }} />
+                        ))
+                    ) : featuredProducts.length > 0 ? (
+                        featuredProducts.map(p => (
+                            <ProductCard key={p.id} product={p} />
+                        ))
+                    ) : (
+                        <p style={{ opacity: 0.5, gridColumn: '1/-1', textAlign: 'center', padding: '3rem' }}>
+                            Our collection is being updated. <Link href="/shop">Browse all pieces →</Link>
+                        </p>
+                    )}
                 </div>
                 <div className={styles.viewAllWrap}>
                     <Link href="/shop" className={styles.viewAll}>View All Jewellery →</Link>

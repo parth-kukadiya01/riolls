@@ -2,12 +2,16 @@
 
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
 import MobileNav from './MobileNav';
 import styles from './Navbar.module.css';
 
 export default function Navbar() {
+    const pathname = usePathname();
     const { totalItems, openCart } = useCart();
+    const { user, loading: authLoading } = useAuth();
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const [activeMega, setActiveMega] = useState<string | null>(null);
@@ -18,6 +22,8 @@ export default function Navbar() {
         window.addEventListener('scroll', onScroll, { passive: true });
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
+
+    if (pathname?.startsWith('/admin')) return null;
 
     const openMega = (id: string) => {
         if (closeTimer.current) clearTimeout(closeTimer.current);
@@ -55,7 +61,7 @@ export default function Navbar() {
                     <li><Link href="/ai-studio/step-1" className={styles.roseLink}>AI Studio <span className={styles.star}>✦</span></Link></li>
                     <li><Link href="/bespoke">Bespoke</Link></li>
                     <li onMouseEnter={() => openMega('journal')} onMouseLeave={closeMega}>
-                        <span className={styles.linkItem}>Journal <span className={styles.chevron}>▾</span></span>
+                        <Link href="/blog" className={styles.linkItem} style={{ textDecoration: 'none' }}>Journal <span className={styles.chevron}>▾</span></Link>
                     </li>
                     <li><Link href="/contact">Contact</Link></li>
                 </ul>
@@ -67,12 +73,34 @@ export default function Navbar() {
                             <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
                         </svg>
                     </Link>
-                    <Link href="/login" className={styles.icon} aria-label="Account">
-                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-                            <circle cx="12" cy="7" r="4" />
-                        </svg>
-                    </Link>
+                    {/* Account icon — shows Profile when logged in, Login when logged out */}
+                    {!authLoading && (
+                        user ? (
+                            <Link href="/profile" className={styles.icon} aria-label="My Account" title={`${user.firstName} ${user.lastName}`}>
+                                <span style={{
+                                    width: '28px', height: '28px',
+                                    borderRadius: '50%',
+                                    background: 'var(--charcoal)',
+                                    color: 'var(--white)',
+                                    fontSize: '11px',
+                                    letterSpacing: '0.05em',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontFamily: 'var(--font-sc)',
+                                }}>
+                                    {user.firstName[0]}{user.lastName[0]}
+                                </span>
+                            </Link>
+                        ) : (
+                            <Link href="/login" className={styles.icon} aria-label="Account">
+                                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+                                    <circle cx="12" cy="7" r="4" />
+                                </svg>
+                            </Link>
+                        )
+                    )}
                     <button className={styles.icon} aria-label="Cart" onClick={openCart}>
                         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                             <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
@@ -109,9 +137,9 @@ export default function Navbar() {
                             <span className={styles.megaTitle}>Services</span>
                             <Link href="/bespoke">Bespoke Commission</Link>
                             <Link href="/ai-studio/step-1">AI Design Studio</Link>
-                            <Link href="/search">Search</Link>
+                            {/* <Link href="/search">Search</Link> */}
                         </div>
-                        <div className={styles.megaImg}>
+                        <div className={styles.megaImg} style={{ backgroundImage: 'url("https://res.cloudinary.com/dl6cdbdzl/image/upload/v1771999550/aleksandr-dalakian-dgXGLijwNOI-unsplash_zzfl3x.jpg")', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                             <span className={styles.megaImgCaption}>The Celestine Collection</span>
                         </div>
                     </div>
@@ -137,7 +165,7 @@ export default function Navbar() {
                             <Link href="/shop">New In</Link>
                             <Link href="/shop">Last Pieces</Link>
                         </div>
-                        <div className={styles.megaImg} style={{ background: 'linear-gradient(145deg,var(--light),var(--blush))' }}>
+                        <div className={styles.megaImg} style={{ backgroundImage: 'url("https://res.cloudinary.com/dl6cdbdzl/image/upload/v1771997169/buddy-an-bUQZomnihtI-unsplash_gfm2y4.jpg")', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                             <span className={styles.megaImgCaption}>The Aurora Collection</span>
                         </div>
                     </div>
@@ -156,15 +184,16 @@ export default function Navbar() {
                         <div className={styles.megaCol}>
                             <span className={styles.megaTitle}>Community</span>
                             <Link href="/reviews">Customer Reviews</Link>
+                            <Link href="/reviews#write">Write a Review</Link>
                             <Link href="/bespoke">Book a Consultation</Link>
                         </div>
                         <div className={styles.megaCol}>
                             <span className={styles.megaTitle}>Quick Links</span>
                             <Link href="/shop">Shop All</Link>
                             <Link href="/ai-studio/step-1">AI Studio</Link>
-                            <Link href="/search">Search</Link>
+                            {/* <Link href="/search">Search</Link> */}
                         </div>
-                        <div className={styles.megaImg} style={{ background: 'linear-gradient(145deg,var(--rose-pale),var(--blush))' }}>
+                        <div className={styles.megaImg} style={{ backgroundImage: 'url("https://res.cloudinary.com/dl6cdbdzl/image/upload/v1771998506/nataliya-melnychuk-oO0JAOJhquk-unsplash_mhgefc.jpg")' }}>
                             <span className={styles.megaImgCaption}>Stories from the Atelier</span>
                         </div>
                     </div>

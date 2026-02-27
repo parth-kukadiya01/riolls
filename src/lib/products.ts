@@ -1,4 +1,4 @@
-export type Metal = 'yellow-gold' | 'white-gold' | 'rose-gold' | 'platinum';
+export type Metal = 'yellow-gold' | 'white-gold' | 'rose-gold';
 export type Stone = 'diamond' | 'ruby' | 'sapphire' | 'emerald' | 'pearl';
 export type Category = 'rings' | 'necklaces' | 'earrings' | 'bracelets';
 
@@ -6,16 +6,24 @@ export interface Product {
   id: string;
   slug: string;
   name: string;
-  category: Category;
+  category: Category | string; // string for API category slugs
   price: number | null; // null = Price on Application
-  metal: Metal;
-  stone: Stone;
-  badge?: 'New In' | 'Last Piece';
+  metal: Metal | string;
+  stone: Stone | string;
+  badge?: 'New In' | 'Last Piece' | string;
   description: string;
   stone_detail: string;
   gradient: string; // CSS gradient for placeholder
   gradient_hover: string;
   is_wishlisted?: boolean;
+  // API fields
+  _id?: string;        // MongoDB id from backend
+  images?: string[];   // product image URLs from backend
+  price9k?: number | null;
+  price14k?: number | null;
+  price18k?: number | null;
+  price22k?: number | null;
+  availableMetals?: string[];
 }
 
 export const PRODUCTS: Product[] = [
@@ -126,7 +134,7 @@ export const PRODUCTS: Product[] = [
     name: 'Orbit Sculptural Ring',
     category: 'rings',
     price: 7200,
-    metal: 'platinum',
+    metal: 'white-gold',
     stone: 'diamond',
     description: 'An architectural study in negative space — a free-form platinum band orbiting a single brilliant-cut diamond.',
     stone_detail: '1.50ct · F Colour · VVS1 Clarity · Brilliant Cut',
@@ -174,7 +182,7 @@ export function getProductsByCategory(cat?: Category): Product[] {
   return PRODUCTS.filter(p => p.category === cat);
 }
 
-export function formatPrice(price: number | null): string {
-  if (price === null) return 'Price on Application';
+export function formatPrice(price: number | null | undefined): string {
+  if (price === null || price === undefined) return 'Price on Application';
   return `£ ${price.toLocaleString('en-GB')}`;
 }

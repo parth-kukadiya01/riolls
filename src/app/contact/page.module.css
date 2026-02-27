@@ -128,6 +128,29 @@
 }
 
 /* Form */
+.modeBtn {
+    background: transparent;
+    border: none;
+    font-family: var(--font-sc);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--stone);
+    padding: 8px 16px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.modeBtn:hover {
+    color: var(--charcoal);
+}
+
+.modeBtnActive {
+    color: var(--charcoal);
+    border-bottom-color: var(--charcoal);
+    font-weight: 500;
+}
+
 .formWrap {
     padding: 52px 60px;
     border-right: 1px solid var(--border);
@@ -381,4 +404,155 @@
     .card:last-child {
         border-bottom: none;
     }
+}
+/* ── Custom Date Picker ── */
+.datePickerWrap {
+    background: var(--white);
+    padding: 16px;
+    border: 1px solid var(--border);
+    margin-top: 8px;
+}
+
+.datePickerHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.dateMonthYear {
+    font-family: var(--font-body);
+    font-size: 18px;
+    color: var(--charcoal);
+}
+
+.dateNavBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--charcoal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+}
+
+.dateNavBtn:hover {
+    color: var(--gold);
+}
+
+.dateGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    text-align: center;
+}
+
+.dateHeaderCell {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--stone);
+    margin-bottom: 8px;
+}
+
+.dateCellEmpty {
+    height: 36px;
+}
+
+.dateCell {
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--stone);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.dateCellPast {
+    color: var(--border);
+    cursor: not-allowed;
+}
+
+.dateCellToday {
+    font-weight: bold;
+    color: var(--charcoal);
+}
+
+.dateCell:hover:not(.dateCellPast):not(.dateCellSelected) {
+    background: var(--cream);
+    color: var(--charcoal);
+}
+
+.dateCellSelected {
+    background: var(--charcoal);
+    color: var(--white);
+}
+
+/* ── Custom Time Picker ── */
+.timePickerWrap {
+    background: var(--white);
+    padding: 24px;
+    border: 1px solid var(--border);
+    margin-top: 8px;
+}
+
+.timeGroupHeader {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.timeGroupLine {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    opacity: 0.6;
+}
+
+.timeGroupTitle {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--stone);
+}
+
+.timeGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.timeSlot {
+    border: 1px solid var(--border);
+    /* Soft mint green border based on screenshot vibe, adapting to theme: */
+    border-color: #72C3A7; 
+    background: transparent;
+    color: var(--stone);
+    font-family: var(--font-body);
+    font-size: 14px;
+    padding: 10px 0;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.timeSlot:hover {
+    color: var(--charcoal);
+    border-color: var(--charcoal);
+}
+
+.timeSlotActive {
+    background: var(--charcoal);
+    border-color: var(--charcoal);
+    color: var(--white);
+}
+
+/* ── Hide Custom Pickers if visually not toggled ── */
+.pickerOverlayBox {
+    margin-top: -12px;
+    margin-bottom: 24px;
 }

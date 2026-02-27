@@ -1,7 +1,7 @@
 /* Reviews page */
 .hero {
     background: var(--white);
-    padding: 80px var(--gutter) 60px;
+    padding: var(--space-xl) var(--gutter) 60px;
     text-align: center;
     border-bottom: 1px solid var(--border);
 }
@@ -48,7 +48,7 @@
 /* Stats */
 .statsSection {
     background: var(--cream);
-    padding: 60px var(--gutter);
+    padding: var(--space-lg) var(--gutter);
 }
 
 .statsGrid {
@@ -132,7 +132,7 @@
 
 /* Reviews */
 .reviewsSection {
-    padding: 60px var(--gutter) 80px;
+    padding: var(--space-lg) var(--gutter) 80px;
     background: var(--white);
 }
 
@@ -350,7 +350,7 @@
     .statsSection,
     .reviewsSection,
     .cta {
-        padding: 48px 20px;
+        padding: var(--space-md) var(--gutter);
     }
 
     .grid {

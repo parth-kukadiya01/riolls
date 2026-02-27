@@ -1,7 +1,7 @@
 /* Blog page */
 .hero {
     background: linear-gradient(160deg, var(--white) 0%, var(--cream) 60%, var(--light) 100%);
-    padding: 80px var(--gutter) 72px;
+    padding: var(--space-xl) var(--gutter) 72px;
     text-align: center;
     border-bottom: 1px solid var(--border);
 }
@@ -46,7 +46,7 @@
 
 /* Featured */
 .featuredSection {
-    padding: 60px var(--gutter);
+    padding: var(--space-lg) var(--gutter);
     background: var(--white);
 }
 
@@ -132,7 +132,7 @@
 
 /* All articles */
 .allSection {
-    padding: 60px var(--gutter) 80px;
+    padding: var(--space-lg) var(--gutter) 80px;
     background: var(--cream);
 }
 
@@ -301,7 +301,7 @@
     .featuredSection,
     .allSection,
     .newsletter {
-        padding: 48px 20px;
+        padding: var(--space-md) var(--gutter);
     }
 }
 

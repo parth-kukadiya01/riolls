@@ -1,16 +1,33 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import styles from './step.module.css';
+import { useAIStudio } from '@/context/AIStudioContext';
 
 export default function AIStep5() {
+    const router = useRouter();
+    const { state, submitQuote } = useAIStudio();
     const [submitted, setSubmitted] = useState(false);
-    const [form, setForm] = useState({ name: '', email: '', phone: '', notes: '', contact: 'Email' });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
+    const [form, setForm] = useState({ name: '', email: '', phone: '', notes: '', preferredContact: 'Email' });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const selectedConcept = state.selectedConceptIndex !== null ? state.generatedConcepts[state.selectedConceptIndex] : null;
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setSubmitted(true);
+        setIsSubmitting(true);
+        setErrorMsg('');
+
+        const success = await submitQuote(form);
+        if (success) {
+            setSubmitted(true);
+        } else {
+            setErrorMsg('Failed to submit quote. Please try again.');
+        }
+        setIsSubmitting(false);
     };
 
     if (submitted) {
@@ -42,32 +59,80 @@ export default function AIStep5() {
             <div className={styles.twoCol}>
                 {/* Design Summary */}
                 <div className={styles.preview}>
-                    <div className={styles.summaryCard}>
-                        <span className={styles.summaryLabel}>Your Design</span>
-                        <div className={styles.summaryImg} style={{ background: 'radial-gradient(ellipse at 45%,#3d2b14,#1a1208)' }} />
-                        {[
-                            ['Piece', 'Ring'],
-                            ['Metal', '18k Yellow Gold'],
-                            ['Stone', '1.50ct Brilliant Diamond'],
-                            ['Setting', 'Vintage Milgrain'],
-                            ['Finish', 'High Polish'],
-                        ].map(([k, v]) => (
-                            <div key={k} className={styles.specRow}>
-                                <span className={styles.specKey}>{k}</span>
-                                <span className={styles.specVal}>{v}</span>
+                    {state.galleryReference ? (
+                        <div className={styles.summaryCard}>
+                            <span className={styles.summaryLabel}>Gallery Inquiry</span>
+                            <div
+                                className={styles.summaryImg}
+                                style={{
+                                    background: `url(${state.galleryReference.image})`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center'
+                                }}
+                            />
+                            <div className={styles.specRow}>
+                                <span className={styles.specKey}>Piece</span>
+                                <span className={styles.specVal}>{state.galleryReference.name}</span>
                             </div>
-                        ))}
-                        <div className={styles.priceEstimate}>
-                            <span className={styles.priceLabel}>Estimated Range</span>
-                            <span className={styles.priceValue}>£ 4,200 – £ 5,800</span>
+                            <div className={styles.specRow}>
+                                <span className={styles.specKey}>Type</span>
+                                <span className={styles.specVal}>{state.galleryReference.type === 'ai_concept' ? 'Community AI Concept' : 'Past Commission'}</span>
+                            </div>
+                            <div className={styles.priceEstimate} style={{ marginTop: '24px' }}>
+                                <span className={styles.priceLabel}>Inquire</span>
+                                <span className={styles.priceValue} style={{ fontSize: '14px', lineHeight: 1.5 }}>
+                                    Submit your details to discuss creating a custom piece inspired by this design.
+                                </span>
+                            </div>
                         </div>
-                    </div>
+                    ) : (
+                        <div className={styles.summaryCard}>
+                            <span className={styles.summaryLabel}>Your Design</span>
+                            <div
+                                className={styles.summaryImg}
+                                style={{
+                                    background: selectedConcept?.image_data ? `url(${selectedConcept.image_data})` : 'radial-gradient(ellipse at 45%,#3d2b14,#1a1208)',
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center'
+                                }}
+                            />
+                            {[
+                                ['Piece', state.profile.pieceType || 'Ring'],
+                                ['Metal', state.customisations.finalMetal || '18k Yellow Gold'],
+                                ['Stone', `${state.customisations.stoneSize || '1.50'}ct ${state.customisations.stoneCut || 'Brilliant'} Diamond`],
+                                ['Setting', state.profile.setting || 'Classic'],
+                                ['Finish', state.customisations.finish || 'High Polish'],
+                            ].map(([k, v]) => (
+                                <div key={k} className={styles.specRow}>
+                                    <span className={styles.specKey}>{k}</span>
+                                    <span className={styles.specVal}>{v}</span>
+                                </div>
+                            ))}
+                            <div className={styles.priceEstimate}>
+                                <span className={styles.priceLabel}>Estimated Range</span>
+                                <span className={styles.priceValue}>
+                                    {state.customisations.estimatedPriceLow ? `£ ${state.customisations.estimatedPriceLow.toLocaleString()}` : ''}
+                                    {state.customisations.estimatedPriceHigh ? ` – £ ${state.customisations.estimatedPriceHigh.toLocaleString()}` : ''}
+                                </span>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Form */}
                 <div className={styles.builder}>
+                    {state.galleryReference ? (
+                        <button type="button" onClick={() => router.push('/bespoke')} className={styles.backBtn}>
+                            ← Back to Gallery
+                        </button>
+                    ) : (
+                        <button type="button" onClick={() => router.push('/ai-studio/step-4')} className={styles.backBtn}>
+                            ← Back
+                        </button>
+                    )}
+
                     <div className={styles.builderHeader}>
-                        <span className={styles.builderEyebrow}>Step 5 of 5</span>
+                        <span className={styles.builderEyebrow}>{state.galleryReference ? 'Book Consultation' : 'Step 5 of 5'}</span>
                         <h2 className={styles.builderH2}>Request your quote.</h2>
                         <p className={styles.builderBody}>Our concierge team responds within 48 hours.</p>
                     </div>
@@ -97,8 +162,8 @@ export default function AIStep5() {
                                 {['Email', 'Phone', 'WhatsApp'].map(c => (
                                     <button
                                         key={c} type="button"
-                                        className={`${styles.contactBtn} ${form.contact === c ? styles.contactBtnActive : ''}`}
-                                        onClick={() => setForm(p => ({ ...p, contact: c }))}
+                                        className={`${styles.contactBtn} ${form.preferredContact === c ? styles.contactBtnActive : ''}`}
+                                        onClick={() => setForm(p => ({ ...p, preferredContact: c }))}
                                     >{c}</button>
                                 ))}
                             </div>
@@ -111,11 +176,14 @@ export default function AIStep5() {
                                 rows={3}
                                 placeholder="Any other inspirations, questions, or details…"
                                 value={form.notes}
-                                onChange={e => setForm(p => ({ ...p, notes: e.target.value }))}
+                                onChange={e => setForm({ ...form, notes: e.target.value })}
                             />
                         </div>
 
-                        <button type="submit" className={styles.submitBtn}>Send My Quote Request →</button>
+                        {errorMsg && <p style={{ color: 'var(--alert)', marginBottom: '1rem', fontSize: '0.9rem' }}>{errorMsg}</p>}
+                        <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
+                            {isSubmitting ? 'Sending...' : 'Send My Quote Request →'}
+                        </button>
                     </form>
                 </div>
             </div>

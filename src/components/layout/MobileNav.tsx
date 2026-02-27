@@ -2,7 +2,9 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
 import styles from './MobileNav.module.css';
 
 interface Props {
@@ -12,10 +14,18 @@ interface Props {
 
 export default function MobileNav({ isOpen, onClose }: Props) {
     const { totalItems, openCart } = useCart();
+    const { user, logout } = useAuth();
+    const router = useRouter();
     const [expandedSection, setExpandedSection] = useState<string | null>('shop');
 
     const toggle = (section: string) => {
         setExpandedSection(prev => prev === section ? null : section);
+    };
+
+    const handleLogout = () => {
+        logout();
+        onClose();
+        router.push('/');
     };
 
     return (
@@ -44,6 +54,13 @@ export default function MobileNav({ isOpen, onClose }: Props) {
                     </button>
                 </div>
 
+                {/* Auth greeting */}
+                {user && (
+                    <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid var(--border)', fontSize: '0.85rem', color: 'var(--stone)' }}>
+                        Signed in as <strong style={{ color: 'var(--charcoal)' }}>{user.firstName} {user.lastName}</strong>
+                    </div>
+                )}
+
                 <div className={styles.items}>
                     {/* Shop acc */}
                     <div className={styles.item}>
@@ -70,9 +87,9 @@ export default function MobileNav({ isOpen, onClose }: Props) {
                         </div>
                         {expandedSection === 'col' && (
                             <div className={styles.subItems}>
-                                <Link href="#" className={styles.subLink} onClick={onClose}>Celestine Collection</Link>
-                                <Link href="#" className={styles.subLink} onClick={onClose}>Aurora Series</Link>
-                                <Link href="#" className={styles.subLink} onClick={onClose}>Bridal</Link>
+                                <Link href="/shop?cat=rings" className={styles.subLink} onClick={onClose}>Celestine Collection</Link>
+                                <Link href="/shop?cat=necklaces" className={styles.subLink} onClick={onClose}>Aurora Series</Link>
+                                <Link href="/shop" className={styles.subLink} onClick={onClose}>Bridal</Link>
                             </div>
                         )}
                     </div>
@@ -86,7 +103,7 @@ export default function MobileNav({ isOpen, onClose }: Props) {
                         <Link href="/bespoke" className={styles.mainLink} onClick={onClose}>Bespoke</Link>
                     </div>
                     <div className={styles.item}>
-                        <Link href="#" className={styles.mainLink} onClick={onClose}>Our Story</Link>
+                        <Link href="/about" className={styles.mainLink} onClick={onClose}>Our Story</Link>
                     </div>
                 </div>
 
@@ -98,6 +115,39 @@ export default function MobileNav({ isOpen, onClose }: Props) {
                             </svg>
                             Search
                         </Link>
+
+                        {/* Auth links at bottom */}
+                        {user ? (
+                            <>
+                                <Link href="/profile" className={styles.utilLink} onClick={onClose}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" />
+                                    </svg>
+                                    My Account
+                                </Link>
+                                <button className={styles.utilLink} onClick={handleLogout} style={{ background: 'none', border: 'none', cursor: 'pointer', font: 'inherit', padding: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" />
+                                    </svg>
+                                    Sign Out
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <Link href="/login" className={styles.utilLink} onClick={onClose}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" />
+                                    </svg>
+                                    Sign In
+                                </Link>
+                                <Link href="/signup" className={styles.utilLink} onClick={onClose}>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                        <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><line x1="19" y1="8" x2="19" y2="14" /><line x1="22" y1="11" x2="16" y2="11" />
+                                    </svg>
+                                    Register
+                                </Link>
+                            </>
+                        )}
                     </div>
                     <span className={styles.social}>Instagram &nbsp;·&nbsp; Pinterest</span>
                 </div>

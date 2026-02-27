@@ -1,0 +1,302 @@
+/* Blog detail page */
+
+/* ── Hero ─────────────────────────────────────────────────── */
+.postHero {
+    position: relative;
+    min-height: 60vh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    background: var(--charcoal);
+}
+
+.postHeroImg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.55;
+}
+
+.postHeroOverlay {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding: 64px var(--gutter);
+}
+
+.postHeroContent {
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.backLink {
+    display: inline-block;
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: rgba(248, 246, 244, 0.65);
+    text-decoration: none;
+    margin-bottom: 24px;
+    transition: color 0.2s;
+}
+
+.backLink:hover {
+    color: rgba(248, 246, 244, 1);
+}
+
+.catTag {
+    font-family: var(--font-sc);
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: #F5B9AD;
+    border: 1px solid #F5B9AD;
+    padding: 4px 12px;
+    display: inline-block;
+    margin-bottom: 20px;
+    width: fit-content;
+}
+
+.postTitle {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(32px, 5vw, 58px);
+    color: #F8F6F4;
+    line-height: 1.05;
+    margin-bottom: 20px;
+}
+
+.postExcerpt {
+    font-family: var(--font-body);
+    font-size: 19px;
+    color: rgba(248, 246, 244, 0.75);
+    line-height: 1.75;
+    max-width: 620px;
+    margin-bottom: 28px;
+}
+
+.meta {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    color: rgba(248, 246, 244, 0.5);
+    letter-spacing: 0.12em;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.dot {
+    opacity: 0.4;
+}
+
+/* ── Article body ──────────────────────────────────────────── */
+.postBody {
+    background: var(--white);
+}
+
+.postContent {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 72px var(--gutter);
+    font-family: var(--font-body);
+    font-size: 18px;
+    color: var(--charcoal);
+    line-height: 1.9;
+}
+
+.postContent p {
+    margin-bottom: 1.5em;
+}
+
+.postContent h2 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 32px;
+    color: var(--charcoal);
+    margin: 2.5rem 0 1rem;
+    line-height: 1.15;
+}
+
+.postContent h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 24px;
+    color: var(--charcoal);
+    margin: 2rem 0 0.75rem;
+}
+
+.postContent ul,
+.postContent ol {
+    padding-left: 1.5em;
+    margin-bottom: 1.5em;
+}
+
+.postContent li {
+    margin-bottom: 0.5em;
+}
+
+.postContent blockquote {
+    border-left: 3px solid var(--rose);
+    padding: 8px 0 8px 24px;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--stone);
+}
+
+.postContent img {
+    max-width: 100%;
+    margin: 2rem 0;
+}
+
+.postContent a {
+    color: var(--rose);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* ── Author card ────────────────────────────────────────────── */
+.authorCard {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 32px var(--gutter) 64px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-top: 1px solid var(--border);
+}
+
+.authorAvatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--border);
+}
+
+.authorLabel {
+    display: block;
+    font-family: var(--font-sc);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-bottom: 4px;
+}
+
+.authorName {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--charcoal);
+}
+
+/* ── Skeleton ───────────────────────────────────────────────── */
+.skeletonCard {
+    background: linear-gradient(90deg, #f0ebe4 25%, #e8e2da 50%, #f0ebe4 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* ── Newsletter ─────────────────────────────────────────────── */
+.newsletter {
+    background: var(--deep);
+    padding: 72px var(--gutter);
+    text-align: center;
+}
+
+.newsletterH2 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(28px, 4vw, 44px);
+    color: #F8F6F4;
+    margin-bottom: 14px;
+}
+
+.newsletterSub {
+    font-family: var(--font-body);
+    font-size: 18px;
+    color: rgba(248, 246, 244, 0.55);
+    max-width: 440px;
+    margin: 0 auto 40px;
+    line-height: 1.75;
+}
+
+.newsletterForm {
+    display: flex;
+    gap: 0;
+    max-width: 440px;
+    margin: 0 auto;
+}
+
+.newsletterInput {
+    flex: 1;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(248, 246, 244, 0.2);
+    border-right: none;
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: #F8F6F4;
+    outline: none;
+}
+
+.newsletterInput::placeholder {
+    color: rgba(248, 246, 244, 0.35);
+    font-style: italic;
+}
+
+.newsletterBtn {
+    padding: 14px 28px;
+    background: var(--rose);
+    color: #F8F6F4;
+    font-family: var(--font-sc);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.newsletterBtn:hover {
+    background: var(--rose-light, #a56a5c);
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .postHeroOverlay {
+        padding: var(--space-md) var(--gutter);
+    }
+
+    .postContent {
+        padding: var(--space-md) var(--gutter);
+        font-size: 17px;
+    }
+
+    .authorCard {
+        padding: 24px 20px 48px;
+    }
+
+    .netflix,
+    .newsletter {
+        padding: var(--space-md) var(--gutter);
+    }
+
+    .newsletterForm {
+        flex-direction: column;
+    }
+
+    .newsletterInput {
+        border-right: 1px solid rgba(248, 246, 244, 0.2);
+        border-bottom: none;
+    }
+}

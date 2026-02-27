@@ -4,11 +4,11 @@ import styles from './page.module.css';
 
 // Using constants for images so they can be easily managed by an admin later
 const IMAGES = {
-    hero: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400'%3E%3Crect width='100%25' height='100%25' fill='%23EFEFEF'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23A0A0A0' font-family='sans-serif' font-size='14'%3EAdmin Image: Diamond Guide Hero%3C/text%3E%3C/svg%3E",
-    cert_gia: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='100'%3E%3Crect width='100%25' height='100%25' fill='%23F5F5F5'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23A0A0A0' font-family='sans-serif' font-size='12'%3EGIA Logo%3C/text%3E%3C/svg%3E",
-    cert_igi: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='100'%3E%3Crect width='100%25' height='100%25' fill='%23F5F5F5'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23A0A0A0' font-family='sans-serif' font-size='12'%3EIGI Logo%3C/text%3E%3C/svg%3E",
-    cert_sgl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='100'%3E%3Crect width='100%25' height='100%25' fill='%23F5F5F5'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23A0A0A0' font-family='sans-serif' font-size='12'%3ESGL Logo%3C/text%3E%3C/svg%3E",
-    cert_bis: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='100'%3E%3Crect width='100%25' height='100%25' fill='%23F5F5F5'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23A0A0A0' font-family='sans-serif' font-size='12'%3EBIS Hallmark%3C/text%3E%3C/svg%3E",
+    hero: "https://res.cloudinary.com/dl6cdbdzl/image/upload/v1772000100/paige-johnson-Xk0wo4HtM-g-unsplash_kghwev.jpg",
+    cert_gia: "https://res.cloudinary.com/dl6cdbdzl/image/upload/v1771999683/gia_q8l69s.png",
+    cert_igi: "https://res.cloudinary.com/dl6cdbdzl/image/upload/v1771999686/igi_t8apni.png",
+    cert_sgl: "https://res.cloudinary.com/dl6cdbdzl/image/upload/v1771999685/sgl_i8alev.png",
+    cert_bis: "https://res.cloudinary.com/dl6cdbdzl/image/upload/v1771999682/bis_r6ea6g.png"
 };
 
 export default function DiamondBuyingGuide() {
@@ -43,8 +43,6 @@ export default function DiamondBuyingGuide() {
                 <div className={styles.tabsInner}>
                     <span className={styles.tabActive}>Diamond Guide</span>
                     <Link href="#" className={styles.tabLink}>Gem Guide</Link>
-                    <Link href="#" className={styles.tabLink}>Size Guide</Link>
-                    <Link href="#" className={styles.tabLink}>Care Tips</Link>
                 </div>
             </div>
 

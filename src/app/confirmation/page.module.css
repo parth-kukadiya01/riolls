@@ -234,7 +234,7 @@
 
 @media (max-width: 768px) {
     .main {
-        padding: 40px 20px;
+        padding: var(--space-md) var(--gutter);
     }
 
     .nextGrid {

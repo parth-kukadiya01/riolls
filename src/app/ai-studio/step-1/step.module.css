@@ -24,7 +24,7 @@
 .container {
     max-width: 680px;
     margin: 0 auto;
-    padding: 80px var(--gutter);
+    padding: var(--space-xl) var(--gutter);
     text-align: center;
 }
 
@@ -333,7 +333,7 @@
 
 /* Results */
 .results {
-    padding: 60px var(--gutter);
+    padding: var(--space-lg) var(--gutter);
 }
 
 .resultsHeader {
@@ -855,7 +855,7 @@
     }
 
     .builder {
-        padding: 40px 20px;
+        padding: var(--space-md) var(--gutter);
     }
 
     .designGrid {
@@ -864,6 +864,6 @@
 
     .container,
     .results {
-        padding: 40px 20px;
+        padding: var(--space-md) var(--gutter);
     }
 }

@@ -113,6 +113,13 @@
     margin-bottom: 8px;
 }
 
+.itemPriceRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 8px;
+}
+
 .itemPrice {
     font-family: var(--font-display);
     font-style: italic;
