@@ -25,7 +25,7 @@ export default function AboutPage() {
             <section className={styles.imageSection}>
                 <div className={styles.fullImageWrapper}>
                     <Image
-                        src={ABOUT_IMAGES.hero}
+                        src={"https://res.cloudinary.com/dl6cdbdzl/image/upload/v1772124653/Riolls_jewels_t4kryx.png"}
                         alt="About Riolls"
                         fill
                         className={styles.fullImage}
@@ -69,7 +69,7 @@ export default function AboutPage() {
                     </div>
                     <div className={styles.splitImage}>
                         <Image
-                            src={ABOUT_IMAGES.craft}
+                            src={"https://res.cloudinary.com/dl6cdbdzl/image/upload/v1772123328/In_Mexico_a_Family_Focused_on_Twists_of_Silver_Filigree_ohuo6h.jpg"}
                             alt="Craftsmanship"
                             fill
                             className={styles.image}
@@ -99,7 +99,7 @@ export default function AboutPage() {
                     </div>
                     <div className={styles.splitImage}>
                         <Image
-                            src={ABOUT_IMAGES.gold}
+                            src={"https://res.cloudinary.com/dl6cdbdzl/image/upload/v1772123321/Jaubalet_Paris_Joaillerie_tukwhe.jpg"}
                             alt="Responsibly Sourced Gold"
                             fill
                             className={styles.image}

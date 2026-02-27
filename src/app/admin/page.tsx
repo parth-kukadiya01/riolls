@@ -13,6 +13,7 @@ interface DashboardData {
     pendingOrders: number;
     newEnquiries: number;
     newDesignRequests: number;
+    aiConceptsCount?: number;
     recentOrders: Array<{
         _id: string;
         orderNumber: string;
@@ -30,6 +31,8 @@ export default function AdminDashboard() {
     const [data, setData] = useState<DashboardData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [goldPrice, setGoldPrice] = useState('');
+    const [updating, setUpdating] = useState(false);
 
     useEffect(() => {
         let mounted = true;
@@ -52,6 +55,36 @@ export default function AdminDashboard() {
         loadDashboard();
         return () => { mounted = false; };
     }, []);
+
+    const handleUpdateGoldPrice = async () => {
+        if (!goldPrice || isNaN(parseFloat(goldPrice))) {
+            alert('Please enter a valid gold price');
+            return;
+        }
+
+        if (!confirm(`Are you sure you want to update all product prices based on £${goldPrice}/g?`)) {
+            return;
+        }
+
+        setUpdating(true);
+        try {
+            const res = await adminFetch('/admin/bulk-update-gold-prices', {
+                method: 'POST',
+                body: JSON.stringify({ gold24kPrice: parseFloat(goldPrice) })
+            });
+            const json = await res.json();
+            if (res.ok) {
+                alert(json.message);
+                setGoldPrice('');
+            } else {
+                alert(json.message || 'Failed to update prices');
+            }
+        } catch (err: any) {
+            alert(err.message);
+        } finally {
+            setUpdating(false);
+        }
+    };
 
     if (loading) return <div style={{ padding: '2rem' }}>Loading dashboard data...</div>;
     if (error) return <div style={{ padding: '2rem', color: 'red' }}>Error: {error}</div>;
@@ -127,6 +160,38 @@ export default function AdminDashboard() {
                     </div>
                     <div className={styles.kpiValue}>{data.totalProducts}</div>
                 </div>
+
+                <div className={`${styles.kpiCard} ${styles.goldCard}`}>
+                    <div className={styles.kpiHeader}>
+                        <span className={styles.kpiTitle}>Gold Price Control</span>
+                        <div className={styles.kpiIcon} style={{ background: 'rgba(255, 193, 7, 0.15)', color: '#ffc107' }}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div className={styles.goldInputGroup}>
+                        <div className={styles.inputWrapper}>
+                            <span className={styles.currencyPrefix}>£</span>
+                            <input
+                                type="number"
+                                step="0.01"
+                                className={styles.goldInput}
+                                placeholder="24k Price / g"
+                                value={goldPrice}
+                                onChange={e => setGoldPrice(e.target.value)}
+                            />
+                        </div>
+                        <button
+                            className={styles.goldButton}
+                            onClick={handleUpdateGoldPrice}
+                            disabled={updating}
+                        >
+                            {updating ? '...' : 'Update All'}
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div className={styles.contentGrid}>
@@ -177,6 +242,18 @@ export default function AdminDashboard() {
                                 <span>AI Studio Quotes</span>
                             </div>
                             {data.newDesignRequests > 0 && <span className={styles.actionBadge}>{data.newDesignRequests}</span>}
+                        </Link>
+
+                        <Link href="/admin/bespoke" className={styles.actionItem} style={{ textDecoration: 'none' }}>
+                            <div className={styles.actionLabel}>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6b4fbb" strokeWidth="2">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                                </svg>
+                                <span>Bespoke Portfolio</span>
+                            </div>
+                            <span className={styles.actionBadge} style={{ background: '#f3e8ff', color: '#6b4fbb' }}>
+                                {data.aiConceptsCount !== undefined ? `${data.aiConceptsCount} Concepts` : 'Manage'}
+                            </span>
                         </Link>
                     </div>
                 </div>

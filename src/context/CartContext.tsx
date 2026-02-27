@@ -33,6 +33,7 @@ export interface CartItem {
     product: CartProduct;
     size?: string;
     metal?: string;
+    purity?: string;
     quantity: number;
     stoneSize?: number;
     engraving?: string;
@@ -44,9 +45,9 @@ interface CartContextType {
     loading: boolean;
     openCart: () => void;
     closeCart: () => void;
-    addItem: (productId: string, opts?: { size?: string; metal?: string; quantity?: number; stoneSize?: number; engraving?: string }) => Promise<void>;
+    addItem: (productId: string, opts?: { size?: string; metal?: string; purity?: string; quantity?: number; stoneSize?: number; engraving?: string }) => Promise<void>;
     removeItem: (itemId: string) => Promise<void>;
-    updateItem: (itemId: string, data: { quantity?: number; size?: string; metal?: string }) => Promise<void>;
+    updateItem: (itemId: string, data: { quantity?: number; size?: string; metal?: string; purity?: string }) => Promise<void>;
     clearCart: () => Promise<void>;
     refetch: () => Promise<void>;
     totalItems: number;
@@ -88,7 +89,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
     const addItem = useCallback(async (
         productId: string,
-        opts?: { size?: string; metal?: string; quantity?: number; stoneSize?: number; engraving?: string },
+        opts?: { size?: string; metal?: string; purity?: string; quantity?: number; stoneSize?: number; engraving?: string },
     ) => {
         if (!getToken()) {
             router.push('/login');
@@ -109,7 +110,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setItems(res.data?.items ?? []);
     }, []);
 
-    const updateItem = useCallback(async (itemId: string, data: { quantity?: number; size?: string; metal?: string }) => {
+    const updateItem = useCallback(async (itemId: string, data: { quantity?: number; size?: string; metal?: string; purity?: string }) => {
         if (!getToken()) return;
         const res: any = await cartApi.update(itemId, data);
         setItems(res.data?.items ?? []);

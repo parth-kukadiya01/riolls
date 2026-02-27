@@ -41,12 +41,12 @@ export default function AIStep2() {
         const defaultStyle = formatStyle(Array.isArray(p.style) ? p.style[0] : p.style);
         const defaultBudget = formatBudget(Array.isArray(p.budget) ? p.budget[0] : p.budget);
 
-        const optionsPiece = Array.from(new Set([defaultPiece, 'a ring', 'a necklace', 'earrings', 'a bracelet']));
-        const optionsMetal = Array.from(new Set([defaultMetal, 'in 9k yellow gold', 'in 18k yellow gold', 'in 18k white gold', 'in 925 silver', 'in platinum']));
-        const optionsStone = Array.from(new Set([defaultStone, 'with brilliant diamonds', 'with lab-grown diamonds', 'with moissanite', 'with cz']));
+        const optionsPiece = Array.from(new Set([defaultPiece, 'a ring', 'a necklace', 'a earrings', 'a bracelet']));
+        const optionsMetal = Array.from(new Set([defaultMetal, 'in 9k yellow gold', 'in 9k rose gold', 'in 9k white gold', 'in 14k yellow gold', 'in 14k rose gold', 'in 14k white gold', 'in 18k yellow gold', 'in 18k rose gold', 'in 18k white gold', 'in 925 silver']));
+        const optionsStone = Array.from(new Set([defaultStone, 'with brilliant diamonds', 'Vivid Coloured Gems', 'Pearls & Organics', 'Mixed & Layered']));
         const optionsStyle = Array.from(new Set([defaultStyle, 'in a romantic style', 'in a classic style', 'with a modern aesthetic', 'in a minimalist design', 'with sculptural forms']));
-        const optionsSetting = ['and a pavé band', 'and a solitaire setting', 'and a halo setting', 'and a bezel setting'];
-        const optionsBudget = Array.from(new Set([defaultBudget, 'with a budget under £1,000', 'with a budget £2,000 – £5,000', 'with no strict budget']));
+        const optionsSetting = ['and a pavé band', 'and a solitaire setting', 'and a halo setting', 'and a bezel setting', 'and a tension setting', 'and a channel setting', 'and a trilogy setting', 'and a cluster setting'];
+        const optionsBudget = Array.from(new Set([defaultBudget, 'with a budget under £1,000', 'with a budget £1,000 – £2,000', 'with a budget £2,000 – £4,000', 'with a budget £4,000 – £6,000', 'with a budget £6,000 – £8,000', 'with a budget over £5,000', 'with no strict budget']));
 
         return [
             { id: 'pieceType', label: 'Piece', options: optionsPiece },

@@ -257,3 +257,65 @@
 .link:hover {
     text-decoration: underline;
 }
+
+.goldCard {
+    background: linear-gradient(135deg, #fff 0%, #fffbf2 100%);
+    border: 1px solid rgba(255, 193, 7, 0.2);
+}
+
+.goldInputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.currencyPrefix {
+    position: absolute;
+    left: 0.75rem;
+    color: #666;
+    font-size: 0.875rem;
+    pointer-events: none;
+}
+
+.goldInput {
+    padding: 0.6rem 0.75rem 0.6rem 1.75rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.goldInput:focus {
+    border-color: var(--gold);
+}
+
+.goldButton {
+    background: var(--gold);
+    color: var(--white);
+    border: none;
+    padding: 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.goldButton:hover {
+    opacity: 0.9;
+}
+
+.goldButton:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}

@@ -48,6 +48,11 @@ export default function ProductPage() {
                     gradient_hover: 'linear-gradient(145deg,#c8b89a,#b8a880)',
                     is_wishlisted: p.isWishlisted,
                     images: p.images ?? [],
+                    price9k: p.price9k,
+                    price14k: p.price14k,
+                    price18k: p.price18k,
+                    price22k: p.price22k,
+                    availableMetals: p.availableMetals,
                 });
                 setStatus('found');
             })

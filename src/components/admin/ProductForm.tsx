@@ -16,6 +16,11 @@ interface ProductFormProps {
     isEdit?: boolean;
 }
 
+const GOLD_OPTIONS = ['Yellow Gold', 'Rose Gold', 'White Gold', 'Platinum'];
+
+const COLLECTION_OPTIONS = ['Celestine Collection', 'Aurora Series', 'Tempest Line'];
+const OCCASION_OPTIONS = ['Bridal & Engagement', 'Anniversary Gifts', 'High Jewellery'];
+
 export default function ProductForm({ initialData = null, isEdit = false }: ProductFormProps) {
     const router = useRouter();
     const [categories, setCategories] = useState<Category[]>([]);
@@ -24,13 +29,16 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
 
     const [formData, setFormData] = useState({
         name: '', slug: '', categoryId: '', price: '',
+        price9k: '', price14k: '', price18k: '', price22k: '',
         metal: '', stone: '', badge: '', description: '', stoneDetail: '',
         isFeatured: false, isActive: true, sortOrder: 0,
         engravingAvailable: true, maxEngravingLength: 25,
         minStoneSize: 0.5, maxStoneSize: 3.0,
         deliveryInfo: 'Free insured worldwide delivery within 7-10 working days.',
         careInstructions: 'Store in the provided pouch. Clean gently with a soft cloth.',
-        availableMetals: ''
+        availableMetals: '',
+        weight: '',
+        additionalCharge: '0'
     });
 
     // Image logic
@@ -56,6 +64,10 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                 slug: initialData.slug || '',
                 categoryId: initialData.category?._id || '',
                 price: initialData.price === null ? '' : String(initialData.price),
+                price9k: initialData.price9k === null ? '' : String(initialData.price9k),
+                price14k: initialData.price14k === null ? '' : String(initialData.price14k),
+                price18k: initialData.price18k === null ? '' : String(initialData.price18k),
+                price22k: initialData.price22k === null ? '' : String(initialData.price22k),
                 metal: initialData.metal || '',
                 stone: initialData.stone || '',
                 badge: initialData.badge || '',
@@ -70,7 +82,9 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                 maxStoneSize: initialData.maxStoneSize || 3.0,
                 deliveryInfo: initialData.deliveryInfo || '',
                 careInstructions: initialData.careInstructions || '',
-                availableMetals: initialData.availableMetals ? initialData.availableMetals.join(', ') : ''
+                availableMetals: initialData.availableMetals ? initialData.availableMetals.join(', ') : '',
+                weight: initialData.weight === null ? '' : String(initialData.weight),
+                additionalCharge: initialData.additionalCharge === null ? '0' : String(initialData.additionalCharge)
             });
 
             if (initialData.images) {
@@ -78,6 +92,19 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
             }
         }
     }, [initialData]);
+
+    useEffect(() => {
+        const metal = formData.metal;
+        let syncedPrice = '';
+        if (metal === '9k') syncedPrice = formData.price9k;
+        else if (metal === '14k') syncedPrice = formData.price14k;
+        else if (metal === '18k') syncedPrice = formData.price18k;
+        else if (metal === '22k') syncedPrice = formData.price22k;
+
+        if (syncedPrice && syncedPrice !== formData.price) {
+            setFormData(prev => ({ ...prev, price: syncedPrice }));
+        }
+    }, [formData.metal, formData.price9k, formData.price14k, formData.price18k, formData.price22k]);
 
     // Handle drag events
     const handleDrag = (e: React.DragEvent) => {
@@ -115,6 +142,18 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
     const generateSlug = () => {
         if (!formData.name) return;
         setFormData(f => ({ ...f, slug: f.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') }));
+    };
+
+    const toggleMetal = (metal: string) => {
+        const currentMetals = formData.availableMetals.split(',').map(m => m.trim()).filter(Boolean);
+        const hasMetal = currentMetals.includes(metal);
+        let newMetals;
+        if (hasMetal) {
+            newMetals = currentMetals.filter(m => m !== metal);
+        } else {
+            newMetals = [...currentMetals, metal];
+        }
+        setFormData({ ...formData, availableMetals: newMetals.join(', ') });
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -164,10 +203,16 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                 const payload = {
                     ...formData,
                     price: formData.price ? parseFloat(formData.price) : null,
+                    price9k: formData.price9k ? parseFloat(formData.price9k) : null,
+                    price14k: formData.price14k ? parseFloat(formData.price14k) : null,
+                    price18k: formData.price18k ? parseFloat(formData.price18k) : null,
+                    price22k: formData.price22k ? parseFloat(formData.price22k) : null,
                     sortOrder: parseInt(String(formData.sortOrder)),
                     maxEngravingLength: parseInt(String(formData.maxEngravingLength)),
                     minStoneSize: parseFloat(String(formData.minStoneSize)),
                     maxStoneSize: parseFloat(String(formData.maxStoneSize)),
+                    weight: formData.weight ? parseFloat(formData.weight) : null,
+                    additionalCharge: formData.additionalCharge ? parseFloat(formData.additionalCharge) : 0,
                     availableMetals: formData.availableMetals.split(',').map(m => m.trim()).filter(Boolean),
                     images: [...existingImages, ...uploadedImageUrls] // Combine existing and newly uploaded URLs
                 };
@@ -187,6 +232,10 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                 submitData.append('slug', formData.slug);
                 submitData.append('categoryId', formData.categoryId || categories[0]?._id);
                 if (formData.price) submitData.append('price', formData.price);
+                if (formData.price9k) submitData.append('price9k', formData.price9k);
+                if (formData.price14k) submitData.append('price14k', formData.price14k);
+                if (formData.price18k) submitData.append('price18k', formData.price18k);
+                if (formData.price22k) submitData.append('price22k', formData.price22k);
                 submitData.append('metal', formData.metal || '18k Gold');
                 submitData.append('stone', formData.stone || 'Diamond');
                 if (formData.badge) submitData.append('badge', formData.badge);
@@ -201,6 +250,8 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                 submitData.append('maxStoneSize', String(formData.maxStoneSize));
                 submitData.append('deliveryInfo', formData.deliveryInfo);
                 submitData.append('careInstructions', formData.careInstructions);
+                if (formData.weight) submitData.append('weight', formData.weight);
+                if (formData.additionalCharge) submitData.append('additionalCharge', formData.additionalCharge);
 
                 const metals = formData.availableMetals.split(',').map(m => m.trim()).filter(Boolean);
                 metals.forEach(m => submitData.append('availableMetals', m));
@@ -250,9 +301,30 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                         {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
                     </select>
                 </div>
-                <div className={styles.formGroup}>
-                    <label className={styles.label}>Price (£)</label>
-                    <input className={styles.input} type="number" step="0.01" placeholder="Leave blank for POA" value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} />
+                <div className={styles.formGroup} style={{ gridColumn: '1 / -1', padding: '1rem', background: 'rgba(0,0,0,0.02)', borderRadius: '8px', marginBottom: '1rem' }}>
+                    <div className={styles.optionGroupLabel} style={{ marginBottom: '1rem' }}>Pricing Strategy</div>
+                    <div className={styles.formGrid} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Price (Main) £</label>
+                            <input className={styles.input} type="number" step="0.01" placeholder="POA" value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} />
+                        </div>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Price (9k) £</label>
+                            <input className={styles.input} type="number" step="0.01" value={formData.price9k} onChange={e => setFormData({ ...formData, price9k: e.target.value })} />
+                        </div>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Price (14k) £</label>
+                            <input className={styles.input} type="number" step="0.01" value={formData.price14k} onChange={e => setFormData({ ...formData, price14k: e.target.value })} />
+                        </div>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Price (18k) £</label>
+                            <input className={styles.input} type="number" step="0.01" value={formData.price18k} onChange={e => setFormData({ ...formData, price18k: e.target.value })} />
+                        </div>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Price (22k) £</label>
+                            <input className={styles.input} type="number" step="0.01" value={formData.price22k} onChange={e => setFormData({ ...formData, price22k: e.target.value })} />
+                        </div>
+                    </div>
                 </div>
 
                 <div className={styles.formGroup} style={{ gridColumn: '1 / -1' }}>
@@ -263,23 +335,108 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                 {/* Attributes */}
                 <div className={styles.formGroup}>
                     <label className={styles.label}>Primary Metal *</label>
-                    <input className={styles.input} required value={formData.metal} onChange={e => setFormData({ ...formData, metal: e.target.value })} placeholder="e.g. 18k Rose Gold" />
+                    <select
+                        className={styles.input}
+                        required
+                        value={formData.metal}
+                        onChange={e => setFormData({ ...formData, metal: e.target.value })}
+                    >
+                        <option value="">Select Metal</option>
+                        <option value="9k">9k</option>
+                        <option value="14k">14k</option>
+                        <option value="18k">18k</option>
+                        <option value="22k">22k</option>
+                    </select>
                 </div>
+
                 <div className={styles.formGroup}>
                     <label className={styles.label}>Primary Stone *</label>
-                    <input className={styles.input} required value={formData.stone} onChange={e => setFormData({ ...formData, stone: e.target.value })} placeholder="e.g. Diamond" />
+                    <select
+                        className={styles.input}
+                        required
+                        value={formData.stone}
+                        onChange={e => setFormData({ ...formData, stone: e.target.value })}
+                    >
+                        <option value="">Select Stone</option>
+                        <option value="Diamond">Diamond</option>
+                        <option value="Lab Diamond">Lab Diamond</option>
+                        <option value="Moissanite">Moissanite</option>
+                        <option value="CZ">CZ</option>
+                    </select>
                 </div>
+
                 <div className={styles.formGroup} style={{ gridColumn: '1 / -1' }}>
                     <label className={styles.label}>Stone Detail *</label>
-                    <textarea className={styles.textarea} style={{ minHeight: '80px' }} required value={formData.stoneDetail} onChange={e => setFormData({ ...formData, stoneDetail: e.target.value })} />
+                    <textarea
+                        className={styles.textarea}
+                        style={{ minHeight: '80px' }}
+                        required
+                        value={formData.stoneDetail}
+                        onChange={e => setFormData({ ...formData, stoneDetail: e.target.value })}
+                    />
                 </div>
+
                 <div className={styles.formGroup}>
                     <label className={styles.label}>Available Metals (comma separated)</label>
-                    <input className={styles.input} value={formData.availableMetals} onChange={e => setFormData({ ...formData, availableMetals: e.target.value })} placeholder="18k Yellow Gold, Platinum" />
+                    <input
+                        className={styles.input}
+                        value={formData.availableMetals}
+                        onChange={e => setFormData({ ...formData, availableMetals: e.target.value })}
+                        placeholder="18k Yellow Gold"
+                    />
+                    <div className={styles.metalOptions}>
+                        {GOLD_OPTIONS.map(metal => (
+                            <span
+                                key={metal}
+                                className={`${styles.metalTag} ${formData.availableMetals.split(',').map(m => m.trim()).includes(metal) ? styles.metalTagActive : ''}`}
+                                onClick={() => toggleMetal(metal)}
+                            >
+                                {metal}
+                            </span>
+                        ))}
+                    </div>
                 </div>
+
                 <div className={styles.formGroup}>
-                    <label className={styles.label}>Badge</label>
-                    <input className={styles.input} value={formData.badge} onChange={e => setFormData({ ...formData, badge: e.target.value })} placeholder="e.g. New In, Last Piece" />
+                    <label className={styles.label}>Badge & Collections</label>
+                    <select
+                        className={styles.input}
+                        value={formData.badge}
+                        onChange={e => setFormData({ ...formData, badge: e.target.value })}
+                    >
+                        <option value="New In">New In</option>
+                        <option value="Last Piece">Last Piece</option>
+                        <option value="Best Seller">Best Seller</option>
+                    </select>
+                    <div className={styles.optionGroup}>
+                        <div className={styles.optionGroupLabel}>Collections</div>
+                        <div className={styles.metalOptions}>
+                            {COLLECTION_OPTIONS.map(opt => (
+                                <span
+                                    key={opt}
+                                    className={`${styles.metalTag} ${formData.badge === opt ? styles.metalTagActive : ''}`}
+                                    onClick={() => setFormData({ ...formData, badge: formData.badge === opt ? '' : opt })}
+                                >
+                                    {opt}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className={styles.optionGroup}>
+                        <div className={styles.optionGroupLabel}>By Occasion</div>
+                        <div className={styles.metalOptions}>
+                            {OCCASION_OPTIONS.map(opt => (
+                                <span
+                                    key={opt}
+                                    className={`${styles.metalTag} ${formData.badge === opt ? styles.metalTagActive : ''}`}
+                                    onClick={() => setFormData({ ...formData, badge: formData.badge === opt ? '' : opt })}
+                                >
+                                    {opt}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
                 </div>
 
                 {/* Specifics */}
@@ -291,9 +448,18 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                     <label className={styles.label}>Max Stone Size (ct)</label>
                     <input className={styles.input} type="number" step="0.01" value={formData.maxStoneSize} onChange={e => setFormData({ ...formData, maxStoneSize: Number(e.target.value) })} />
                 </div>
+                <div className={styles.formGroup}>
+                    <label className={styles.label}>Metal Weight (g)</label>
+                    <input className={styles.input} type="number" step="0.01" value={formData.weight} onChange={e => setFormData({ ...formData, weight: e.target.value })} />
+                </div>
+                <div className={styles.formGroup}>
+                    <label className={styles.label}>Additional Charge (£)</label>
+                    <input className={styles.input} type="number" step="0.01" value={formData.additionalCharge} onChange={e => setFormData({ ...formData, additionalCharge: e.target.value })} />
+                </div>
 
                 {/* Toggles */}
-                <div className={styles.formGroup}>
+                <div className={styles.formGroup} style={{ visibility: 'hidden', height: 0, overflow: 'hidden' }}>
+                    {/* Replaced by Featured tag above, but keeping for layout if needed or just remove */}
                     <label className={styles.toggleLabel}>
                         <input type="checkbox" className={styles.toggleInput} checked={formData.isFeatured} onChange={e => setFormData({ ...formData, isFeatured: e.target.checked })} />
                         Featured Product

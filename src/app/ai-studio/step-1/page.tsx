@@ -24,7 +24,7 @@ export const questions = [
     {
         id: 'stonePreference',
         question: 'What draws your eye?',
-        answers: ['Brilliant Diamonds', 'Vivid Coloured Gems', 'Pearls & Organics', 'Mixed & Layered', "Lab-Grown Diamonds", "Lab-Grown Coloured Gems", "Moissanite", "CZ"],
+        answers: ['Brilliant Diamonds', 'Vivid Coloured Gems', 'Pearls & Organics', 'Mixed & Layered'],
     },
     {
         id: 'wearOccasion',

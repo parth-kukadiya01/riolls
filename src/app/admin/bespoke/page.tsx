@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { bespokeApi, reviewsApi } from '@/lib/api';
+import { adminFetch } from '@/lib/adminAuth';
 import styles from './page.module.css';
 
 interface BespokeWork {
@@ -44,13 +44,18 @@ export default function AdminBespokePage() {
         setError('');
         try {
             const [portfolioRes, aiRes] = await Promise.all([
-                bespokeApi.list(false),
-                bespokeApi.adminListAiConcepts()
+                adminFetch('/bespoke?active_only=false'),
+                adminFetch('/bespoke/admin/ai-concepts')
             ]);
-            console.log('Loaded Portfolio:', portfolioRes);
-            console.log('Loaded AI Concepts:', aiRes);
-            setWorks((portfolioRes.data as BespokeWork[]) || []);
-            setAiConcepts((aiRes.data as BespokeWork[]) || []);
+
+            const portfolioJson = await portfolioRes.json();
+            const aiJson = await aiRes.json();
+
+            if (!portfolioRes.ok) throw new Error(portfolioJson.message || 'Failed to load portfolio');
+            if (!aiRes.ok) throw new Error(aiJson.message || 'Failed to load AI concepts');
+
+            setWorks((portfolioJson.data as BespokeWork[]) || []);
+            setAiConcepts((aiJson.data as BespokeWork[]) || []);
         } catch (err: any) {
             console.error('Failed to load bespoke works:', err);
             setError(err.message || 'Failed to load bespoke works');
@@ -64,12 +69,21 @@ export default function AdminBespokePage() {
         if (!file) return;
         setUploading(true);
         try {
-            // Re-using the review image upload endpoint since it just uploads to Cloudinary and returns URL
-            // In a real app we might want a dedicated admin upload endpoint
-            const url = await reviewsApi.uploadImage(file);
-            setImage(url);
-        } catch (err) {
-            alert('Image upload failed');
+            const formData = new FormData();
+            formData.append('images', file);
+            formData.append('folder', 'bespoke');
+
+            const res = await adminFetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const json = await res.json();
+            if (!res.ok) throw new Error(json.message || 'Upload failed');
+
+            setImage(json.data.urls[0]);
+        } catch (err: any) {
+            alert(err.message || 'Image upload failed');
         } finally {
             setUploading(false);
         }
@@ -116,11 +130,17 @@ export default function AdminBespokePage() {
         const payload = { name, image, tall, order: Number(order), isActive };
 
         try {
-            if (editingWork) {
-                await bespokeApi.update(editingWork._id, payload);
-            } else {
-                await bespokeApi.create(payload);
-            }
+            const endpoint = editingWork ? `/bespoke/admin/${editingWork._id}` : '/bespoke/admin';
+            const method = editingWork ? 'PUT' : 'POST';
+
+            const res = await adminFetch(endpoint, {
+                method,
+                body: JSON.stringify(payload)
+            });
+
+            const json = await res.json();
+            if (!res.ok) throw new Error(json.message || 'Failed to save');
+
             closeModal();
             loadWorks();
         } catch (err: any) {
@@ -131,7 +151,15 @@ export default function AdminBespokePage() {
     const handleDelete = async (id: string) => {
         if (!confirm('Are you sure you want to delete this work?')) return;
         try {
-            await bespokeApi.delete(id);
+            const res = await adminFetch(`/bespoke/admin/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (!res.ok) {
+                const json = await res.json();
+                throw new Error(json.message || 'Delete failed');
+            }
+
             loadWorks();
         } catch (err: any) {
             alert(err.message || 'Delete failed');
