@@ -9,6 +9,8 @@ import styles from './page.module.css';
 
 type Tab = 'profile' | 'orders' | 'designs' | 'enquiries' | 'addresses';
 
+const emptyAddress = { label: 'Home', fullName: '', address1: '', address2: '', city: '', postcode: '', country: '', isDefault: false };
+
 export default function ProfilePage() {
     const { user, logout, loading: authLoading, refreshProfile } = useAuth();
     const router = useRouter();
@@ -24,6 +26,11 @@ export default function ProfilePage() {
     const [enquiries, setEnquiries] = useState<any[]>([]);
     const [addresses, setAddresses] = useState<any[]>([]);
     const [tabLoading, setTabLoading] = useState(false);
+
+    // Address form state
+    const [showAddressForm, setShowAddressForm] = useState(false);
+    const [addressForm, setAddressForm] = useState(emptyAddress);
+    const [addressSaving, setAddressSaving] = useState(false);
 
     // Redirect if not logged in
     useEffect(() => {
@@ -45,17 +52,28 @@ export default function ProfilePage() {
     useEffect(() => {
         if (!user) return;
         setTabLoading(true);
-        if (activeTab === 'orders') {
-            ordersApi.list().then((res: any) => setOrders(res.data?.items ?? [])).finally(() => setTabLoading(false));
-        } else if (activeTab === 'designs') {
-            userApi.getDesigns().then((res: any) => setDesigns(res.data ?? [])).finally(() => setTabLoading(false));
-        } else if (activeTab === 'enquiries') {
-            userApi.getEnquiries().then((res: any) => setEnquiries(res.data ?? [])).finally(() => setTabLoading(false));
-        } else if (activeTab === 'addresses') {
-            addressesApi.list().then((res: any) => setAddresses(res.data ?? [])).finally(() => setTabLoading(false));
-        } else {
-            setTabLoading(false);
-        }
+        const load = async () => {
+            try {
+                if (activeTab === 'orders') {
+                    const res: any = await ordersApi.list();
+                    setOrders(Array.isArray(res.data) ? res.data : []);
+                } else if (activeTab === 'designs') {
+                    const res: any = await userApi.getDesigns();
+                    setDesigns(res.data ?? []);
+                } else if (activeTab === 'enquiries') {
+                    const res: any = await userApi.getEnquiries();
+                    setEnquiries(res.data ?? []);
+                } else if (activeTab === 'addresses') {
+                    const res: any = await addressesApi.list();
+                    setAddresses(res.data ?? []);
+                }
+            } catch (err) {
+                console.error(`Failed to load ${activeTab}:`, err);
+            } finally {
+                setTabLoading(false);
+            }
+        };
+        load();
     }, [activeTab, user]);
 
     const handleSaveProfile = async (e: React.FormEvent) => {
@@ -63,6 +81,32 @@ export default function ProfilePage() {
         await userApi.updateProfile(editForm);
         await refreshProfile();
         setIsEditing(false);
+    };
+
+    const handleAddAddress = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setAddressSaving(true);
+        try {
+            await addressesApi.add(addressForm);
+            const res: any = await addressesApi.list();
+            setAddresses(res.data ?? []);
+            setShowAddressForm(false);
+            setAddressForm(emptyAddress);
+        } catch (err) {
+            console.error('Failed to add address:', err);
+        } finally {
+            setAddressSaving(false);
+        }
+    };
+
+    const handleDeleteAddress = async (id: string) => {
+        if (!confirm('Remove this address?')) return;
+        try {
+            await addressesApi.remove(id);
+            setAddresses(prev => prev.filter((a: any) => a._id !== id));
+        } catch (err) {
+            console.error('Failed to delete address:', err);
+        }
     };
 
     const handleLogout = () => {
@@ -263,15 +307,91 @@ export default function ProfilePage() {
             case 'addresses':
                 return (
                     <>
-                        <h2 className={styles.sectionTitle}>Saved Addresses</h2>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                            <h2 className={styles.sectionTitle} style={{ margin: 0 }}>Saved Addresses</h2>
+                        </div>
+
+                        {showAddressForm && (
+                            <form className={styles.editForm} onSubmit={handleAddAddress} style={{ marginBottom: '2rem', maxWidth: '100%' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                                    <div className={styles.inputGroup}>
+                                        <label className={styles.label}>Label</label>
+                                        <input className={styles.input} value={addressForm.label}
+                                            onChange={e => setAddressForm(f => ({ ...f, label: e.target.value }))}
+                                            placeholder="e.g. Home, Office" />
+                                    </div>
+                                    <div className={styles.inputGroup}>
+                                        <label className={styles.label}>Full Name</label>
+                                        <input className={styles.input} value={addressForm.fullName}
+                                            onChange={e => setAddressForm(f => ({ ...f, fullName: e.target.value }))}
+                                            required />
+                                    </div>
+                                    <div className={styles.inputGroup} style={{ gridColumn: '1 / -1' }}>
+                                        <label className={styles.label}>Address Line 1</label>
+                                        <input className={styles.input} value={addressForm.address1}
+                                            onChange={e => setAddressForm(f => ({ ...f, address1: e.target.value }))}
+                                            required />
+                                    </div>
+                                    <div className={styles.inputGroup} style={{ gridColumn: '1 / -1' }}>
+                                        <label className={styles.label}>Address Line 2 (Optional)</label>
+                                        <input className={styles.input} value={addressForm.address2}
+                                            onChange={e => setAddressForm(f => ({ ...f, address2: e.target.value }))} />
+                                    </div>
+                                    <div className={styles.inputGroup}>
+                                        <label className={styles.label}>City</label>
+                                        <input className={styles.input} value={addressForm.city}
+                                            onChange={e => setAddressForm(f => ({ ...f, city: e.target.value }))}
+                                            required />
+                                    </div>
+                                    <div className={styles.inputGroup}>
+                                        <label className={styles.label}>Postcode</label>
+                                        <input className={styles.input} value={addressForm.postcode}
+                                            onChange={e => setAddressForm(f => ({ ...f, postcode: e.target.value }))}
+                                            required />
+                                    </div>
+                                    <div className={styles.inputGroup}>
+                                        <label className={styles.label}>Country</label>
+                                        <input className={styles.input} value={addressForm.country}
+                                            onChange={e => setAddressForm(f => ({ ...f, country: e.target.value }))}
+                                            required />
+                                    </div>
+                                    <div className={styles.inputGroup} style={{ justifyContent: 'center' }}>
+                                        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', marginTop: '1.2rem' }}>
+                                            <input type="checkbox" checked={addressForm.isDefault}
+                                                onChange={e => setAddressForm(f => ({ ...f, isDefault: e.target.checked }))} />
+                                            <span className={styles.label} style={{ fontSize: '12px' }}>Set as default</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div className={styles.formActions}>
+                                    <button type="button" className={styles.cancelBtn}
+                                        onClick={() => { setShowAddressForm(false); setAddressForm(emptyAddress); }}>
+                                        Cancel
+                                    </button>
+                                    <button type="submit" className={styles.saveBtn} disabled={addressSaving}>
+                                        {addressSaving ? 'Saving…' : 'Save Address'}
+                                    </button>
+                                </div>
+                            </form>
+                        )}
+
                         {tabLoading ? (
                             <p>Loading addresses…</p>
+                        ) : addresses.length === 0 && !showAddressForm ? (
+                            <div className={styles.emptyState}>
+                                <p>You have no saved addresses yet.</p>
+                                <button className={styles.shopBtn} onClick={() => setShowAddressForm(true)}>Add Your First Address</button>
+                            </div>
                         ) : (
                             <div className={styles.cardGroup}>
                                 {addresses.map((a: any) => (
                                     <div key={a._id} className={styles.card}>
                                         <div className={styles.cardHeader}>
                                             <h3 className={styles.cardTitle}>{a.label ?? 'Address'}{a.isDefault && ' (Default)'}</h3>
+                                            <button className={styles.editBtn} onClick={() => handleDeleteAddress(a._id)}
+                                                style={{ color: 'var(--rose)', textDecoration: 'none', cursor: 'pointer' }}>
+                                                Remove
+                                            </button>
                                         </div>
                                         <div className={styles.cardBody}>
                                             <p className={styles.addressLine}>{a.fullName}</p>

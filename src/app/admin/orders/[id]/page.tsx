@@ -304,7 +304,7 @@ export default function AdminOrderDetails({ params }: { params: Promise<{ id: st
                         <h2 className={styles.cardTitle}>Payment info</h2>
                         <div className={styles.detailSection}>
                             <div className={styles.detailLabel}>Method</div>
-                            <div className={styles.detailValue} style={{ textTransform: 'capitalize' }}>{order.paymentMethod.replace('_', ' ')}</div>
+                            <div className={styles.detailValue} style={{ textTransform: 'capitalize' }}>{(order.paymentMethod || 'N/A').replace('_', ' ')}</div>
                         </div>
                         <div className={styles.detailSection}>
                             <div className={styles.detailLabel}>Status</div>

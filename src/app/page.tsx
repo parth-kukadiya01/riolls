@@ -45,7 +45,7 @@ export default function HomePage() {
         productsApi
             .list({ page: 1, limit: 5, sort: '-createdAt' })
             .then((res: any) => {
-                const items: any[] = res.data?.items ?? [];
+                const items: any[] = Array.isArray(res.data) ? res.data : [];
                 if (items.length > 0) {
                     setFeatured(items.map((p: any) => ({
                         id: p._id,

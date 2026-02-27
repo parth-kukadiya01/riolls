@@ -12,7 +12,12 @@ import styles from './PDP.module.css';
 export default function PDPClient({ product }: { product: Product }) {
     const router = useRouter();
     const { addItem } = useCart();
-    const [selectedMetal, setSelectedMetal] = useState(product.metal);
+    const normalizedMetal = product.metal.toLowerCase().replace(/ゴールド|gold| /g, '').includes('yellow') ? 'yellow-gold' :
+        product.metal.toLowerCase().includes('white') ? 'white-gold' :
+            product.metal.toLowerCase().includes('rose') ? 'rose-gold' : 'yellow-gold';
+
+    const [selectedMetal, setSelectedMetal] = useState(normalizedMetal);
+    const [selectedPurity, setSelectedPurity] = useState('18k');
     const [activeTab, setActiveTab] = useState<string | null>(null);
     const [engraving, setEngraving] = useState('');
     const [stoneSize, setStoneSize] = useState(1.5);
@@ -21,16 +26,21 @@ export default function PDPClient({ product }: { product: Product }) {
     const [activeImageIdx, setActiveImageIdx] = useState(0);
 
     const metals = [
-        { id: 'yellow-gold', label: '18k Yellow Gold', color: '#C9A96E' },
-        { id: 'white-gold', label: '18k White Gold', color: '#D8D8D8' },
-        { id: 'rose-gold', label: '18k Rose Gold', color: '#E8A898' },
-    ];
+        { id: 'yellow-gold', label: `${selectedPurity} Yellow Gold`, color: '#C9A96E' },
+        { id: 'white-gold', label: `${selectedPurity} White Gold`, color: '#D8D8D8' },
+        { id: 'rose-gold', label: `${selectedPurity} Rose Gold`, color: '#E8A898' },
+    ].filter(m => {
+        if (!product.availableMetals || product.availableMetals.length === 0) return true;
+        const colorName = m.id.replace('-gold', '').replace('-', ' ');
+        return product.availableMetals.some(am => (am as string).toLowerCase().includes(colorName.toLowerCase()));
+    });
 
     const handleAddToBag = () => {
         // Use MongoDB _id when available (API product), fall back to static id
         const productId = (product as any)._id ?? product.id;
         addItem(productId, {
             metal: metals.find(m => m.id === selectedMetal)?.label,
+            purity: selectedPurity
         });
         setAdded(true);
         setTimeout(() => setAdded(false), 2000);
@@ -62,6 +72,15 @@ export default function PDPClient({ product }: { product: Product }) {
 
     const activeMetalLabel = metals.find(m => m.id === selectedMetal)?.label || '';
     const hasImages = product.images && product.images.length > 0;
+
+    // Price calculation with fallback
+    const currentPurityPrice =
+        selectedPurity === '9k' ? product.price9k :
+            selectedPurity === '14k' ? product.price14k :
+                selectedPurity === '18k' ? product.price18k :
+                    selectedPurity === '22k' ? product.price22k : null;
+
+    const displayPrice = currentPurityPrice ?? product.price;
 
     return (
         <div className={styles.page}>
@@ -125,8 +144,10 @@ export default function PDPClient({ product }: { product: Product }) {
                     <p className={styles.stoneDetail}>{product.stone_detail}</p>
 
                     <div className={styles.priceRow}>
-                        <span className={styles.price}>{formatPrice(product.price)}</span>
-                        {product.price && <span className={styles.taxNote}>Inclusive of VAT</span>}
+                        <span className={styles.price}>
+                            {formatPrice(displayPrice)}
+                        </span>
+                        {displayPrice && <span className={styles.taxNote}>Inclusive of VAT</span>}
                     </div>
 
                     {/* Metal selector */}
@@ -147,6 +168,29 @@ export default function PDPClient({ product }: { product: Product }) {
                         <span className={styles.selectedMetal}>
                             {metals.find(m => m.id === selectedMetal)?.label}
                         </span>
+                    </div>
+
+                    {/* Purity selector */}
+                    <div className={styles.section}>
+                        <span className={styles.sectionLabel}>Metal Purity</span>
+                        <div className={styles.purityTags}>
+                            {['9k', '14k', '18k', '22k'].map(purity => {
+                                const purityPrice = purity === '9k' ? (product as any).price9k :
+                                    purity === '14k' ? (product as any).price14k :
+                                        purity === '18k' ? (product as any).price18k :
+                                            (product as any).price22k;
+
+                                return (
+                                    <button
+                                        key={purity}
+                                        className={`${styles.purityTag} ${selectedPurity === purity ? styles.purityTagActive : ''}`}
+                                        onClick={() => setSelectedPurity(purity)}
+                                    >
+                                        {purity.toUpperCase()}
+                                    </button>
+                                );
+                            })}
+                        </div>
                     </div>
 
                     {/* Stone size */}

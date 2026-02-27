@@ -199,6 +199,38 @@
     color: var(--charcoal);
 }
 
+.purityTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.purityTag {
+    background: var(--white);
+    border: 1px solid rgba(201, 169, 110, 0.2);
+    border-radius: 4px;
+    padding: 6px 14px;
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.purityTag:hover {
+    border-color: var(--gold);
+    background: var(--cream);
+}
+
+.purityTagActive {
+    background: var(--gold) !important;
+    border-color: var(--gold) !important;
+    color: var(--white) !important;
+}
+
 /* Slider */
 .slider {
     width: 100%;

@@ -15,18 +15,41 @@ function ShopContent() {
     const [page, setPage] = useState(1);
 
     // Dynamic Filter Options
-    const [dbCategories, setDbCategories] = useState<{ name: string, slug: string }[]>([]);
-    const [dbMetals, setDbMetals] = useState<string[]>([]);
-    const [dbStones, setDbStones] = useState<string[]>([]);
+    const [dbCategories] = useState<{ name: string, slug: string }[]>([
+        { name: 'Rings', slug: 'rings' },
+        { name: 'Necklaces', slug: 'necklaces' },
+        { name: 'Earrings', slug: 'earrings' },
+        { name: 'Bracelets', slug: 'bracelets' },
+        { name: "Men's Collection", slug: 'men-collection' },
+    ]);
+    const [dbMetals] = useState<string[]>([
+        "9k",
+        "14k",
+        "18k",
+        "22k",
+    ]);
+    const [dbMetalColors] = useState<string[]>([
+        "Rose Gold",
+        "White Gold",
+        "Yellow Gold",
+    ]);
+    const [dbStones, setDbStones] = useState<string[]>([
+        "Diamond",
+        "Lab Diamond",
+        "Moissanite",
+        "CZ"
+    ]);
 
     const [filters, setFilters] = useState<{
         cat: string | null;
         metal: string | null;
+        metalColor: string | null;
         stone: string | null;
         maxPrice: number;
     }>({
         cat: (sp.get('cat')) || null,
         metal: null,
+        metalColor: null,
         stone: (sp.get('stone')) || null,
         maxPrice: 20000,
     });
@@ -35,16 +58,9 @@ function ShopContent() {
 
     // Re-read category from URL params
     useEffect(() => {
-        setFilters(f => ({ ...f, cat: sp.get('cat') || null }));
+        const cat = sp.get('cat') || null;
+        setFilters(f => f.cat === cat ? f : { ...f, cat });
     }, [sp]);
-
-    // Fetch categories on mount
-    useEffect(() => {
-        categoriesApi.list().then((res: any) => {
-            const items = res.data ?? [];
-            setDbCategories(items.map((i: any) => ({ name: i.name, slug: i.slug || i.name.toLowerCase().replace(/\s+/g, '-') })));
-        }).catch(() => { });
-    }, []);
 
     // Fetch products whenever filters / sort / page change
     useEffect(() => {
@@ -52,23 +68,17 @@ function ShopContent() {
         const params: Record<string, string | number> = { page, limit: 24, sort };
         if (filters.cat) params.category = filters.cat;
         if (filters.metal) params.metal = filters.metal;
+        if (filters.metalColor) params.metalColor = filters.metalColor;
         if (filters.stone) params.stone = filters.stone;
         if (filters.maxPrice < 20000) params.maxPrice = filters.maxPrice;
 
         productsApi
             .list(params)
             .then((res: any) => {
-                const items = res.data?.items ?? [];
+                const items = Array.isArray(res.data) ? res.data : [];
                 setProducts(items);
-                setTotal(res.data?.total ?? 0);
+                setTotal(res.pagination?.total ?? 0);
 
-                // If no specific metal/stone filter is active, extract the available ones dynamically
-                if (!filters.metal && !filters.stone) {
-                    const metals = Array.from(new Set(items.map((p: any) => p.metal).filter(Boolean)));
-                    const stones = Array.from(new Set(items.map((p: any) => p.stone).filter(Boolean)));
-                    if (metals.length) setDbMetals(metals as string[]);
-                    if (stones.length) setDbStones(stones as string[]);
-                }
             })
             .catch(() => setProducts([]))
             .finally(() => setLoading(false));
@@ -78,7 +88,7 @@ function ShopContent() {
         setFilters(f => ({ ...f, [key]: f[key] === val ? null : val }));
 
     const clear = () =>
-        setFilters({ cat: null, metal: null, stone: null, maxPrice: 20000 });
+        setFilters({ cat: null, metal: null, metalColor: null, stone: null, maxPrice: 20000 });
 
     return (
         <div className={styles.page} style={{ paddingTop: 'var(--nav-height)' }}>
@@ -108,11 +118,21 @@ function ShopContent() {
                     </div>
 
                     <div className={styles.filterGroup}>
-                        <span className={styles.filterLabel}>Metal</span>
+                        <span className={styles.filterLabel}>Metal Purity</span>
                         {dbMetals.map((m: string) => (
                             <label key={m} className={styles.filterItem}>
                                 <input type="checkbox" checked={filters.metal === m} onChange={() => toggle('metal', m)} />
-                                <span style={{ textTransform: 'capitalize' }}>{m.replace('-', ' ')}</span>
+                                <span style={{ textTransform: 'capitalize' }}>{m}</span>
+                            </label>
+                        ))}
+                    </div>
+
+                    <div className={styles.filterGroup}>
+                        <span className={styles.filterLabel}>Metal Colour</span>
+                        {dbMetalColors.map((mc: string) => (
+                            <label key={mc} className={styles.filterItem}>
+                                <input type="checkbox" checked={filters.metalColor === mc} onChange={() => toggle('metalColor', mc)} />
+                                <span style={{ textTransform: 'capitalize' }}>{mc}</span>
                             </label>
                         ))}
                     </div>
@@ -164,10 +184,11 @@ function ShopContent() {
                     </div>
 
                     {/* Active filter chips */}
-                    {(filters.cat || filters.metal || filters.stone) && (
+                    {(filters.cat || filters.metal || filters.metalColor || filters.stone) && (
                         <div className={styles.chips}>
                             {filters.cat && <span className={styles.chip} onClick={() => setFilters(f => ({ ...f, cat: null }))} style={{ textTransform: 'capitalize' }}>{filters.cat} ✕</span>}
-                            {filters.metal && <span className={styles.chip} onClick={() => setFilters(f => ({ ...f, metal: null }))} style={{ textTransform: 'capitalize' }}>{filters.metal.replace('-', ' ')} ✕</span>}
+                            {filters.metal && <span className={styles.chip} onClick={() => setFilters(f => ({ ...f, metal: null }))} style={{ textTransform: 'capitalize' }}>{filters.metal} ✕</span>}
+                            {filters.metalColor && <span className={styles.chip} onClick={() => setFilters(f => ({ ...f, metalColor: null }))} style={{ textTransform: 'capitalize' }}>{filters.metalColor} ✕</span>}
                             {filters.stone && <span className={styles.chip} onClick={() => setFilters(f => ({ ...f, stone: null }))} style={{ textTransform: 'capitalize' }}>{filters.stone} ✕</span>}
                         </div>
                     )}
@@ -188,7 +209,10 @@ function ShopContent() {
                                     slug: p.slug,
                                     name: p.name,
                                     category: p.category?.slug ?? p.category ?? '',
-                                    price: p.price,
+                                    price: (filters.metal === '9k' ? p.price9k :
+                                        filters.metal === '14k' ? p.price14k :
+                                            filters.metal === '18k' ? p.price18k :
+                                                filters.metal === '22k' ? p.price22k : null) ?? p.price,
                                     metal: p.metal,
                                     stone: p.stone,
                                     badge: p.badge,

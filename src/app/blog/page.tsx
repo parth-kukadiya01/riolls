@@ -20,7 +20,7 @@ export default function BlogPage() {
         blogApi
             .list(params as any)
             .then((res: any) => {
-                const items = Array.isArray(res.data) ? res.data : (res.data?.items ?? []);
+                const items = Array.isArray(res.data) ? res.data : [];
                 setPosts(items);
                 // Extract unique categories dynamically from the loaded posts if 'All' is selected
                 if (activecat === 'All') {
