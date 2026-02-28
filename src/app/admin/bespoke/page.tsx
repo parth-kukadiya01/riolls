@@ -12,6 +12,7 @@ interface BespokeWork {
     tall: boolean;
     order: number;
     isActive: boolean;
+    type?: string;
 }
 
 export default function AdminBespokePage() {
@@ -32,6 +33,7 @@ export default function AdminBespokePage() {
     const [tall, setTall] = useState(false);
     const [order, setOrder] = useState(0);
     const [isActive, setIsActive] = useState(true);
+    const [type, setType] = useState('commission');
     const [uploading, setUploading] = useState(false);
     const [formError, setFormError] = useState('');
 
@@ -98,6 +100,7 @@ export default function AdminBespokePage() {
             setTall(work.tall);
             setOrder(work.order);
             setIsActive(work.isActive);
+            setType(work.type || 'commission');
         } else if (work && isAiPromotion) {
             // Preparing to create a NEW permanent bespoke work from an AI concept
             setEditingWork(null);
@@ -106,6 +109,7 @@ export default function AdminBespokePage() {
             setTall(false);
             setOrder(works.length * 10);
             setIsActive(true);
+            setType('ai_concept');
         } else {
             setEditingWork(null);
             setName('');
@@ -113,6 +117,7 @@ export default function AdminBespokePage() {
             setTall(false);
             setOrder(works.length * 10);
             setIsActive(true);
+            setType('commission');
         }
         setIsModalOpen(true);
     };
@@ -127,7 +132,7 @@ export default function AdminBespokePage() {
             return;
         }
 
-        const payload = { name, image, tall, order: Number(order), isActive };
+        const payload = { name, image, tall, order: Number(order), isActive, type };
 
         try {
             const endpoint = editingWork ? `/bespoke/admin/${editingWork._id}` : '/bespoke/admin';
@@ -202,6 +207,7 @@ export default function AdminBespokePage() {
                             <tr>
                                 <th>Image</th>
                                 <th>Name</th>
+                                <th>Type</th>
                                 <th>Layout</th>
                                 <th>Order</th>
                                 <th>Status</th>
@@ -215,6 +221,11 @@ export default function AdminBespokePage() {
                                         <img src={w.image} alt={w.name} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '4px' }} />
                                     </td>
                                     <td style={{ fontWeight: 500 }}>{w.name}</td>
+                                    <td>
+                                        <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--stone)', background: 'var(--cream)', padding: '2px 6px', borderRadius: '4px' }}>
+                                            {w.type === 'ai_concept' ? 'AI Concept' : 'Commission'}
+                                        </span>
+                                    </td>
                                     <td>{w.tall ? 'Tall (2 rows)' : 'Standard (1 row)'}</td>
                                     <td>{w.order}</td>
                                     <td>
@@ -245,10 +256,18 @@ export default function AdminBespokePage() {
                     {aiConcepts.map(c => (
                         <div key={c._id} style={{ border: '1px solid var(--border)', background: 'var(--white)', padding: '16px', borderRadius: '4px', textAlign: 'center' }}>
                             <img src={c.image} alt={c.name} style={{ width: '100%', aspectRatio: '1', objectFit: 'cover', borderRadius: '4px', marginBottom: '16px' }} />
-                            <h3 style={{ fontFamily: 'var(--font-body)', fontSize: '14px', margin: '0 0 16px', color: 'var(--charcoal)' }}>{c.name}</h3>
-                            <button className={styles.primaryBtn} style={{ width: '100%', padding: '8px' }} onClick={() => openModal(c, true)}>
-                                Promote to Portfolio
-                            </button>
+                            <h3 style={{ fontFamily: 'var(--font-body)', fontSize: '14px', margin: '0 0 16px', color: 'var(--charcoal)', minHeight: '40px' }}>{c.name}</h3>
+                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                <button className={styles.primaryBtn} style={{ flex: 2, padding: '8px 4px', fontSize: '12px' }} onClick={() => openModal(c, true)}>
+                                    Promote
+                                </button>
+                                <button className={styles.secondaryBtn} style={{ flex: 1, padding: '8px 4px', fontSize: '12px' }} onClick={() => openModal(c, false)}>
+                                    Edit
+                                </button>
+                                <button className={styles.textBtnDanger} style={{ padding: '8px', border: '1px solid #fee2e2', borderRadius: '4px', background: '#fef2f2', fontSize: '12px' }} onClick={() => handleDelete(c._id)}>
+                                    Del
+                                </button>
+                            </div>
                         </div>
                     ))}
                     {aiConcepts.length === 0 && (
@@ -296,7 +315,14 @@ export default function AdminBespokePage() {
                             <div className={styles.formRow}>
                                 <div className={styles.formGroup} style={{ flex: 1 }}>
                                     <label>Display Order</label>
-                                    <input type="number" value={order} onChange={e => setOrder(Number(e.target.value))} />
+                                    <input type="text" value={order} onChange={e => setOrder(Number(e.target.value.replace(/\D/g, '')))} />
+                                </div>
+                                <div className={styles.formGroup} style={{ flex: 1 }}>
+                                    <label>Type</label>
+                                    <select value={type} onChange={e => setType(e.target.value)}>
+                                        <option value="commission">Commission</option>
+                                        <option value="ai_concept">AI Concept</option>
+                                    </select>
                                 </div>
                                 <div className={styles.formGroup} style={{ flex: 1 }}>
                                     <label>Status</label>

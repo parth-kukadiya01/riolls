@@ -379,9 +379,9 @@
 
 .designGrid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    margin-bottom: 40px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 32px;
+    margin-bottom: 60px;
 }
 
 .designCard {
@@ -391,6 +391,8 @@
     text-align: left;
     padding: 0;
     transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
 }
 
 .designCard:hover {
@@ -403,15 +405,22 @@
 }
 
 .designImg {
-    aspect-ratio: 2/3;
+    width: 100%;
+    aspect-ratio: 4/5;
     border: 1px solid var(--border);
     position: relative;
     overflow: hidden;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: var(--blush);
+}
+
+.designImg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .designBadge {
@@ -449,7 +458,8 @@
     font-size: 15px;
     color: var(--stone);
     display: block;
-    margin-top: 4px;
+    margin-top: 8px;
+    line-height: 1.5;
 }
 
 .resultsActions {

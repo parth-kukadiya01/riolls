@@ -49,7 +49,7 @@ export default function ClientBespokeGallery() {
         );
     }
 
-    const filteredWorks = filter === 'all' ? works : works.filter(w => w.type === filter);
+    const filteredWorks = filter === 'all' ? works : works.filter(w => (w.type || 'commission') === filter);
 
     const handleInquiryClick = (piece: BespokeWork) => {
         setGalleryReference({

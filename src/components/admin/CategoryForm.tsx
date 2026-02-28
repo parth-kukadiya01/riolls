@@ -160,7 +160,7 @@ export default function CategoryForm({ initialData = null, isEdit = false }: Cat
 
                 <div className={styles.formGroup}>
                     <label className={styles.label}>Sort Order</label>
-                    <input className={styles.input} type="number" value={formData.sortOrder} onChange={e => setFormData({ ...formData, sortOrder: Number(e.target.value) })} />
+                    <input className={styles.input} type="text" value={formData.sortOrder} onChange={e => setFormData({ ...formData, sortOrder: Number(e.target.value.replace(/\D/g, '')) })} />
                 </div>
 
                 <div className={styles.formGroup} style={{ marginTop: '1rem' }}>

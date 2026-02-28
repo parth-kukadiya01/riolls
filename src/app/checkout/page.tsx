@@ -134,7 +134,7 @@ export default function CheckoutPage() {
                             </div>
                             <div className={styles.field}>
                                 <label htmlFor="phone">Phone</label>
-                                <input id="phone" name="phone" type="tel" value={form.phone} onChange={handleChange} placeholder="+44 ..." autoComplete="tel" />
+                                <input id="phone" name="phone" type="tel" value={form.phone} onChange={(e) => { e.target.value = e.target.value.replace(/[^0-9+\s-]/g, ''); handleChange(e); }} placeholder="+44 ..." autoComplete="tel" />
                             </div>
                             <button className={styles.next} onClick={() => setStep(2)}>Continue to Delivery →</button>
                         </div>

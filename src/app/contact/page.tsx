@@ -243,7 +243,7 @@ export default function ContactPage() {
                             <div className={styles.row}>
                                 <div className={styles.field}>
                                     <label className={styles.label}>Phone Number</label>
-                                    <input name="phone" value={form.phone} onChange={handle} placeholder="+91 00000 00000" className={styles.input} />
+                                    <input type="tel" name="phone" value={form.phone} onChange={(e) => setForm(f => ({ ...f, phone: e.target.value.replace(/[^0-9+\s-]/g, '') }))} placeholder="+91 00000 00000" className={styles.input} />
                                 </div>
                                 <div className={styles.field}>
                                     <label className={styles.label}>Subject <span className={styles.req}>*</span></label>
@@ -314,7 +314,7 @@ export default function ContactPage() {
                                 </div>
                                 <div className={styles.field}>
                                     <label className={styles.label}>Contact Number <span className={styles.req}>*</span></label>
-                                    <input name="phone" value={apptForm.phone} onChange={handleAppt} required placeholder="Phone Number" className={styles.input} />
+                                    <input type="tel" name="phone" value={apptForm.phone} onChange={(e) => setApptForm(f => ({ ...f, phone: e.target.value.replace(/[^0-9+\s-]/g, '') }))} required placeholder="Phone Number" className={styles.input} />
                                 </div>
                             </div>
 
@@ -325,7 +325,7 @@ export default function ContactPage() {
                                 </div>
                                 <div className={styles.field}>
                                     <label className={styles.label}>Pincode / Zip <span className={styles.req}>*</span></label>
-                                    <input name="pincode" value={apptForm.pincode} onChange={handleAppt} required placeholder="e.g. EC1A 1BB" className={styles.input} />
+                                    <input name="pincode" value={apptForm.pincode} onChange={(e) => setApptForm(f => ({ ...f, pincode: e.target.value.replace(/[^0-9a-zA-Z\s]/g, '') }))} required placeholder="e.g. EC1A 1BB" className={styles.input} />
                                 </div>
                             </div>
 

@@ -141,18 +141,96 @@ export default function AIStep5() {
                                     backgroundPosition: 'center'
                                 }}
                             />
-                            {[
-                                ['Piece', state.profile.pieceType || 'Ring'],
-                                ['Metal', state.customisations.finalMetal || '18k Yellow Gold'],
-                                ['Stone', `${state.customisations.stoneSize || '1.50'}ct ${state.customisations.stoneCut || 'Brilliant'} Diamond`],
-                                ['Setting', state.profile.setting || 'Classic'],
-                                ['Finish', state.customisations.finish || 'High Polish'],
-                            ].map(([k, v]) => (
-                                <div key={k} className={styles.specRow}>
-                                    <span className={styles.specKey}>{k}</span>
-                                    <span className={styles.specVal}>{v}</span>
-                                </div>
-                            ))}
+                            {(() => {
+                                const g = (key: string) => {
+                                    const v = state.profile[key];
+                                    return Array.isArray(v) ? v[0] : v;
+                                };
+                                const pt = g('pieceType') || 'Ring';
+
+                                if (pt === 'Hip Hop / Iced Out') {
+                                    const hipHopSpecs: [string, string][] = [
+                                        ['Piece', g('hipHopStyle') || pt || 'Hip Hop Piece'],
+                                        ...(g('chainStyle') ? [['Chain Style', g('chainStyle')] as [string, string]] : []),
+                                        ['Ice Level', state.customisations.iceLevel || g('iceLevel') || '—'],
+                                        ...(g('pendantType') ? [['Pendant', g('pendantType')] as [string, string]] : []),
+                                        ...(g('grillz') ? [['Grillz', g('grillz')] as [string, string]] : []),
+                                        ...(g('ringStyle') ? [['Ring Style', g('ringStyle')] as [string, string]] : []),
+                                        ['Metal', state.customisations.finalMetal || g('metalColor') || '—'],
+                                        ...(state.customisations.chainWeight ? [['Weight', state.customisations.chainWeight] as [string, string]] : []),
+                                        ...(state.customisations.chainLength ? [['Length', state.customisations.chainLength] as [string, string]] : []),
+                                        ['Finish', state.customisations.finish || '—'],
+                                        ...(state.customisations.engraving ? [['Inscription', state.customisations.engraving] as [string, string]] : []),
+                                        ...(g('budget') ? [['Budget', g('budget')] as [string, string]] : []),
+                                    ];
+                                    return hipHopSpecs.map(([k, v]) => (
+                                        <div key={k} className={styles.specRow}>
+                                            <span className={styles.specKey}>{k}</span>
+                                            <span className={styles.specVal}>{v}</span>
+                                        </div>
+                                    ));
+                                }
+
+                                // Build dynamic specs for Standard types
+                                const specs: [string, string][] = [['Piece', pt]];
+
+                                if (pt === 'Necklace') {
+                                    if (g('necklaceOccasion')) specs.push(['Occasion', g('necklaceOccasion')]);
+                                    if (g('necklaceStyle')) specs.push(['Style', g('necklaceStyle')]);
+                                    if (g('primaryStone') && g('primaryStone') !== 'Solid High-Polish Metal') specs.push(['Primary Stone', g('primaryStone')]);
+                                    if (g('stoneShape')) specs.push(['Stone Cut', g('stoneShape')]);
+                                    if (g('settingProfile')) specs.push(['Setting Profile', g('settingProfile')]);
+                                    if (g('chainStyle')) specs.push(['Chain', g('chainStyle')]);
+                                    if (g('pendantType')) specs.push(['Pendant', g('pendantType')]);
+                                    if (g('scale')) specs.push(['Length', g('scale')]);
+                                } else if (pt === 'Earrings') {
+                                    if (g('earringOccasion')) specs.push(['Occasion', g('earringOccasion')]);
+                                    if (g('earringStyle')) specs.push(['Style', g('earringStyle')]);
+                                    if (g('format')) specs.push(['Format', g('format')]);
+                                    if (g('primaryStone') && g('primaryStone') !== 'Solid High-Polish Metal' && g('primaryStone') !== 'Solid High-Polish Gold') specs.push(['Primary Stone', g('primaryStone')]);
+                                    if (g('stoneShape')) specs.push(['Stone Cut', g('stoneShape')]);
+                                    if (g('settingProfile')) specs.push(['Setting Profile', g('settingProfile')]);
+                                    if (g('scale')) specs.push(['Size', g('scale')]);
+                                } else if (pt === 'Bracelet') {
+                                    if (g('braceletOccasion')) specs.push(['Occasion', g('braceletOccasion')]);
+                                    if (g('braceletStyle')) specs.push(['Style', g('braceletStyle')]);
+                                    if (g('primaryStone') && g('primaryStone') !== 'Solid High-Polish Metal') specs.push(['Primary Stone', g('primaryStone')]);
+                                    if (g('stoneShape')) specs.push(['Stone Cut', g('stoneShape')]);
+                                    if (g('bandStyle')) specs.push(['Detail', g('bandStyle')]);
+                                    if (g('scale')) specs.push(['Fit', g('scale')]);
+                                } else { // Ring 
+                                    const occasion = g('ringOccasion') || 'Engagement';
+                                    specs.push(['Occasion', occasion]);
+
+                                    if (g('ringStyle')) specs.push(['Style', g('ringStyle')]);
+
+                                    const isPlainBand = g('ringStyle') === 'Classic Solid Band' || g('ringStyle')?.includes('Signet') || g('ringStyle') === 'Bold Cigar Band';
+
+                                    if (!isPlainBand && g('primaryStone') && g('primaryStone') !== 'Solid High-Polish Metal') {
+                                        specs.push(['Primary Stone', g('primaryStone')]);
+                                        if (g('stoneShape')) specs.push(['Stone Cut', g('stoneShape')]);
+                                        if (state.customisations.stoneSize) specs.push(['Stone Size', `${state.customisations.stoneSize}ct`]);
+                                        if (g('settingProfile')) specs.push(['Setting Profile', g('settingProfile')]);
+                                    }
+
+                                    if (g('bandStyle')) specs.push(['Band Style', g('bandStyle')]);
+                                    if (g('scale')) specs.push(['Band Thickness', g('scale')]);
+                                }
+
+                                // Common to all standard
+                                specs.push(['Metal', state.customisations.finalMetal || g('metalColor') || '—']);
+                                specs.push(['Finish', state.customisations.finish || '—']);
+                                if (g('style')) specs.push(['Aesthetic', g('style')]);
+                                if (state.customisations.engraving) specs.push(['Engraving', state.customisations.engraving]);
+                                if (g('budget')) specs.push(['Budget', g('budget')]);
+
+                                return specs.map(([k, v]) => (
+                                    <div key={k} className={styles.specRow}>
+                                        <span className={styles.specKey}>{k}</span>
+                                        <span className={styles.specVal}>{v}</span>
+                                    </div>
+                                ));
+                            })()}
                             <div className={styles.priceEstimate}>
                                 <span className={styles.priceLabel}>Estimated Range</span>
                                 <span className={styles.priceValue}>
@@ -241,10 +319,10 @@ export default function AIStep5() {
                                 </div>
                                 <input
                                     type="tel"
-                                    placeholder="Number"
+                                    placeholder="9876543210"
                                     className={styles.phoneInput}
                                     value={form.phone}
-                                    onChange={e => setForm(p => ({ ...p, phone: e.target.value }))}
+                                    onChange={(e) => setForm(f => ({ ...f, phone: e.target.value.replace(/[^0-9+\s-]/g, '') }))}
                                 />
                             </div>
                         </div>

@@ -16,7 +16,7 @@ interface ProductFormProps {
     isEdit?: boolean;
 }
 
-const GOLD_OPTIONS = ['Yellow Gold', 'Rose Gold', 'White Gold', 'Platinum'];
+const GOLD_OPTIONS = ['Yellow Gold', 'Rose Gold', 'White Gold', ''];
 
 const COLLECTION_OPTIONS = ['Celestine Collection', 'Aurora Series', 'Tempest Line'];
 const OCCASION_OPTIONS = ['Bridal & Engagement', 'Anniversary Gifts', 'High Jewellery'];
@@ -306,23 +306,23 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                     <div className={styles.formGrid} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
                         <div className={styles.formGroup}>
                             <label className={styles.label}>Price (Main) £</label>
-                            <input className={styles.input} type="number" step="0.01" placeholder="POA" value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} />
+                            <input className={styles.input} type="text" placeholder="POA" value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value.replace(/[^0-9.]/g, '') })} />
                         </div>
                         <div className={styles.formGroup}>
                             <label className={styles.label}>Price (9k) £</label>
-                            <input className={styles.input} type="number" step="0.01" value={formData.price9k} onChange={e => setFormData({ ...formData, price9k: e.target.value })} />
+                            <input className={styles.input} type="text" value={formData.price9k} onChange={e => setFormData({ ...formData, price9k: e.target.value.replace(/[^0-9.]/g, '') })} />
                         </div>
                         <div className={styles.formGroup}>
                             <label className={styles.label}>Price (14k) £</label>
-                            <input className={styles.input} type="number" step="0.01" value={formData.price14k} onChange={e => setFormData({ ...formData, price14k: e.target.value })} />
+                            <input className={styles.input} type="text" value={formData.price14k} onChange={e => setFormData({ ...formData, price14k: e.target.value.replace(/[^0-9.]/g, '') })} />
                         </div>
                         <div className={styles.formGroup}>
                             <label className={styles.label}>Price (18k) £</label>
-                            <input className={styles.input} type="number" step="0.01" value={formData.price18k} onChange={e => setFormData({ ...formData, price18k: e.target.value })} />
+                            <input className={styles.input} type="text" value={formData.price18k} onChange={e => setFormData({ ...formData, price18k: e.target.value.replace(/[^0-9.]/g, '') })} />
                         </div>
                         <div className={styles.formGroup}>
                             <label className={styles.label}>Price (22k) £</label>
-                            <input className={styles.input} type="number" step="0.01" value={formData.price22k} onChange={e => setFormData({ ...formData, price22k: e.target.value })} />
+                            <input className={styles.input} type="text" value={formData.price22k} onChange={e => setFormData({ ...formData, price22k: e.target.value.replace(/[^0-9.]/g, '') })} />
                         </div>
                     </div>
                 </div>
@@ -442,19 +442,19 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                 {/* Specifics */}
                 <div className={styles.formGroup}>
                     <label className={styles.label}>Min Stone Size (ct)</label>
-                    <input className={styles.input} type="number" step="0.01" value={formData.minStoneSize} onChange={e => setFormData({ ...formData, minStoneSize: Number(e.target.value) })} />
+                    <input className={styles.input} type="text" value={formData.minStoneSize} onChange={e => setFormData({ ...formData, minStoneSize: Number(e.target.value.replace(/[^0-9.]/g, '')) })} />
                 </div>
                 <div className={styles.formGroup}>
                     <label className={styles.label}>Max Stone Size (ct)</label>
-                    <input className={styles.input} type="number" step="0.01" value={formData.maxStoneSize} onChange={e => setFormData({ ...formData, maxStoneSize: Number(e.target.value) })} />
+                    <input className={styles.input} type="text" value={formData.maxStoneSize} onChange={e => setFormData({ ...formData, maxStoneSize: Number(e.target.value.replace(/[^0-9.]/g, '')) })} />
                 </div>
                 <div className={styles.formGroup}>
                     <label className={styles.label}>Metal Weight (g)</label>
-                    <input className={styles.input} type="number" step="0.01" value={formData.weight} onChange={e => setFormData({ ...formData, weight: e.target.value })} />
+                    <input className={styles.input} type="text" value={formData.weight} onChange={e => setFormData({ ...formData, weight: e.target.value.replace(/[^0-9.]/g, '') })} />
                 </div>
                 <div className={styles.formGroup}>
                     <label className={styles.label}>Additional Charge (£)</label>
-                    <input className={styles.input} type="number" step="0.01" value={formData.additionalCharge} onChange={e => setFormData({ ...formData, additionalCharge: e.target.value })} />
+                    <input className={styles.input} type="text" value={formData.additionalCharge} onChange={e => setFormData({ ...formData, additionalCharge: e.target.value.replace(/[^0-9.]/g, '') })} />
                 </div>
 
                 {/* Toggles */}

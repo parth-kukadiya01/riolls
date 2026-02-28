@@ -78,7 +78,19 @@ export function AIStudioProvider({ children }: { children: ReactNode }) {
         setState(prev => ({ ...prev, isGenerating: true, error: null, galleryReference: null }));
 
         try {
-            const res = await aiStudioApi.generateIdeas(state.profile);
+            // Unpack any single-element arrays (like pieceType) into strings for the API
+            const payload: Record<string, any> = {};
+            for (const [key, val] of Object.entries(state.profile)) {
+                payload[key] = Array.isArray(val) ? val[0] : val;
+            }
+
+            if (!payload.pieceType) {
+                setState(prev => ({ ...prev, error: 'Session expired. Please return to Step 1 and start again.', isGenerating: false }));
+                generatingRef.current = false;
+                return false;
+            }
+
+            const res = await aiStudioApi.generateIdeas(payload);
             if (res.success && res.data) {
                 const data = res.data as any;
                 console.log("AI IDEAS DATA:", data);
