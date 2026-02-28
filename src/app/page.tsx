@@ -118,8 +118,12 @@ export default function HomePage() {
                     <h2 className={styles.sectionH2}>A world of jewellery awaits.</h2>
                 </div>
                 <div className={styles.collectionsGrid}>
-                    {collections.length === 0 ? (
+                    {!loadedCats ? (
                         <p style={{ gridColumn: '1/-1', textAlign: 'center', opacity: 0.6, padding: '2rem' }}>Loading collections…</p>
+                    ) : collections.length === 0 ? (
+                        <p style={{ gridColumn: '1/-1', textAlign: 'center', opacity: 0.6, padding: '2rem' }}>
+                            Our collection is being updated. <Link href="/shop">Browse all pieces →</Link>
+                        </p>
                     ) : collections.map(col => {
                         const slug = col.slug ?? col.name?.toLowerCase().replace(/\s+/g, '-');
                         const grad = CAT_GRADS[slug] ?? CAT_GRADS.default;

@@ -87,9 +87,12 @@ export default function MobileNav({ isOpen, onClose }: Props) {
                         </div>
                         {expandedSection === 'col' && (
                             <div className={styles.subItems}>
-                                <Link href="/shop?cat=rings" className={styles.subLink} onClick={onClose}>Celestine Collection</Link>
-                                <Link href="/shop?cat=necklaces" className={styles.subLink} onClick={onClose}>Aurora Series</Link>
-                                <Link href="/shop" className={styles.subLink} onClick={onClose}>Bridal</Link>
+                                <Link href="/shop?cat=rings" className={styles.subLink} onClick={onClose}>Rings</Link>
+                                <Link href="/shop?cat=necklaces" className={styles.subLink} onClick={onClose}>Necklaces</Link>
+                                <Link href="/shop?cat=earrings" className={styles.subLink} onClick={onClose}>Earrings</Link>
+                                <Link href="/shop?cat=bracelets" className={styles.subLink} onClick={onClose}>Bracelets</Link>
+                                <Link href="/shop?badge=New+In" className={styles.subLink} onClick={onClose}>New In</Link>
+                                <Link href="/shop?badge=Last+Piece" className={styles.subLink} onClick={onClose}>Last Pieces</Link>
                             </div>
                         )}
                     </div>

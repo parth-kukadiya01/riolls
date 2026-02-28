@@ -8,16 +8,17 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 var(--gutter);
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid transparent;
-    transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-bottom: var(--glass-border);
+    transition: background 0.4s var(--ease), border-color 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
 
 .scrolled {
-    background: var(--white);
-    border-bottom-color: var(--border);
-    box-shadow: var(--shadow-sm);
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+    border-bottom-color: rgba(255, 255, 255, 0.5);
 }
 
 /* Logo */
@@ -149,14 +150,16 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: var(--white);
-    border-bottom: 1px solid var(--border);
-    box-shadow: var(--shadow-md);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-bottom: var(--glass-border);
+    box-shadow: var(--glass-shadow);
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 280px;
     padding: 48px var(--gutter);
     gap: 40px;
-    animation: slideDown 0.2s ease;
+    animation: slideDown 0.3s var(--ease);
 }
 
 .megaCol {

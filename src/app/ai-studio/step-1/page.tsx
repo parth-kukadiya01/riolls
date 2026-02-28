@@ -12,6 +12,11 @@ export const questions = [
         answers: ['Ring', 'Necklace', 'Earrings', 'Bracelet'],
     },
     {
+        id: 'gender',
+        question: 'Who is this piece for?',
+        answers: ['Men', 'Women', 'Unisex'],
+    },
+    {
         id: 'style',
         question: 'Which aesthetic speaks to you most?',
         answers: ['Romantic & Delicate', 'Bold & Statement', 'Classic & Timeless', 'Avant-Garde & Modern', 'Minimalist & Architectural', 'Bohemian & Earthy', 'Vintage & Art Deco', 'Organic & Molten'],

@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
+import { useAuth } from '@/context/AuthContext';
 import styles from './layout.module.css';
 
 const steps = [
@@ -133,7 +134,34 @@ function FloatingParticles() {
 
 export default function AIStudioLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
+    const router = useRouter();
+    const { user, loading } = useAuth();
     const currentStep = steps.find(s => pathname?.includes(`step-${s.n}`))?.n ?? 0;
+
+    useEffect(() => {
+        if (!loading && !user) {
+            router.replace(`/login?callbackUrl=${encodeURIComponent(pathname ?? '/ai-studio/step-1')}`);
+        }
+    }, [loading, user, router, pathname]);
+
+    // While auth is resolving or redirect is in progress, show a minimal loader
+    if (loading || !user) {
+        return (
+            <div style={{
+                minHeight: '100dvh',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'var(--white)',
+                color: 'var(--stone)',
+                fontSize: '0.9rem',
+                letterSpacing: '0.08em',
+                fontFamily: 'var(--font-sc)',
+            }}>
+                Checking access…
+            </div>
+        );
+    }
 
     return (
         <div className={styles.shell}>

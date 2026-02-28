@@ -45,21 +45,27 @@ function ShopContent() {
         metal: string | null;
         metalColor: string | null;
         stone: string | null;
+        badge: string | null;
         maxPrice: number;
     }>({
         cat: (sp.get('cat')) || null,
         metal: null,
         metalColor: null,
         stone: (sp.get('stone')) || null,
+        badge: (sp.get('badge')) || null,
         maxPrice: 20000,
     });
     const [sort, setSort] = useState<'featured' | 'price' | '-price'>('featured');
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
-    // Re-read category from URL params
+    // Re-read category and badge from URL params
     useEffect(() => {
-        const cat = sp.get('cat') || null;
-        setFilters(f => f.cat === cat ? f : { ...f, cat });
+        const cat = sp.get('cat') || sp.get('collection') || null;
+        const badge = sp.get('badge') || null;
+        setFilters(f => {
+            if (f.cat === cat && f.badge === badge) return f;
+            return { ...f, cat, badge };
+        });
     }, [sp]);
 
     // Fetch products whenever filters / sort / page change
@@ -70,6 +76,7 @@ function ShopContent() {
         if (filters.metal) params.metal = filters.metal;
         if (filters.metalColor) params.metalColor = filters.metalColor;
         if (filters.stone) params.stone = filters.stone;
+        if (filters.badge) params.badge = filters.badge;
         if (filters.maxPrice < 20000) params.maxPrice = filters.maxPrice;
 
         productsApi
@@ -88,7 +95,7 @@ function ShopContent() {
         setFilters(f => ({ ...f, [key]: f[key] === val ? null : val }));
 
     const clear = () =>
-        setFilters({ cat: null, metal: null, metalColor: null, stone: null, maxPrice: 20000 });
+        setFilters({ cat: null, metal: null, metalColor: null, stone: null, badge: null, maxPrice: 20000 });
 
     return (
         <div className={styles.page}>
@@ -184,12 +191,13 @@ function ShopContent() {
                     </div>
 
                     {/* Active filter chips */}
-                    {(filters.cat || filters.metal || filters.metalColor || filters.stone) && (
+                    {(filters.cat || filters.metal || filters.metalColor || filters.stone || filters.badge) && (
                         <div className={styles.chips}>
                             {filters.cat && <span className={styles.chip} onClick={() => setFilters(f => ({ ...f, cat: null }))} style={{ textTransform: 'capitalize' }}>{filters.cat} ✕</span>}
                             {filters.metal && <span className={styles.chip} onClick={() => setFilters(f => ({ ...f, metal: null }))} style={{ textTransform: 'capitalize' }}>{filters.metal} ✕</span>}
                             {filters.metalColor && <span className={styles.chip} onClick={() => setFilters(f => ({ ...f, metalColor: null }))} style={{ textTransform: 'capitalize' }}>{filters.metalColor} ✕</span>}
                             {filters.stone && <span className={styles.chip} onClick={() => setFilters(f => ({ ...f, stone: null }))} style={{ textTransform: 'capitalize' }}>{filters.stone} ✕</span>}
+                            {filters.badge && <span className={styles.chip} onClick={() => setFilters(f => ({ ...f, badge: null }))}>{filters.badge} ✕</span>}
                         </div>
                     )}
 

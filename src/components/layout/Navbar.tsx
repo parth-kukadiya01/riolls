@@ -151,20 +151,20 @@ export default function Navbar() {
                     <div className={styles.mega} onMouseEnter={keepMega} onMouseLeave={closeMega}>
                         <div className={styles.megaCol}>
                             <span className={styles.megaTitle}>Featured</span>
-                            <Link href="/shop?collection=celestine">Celestine Collection</Link>
-                            <Link href="/shop?collection=aurora">Aurora Series</Link>
-                            <Link href="/shop?collection=tempest">Tempest Line</Link>
+                            <Link href="/shop?badge=celestine">Celestine Collection</Link>
+                            <Link href="/shop?badge=aurora">Aurora Series</Link>
+                            <Link href="/shop?badge=tempest">Tempest Line</Link>
                         </div>
                         <div className={styles.megaCol}>
                             <span className={styles.megaTitle}>By Occasion</span>
-                            <Link href="/shop?collection=bridal">Bridal &amp; Engagement</Link>
-                            <Link href="/shop?collection=anniversary">Anniversary Gifts</Link>
-                            <Link href="/shop?collection=high-jewellery">High Jewellery</Link>
+                            <Link href="/shop?cat=rings">Bridal &amp; Engagement</Link>
+                            <Link href="/shop">Anniversary Gifts</Link>
+                            <Link href="/shop">High Jewellery</Link>
                         </div>
                         <div className={styles.megaCol}>
                             <span className={styles.megaTitle}>New &amp; Limited</span>
-                            <Link href="/shop?collection=new-in">New In</Link>
-                            <Link href="/shop?collection=last-pieces">Last Pieces</Link>
+                            <Link href="/shop?badge=new-in">New In</Link>
+                            <Link href="/shop?badge=last-pieces">Last Pieces</Link>
                         </div>
                         <div className={styles.megaImg} style={{ backgroundImage: 'url("https://res.cloudinary.com/dl6cdbdzl/image/upload/v1771997169/buddy-an-bUQZomnihtI-unsplash_gfm2y4.jpg")', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                             <span className={styles.megaImgCaption}>The Aurora Collection</span>
@@ -178,9 +178,9 @@ export default function Navbar() {
                         <div className={styles.megaCol}>
                             <span className={styles.megaTitle}>The Journal</span>
                             <Link href="/blog">All Articles</Link>
-                            <Link href="/blog">Guides</Link>
-                            <Link href="/blog">Behind the Craft</Link>
-                            <Link href="/blog">Inspiration</Link>
+                            <Link href="/blog?category=Guides">Guides</Link>
+                            <Link href="/blog?category=Behind the Craft">Behind the Craft</Link>
+                            <Link href="/blog?category=Inspiration">Inspiration</Link>
                         </div>
                         <div className={styles.megaCol}>
                             <span className={styles.megaTitle}>Community</span>
