@@ -142,7 +142,7 @@ export default function ProfilePage() {
                                 <div className={styles.inputGroup}>
                                     <label className={styles.label}>Phone Number</label>
                                     <input type="tel" className={styles.input} value={editForm.phone}
-                                        onChange={e => setEditForm(f => ({ ...f, phone: e.target.value }))} />
+                                        onChange={e => setEditForm(f => ({ ...f, phone: e.target.value.replace(/[^0-9+\s-]/g, '') }))} />
                                 </div>
                                 <div className={styles.formActions}>
                                     <button type="button" className={styles.cancelBtn} onClick={() => setIsEditing(false)}>Cancel</button>
