@@ -150,7 +150,7 @@ export default function SignupPage() {
                                     placeholder="123456"
                                     maxLength={6}
                                     value={otp}
-                                    onChange={(e) => setOtp(e.target.value)}
+                                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                                     style={{ letterSpacing: '0.2rem', textAlign: 'center', fontSize: '1.25rem' }}
                                 />
                             </div>

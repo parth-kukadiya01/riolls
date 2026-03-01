@@ -22,6 +22,23 @@ const loadingSubMessages = [
     'Polishing the final photorealistic render',
 ];
 
+const loadingMessagesHipHop = [
+    'Decoding your drip preferences…',
+    'Sourcing VVS-grade inspiration…',
+    'Laying out the chain links…',
+    'Icing out every focal point…',
+    'Finalising your custom piece…',
+];
+
+const loadingSubMessagesHipHop = [
+    'Locking in the perfect ice configuration',
+    'Calculating gram weight and dimensions',
+    'Selecting the right link style for your vision',
+    'Polishing each stone to max brilliance',
+    'Rendering your custom bespoke piece',
+];
+
+
 const gradients = [
     'radial-gradient(ellipse at 45%,#3d2b14,#1a1208)',
     'radial-gradient(ellipse at 55%,#1a2420,#0a1210)',
@@ -31,6 +48,10 @@ const gradients = [
 export default function AIStep3() {
     const router = useRouter();
     const { state, generateIdeas, setSelectedConcept } = useAIStudio();
+
+    const isHipHop = (Array.isArray(state.profile.pieceType) ? state.profile.pieceType[0] : state.profile.pieceType) === 'Hip Hop / Iced Out';
+    const msgs = isHipHop ? loadingMessagesHipHop : loadingMessages;
+    const subMsgs = isHipHop ? loadingSubMessagesHipHop : loadingSubMessages;
 
     const [phase, setPhase] = useState<'loading' | 'results' | 'error'>('loading');
     const [msgIdx, setMsgIdx] = useState(0);
@@ -79,8 +100,8 @@ export default function AIStep3() {
                     </div>
 
                     <div className={styles.loadingMsgContainer}>
-                        <h3 className={styles.loadingMsg}>{loadingMessages[msgIdx]}</h3>
-                        <p className={styles.loadingSubmsg}>{loadingSubMessages[msgIdx]}</p>
+                        <h3 className={styles.loadingMsg}>{msgs[msgIdx]}</h3>
+                        <p className={styles.loadingSubmsg}>{subMsgs[msgIdx]}</p>
                         <div className={styles.dots}>
                             <span className={styles.dot} />
                             <span className={styles.dot} />
@@ -119,8 +140,8 @@ export default function AIStep3() {
                         ← Back
                     </button>
                     <div className={styles.resultsHeader}>
-                        <span className={styles.eyebrow}>Your Designs</span>
-                        <h2 className={styles.resultsH2}>Interpretations of your vision.</h2>
+                        <span className={styles.eyebrow}>{isHipHop ? 'Your Custom Pieces' : 'Your Designs'}</span>
+                        <h2 className={styles.resultsH2}>{isHipHop ? 'Your iced-out concepts.' : 'Interpretations of your vision.'}</h2>
                         <p style={{ color: 'var(--muted)', maxWidth: '600px', margin: '0 auto', fontSize: '1rem' }}>
                             {state.styleAnalysis}
                         </p>

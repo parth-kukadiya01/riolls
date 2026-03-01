@@ -7,7 +7,9 @@ import { useAuth } from '@/context/AuthContext';
 import { GoogleLogin } from '@react-oauth/google';
 import styles from './page.module.css';
 
-export default function LoginPage() {
+import { Suspense } from 'react';
+
+function LoginContent() {
     const { login, googleLogin, user, loading: authLoading } = useAuth();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -130,5 +132,13 @@ export default function LoginPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={<div style={{ paddingTop: 'var(--nav-height)', padding: '2rem', textAlign: 'center' }}>Loading...</div>}>
+            <LoginContent />
+        </Suspense>
     );
 }

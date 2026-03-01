@@ -58,6 +58,7 @@ export default function ClientBespokeGallery() {
 
     const availableCategories = Array.from(new Set(typeFiltered.map(w => w.category).filter(Boolean)));
 
+
     const handleInquiryClick = (piece: BespokeWork) => {
         setGalleryReference({
             name: piece.name,

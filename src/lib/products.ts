@@ -136,7 +136,7 @@ export const PRODUCTS: Product[] = [
     price: 7200,
     metal: 'white-gold',
     stone: 'diamond',
-    description: 'An architectural study in negative space — a free-form platinum band orbiting a single brilliant-cut diamond.',
+    description: 'An architectural study in negative space — a free-form  band orbiting a single brilliant-cut diamond.',
     stone_detail: '1.50ct · F Colour · VVS1 Clarity · Brilliant Cut',
     gradient: 'linear-gradient(145deg,#c6bdb0,#b4ab9e,#a49b8e)',
     gradient_hover: 'linear-gradient(145deg,#b4ab9e,#a1988b,#91887b)',

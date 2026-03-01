@@ -276,6 +276,7 @@ export default function ReviewsPage() {
                                 value={reviewTitle}
                                 onChange={e => setReviewTitle(e.target.value)}
                                 placeholder="Summarise your experience…"
+                                required
                                 style={{ width: '100%', padding: '12px 16px', border: '1px solid var(--border)', background: 'var(--cream)', fontSize: '15px', fontFamily: 'var(--font-body)', color: 'var(--charcoal)', outline: 'none', boxSizing: 'border-box' }}
                             />
                         </div>
@@ -288,6 +289,7 @@ export default function ReviewsPage() {
                                 maxLength={1000}
                                 value={reviewBody}
                                 onChange={e => setReviewBody(e.target.value)}
+                                required
                                 placeholder="Tell us about your experience with Riolls Jewels…"
                                 style={{ width: '100%', padding: '12px 16px', border: '1px solid var(--border)', background: 'var(--cream)', fontSize: '15px', fontFamily: 'var(--font-body)', color: 'var(--charcoal)', outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
                             />
