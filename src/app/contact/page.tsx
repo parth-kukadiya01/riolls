@@ -93,11 +93,10 @@ export default function ContactPage() {
             {/* ── Hero ── */}
             <section className={styles.hero}>
                 <div className={styles.heroInner}>
-                    <span className={styles.eyebrow}>Get in Touch</span>
-                    <h1 className={styles.heroH1}>We&apos;d love<br />to hear from you.</h1>
+                    <span className={styles.eyebrow}>Private Consultation</span>
+                    <h1 className={styles.heroH1}>At your absolute<br />disposal.</h1>
                     <p className={styles.heroSub}>
-                        Our team of experts is available Monday through Saturday to assist with orders,
-                        bespoke commissions, and styling enquiries.
+                        Our dedicated concierges are available Monday through Saturday to assist with discerning acquisitions, bespoke commissions, and private viewings.
                     </p>
                 </div>
             </section>
@@ -186,9 +185,9 @@ export default function ContactPage() {
                         </button>
                     </div>
 
-                    <h2 className={styles.formTitle}>{mode === 'enquiry' ? 'Make an Enquiry' : 'Schedule a Date & Time'}</h2>
+                    <h2 className={styles.formTitle}>{mode === 'enquiry' ? 'Submit an Inquiry' : 'Request a Private Appointment'}</h2>
                     <p className={styles.formSub}>
-                        {mode === 'enquiry' ? "Fill in the form and we'll respond within 24 hours." : "Select your preferred date and time for a private consultation."}
+                        {mode === 'enquiry' ? "Detail your request below. A bespoke advisor will respond within 24 hours with the utmost discretion." : "Select your preferred date and time for an exclusive consultation with our master artisans."}
                     </p>
 
                     {!user && (
@@ -334,9 +333,9 @@ export default function ContactPage() {
                                 <label className={styles.label}>Appointment Type <span className={styles.req}>*</span></label>
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginTop: '6px' }}>
                                     {[
-                                        { value: 'office_visit', label: 'Office Visit', icon: '🏢', desc: 'Visit our showroom' },
-                                        { value: 'google_meet', label: 'Google Meet', icon: '📹', desc: 'Video consultation' },
-                                        { value: 'whatsapp', label: 'WhatsApp', icon: '💬', desc: 'Chat consultation' },
+                                        { value: 'office_visit', label: 'Private Atelier', icon: '🏢', desc: 'Visit our sanctuary' },
+                                        { value: 'google_meet', label: 'Virtual Viewing', icon: '📹', desc: 'Secure video link' },
+                                        { value: 'whatsapp', label: 'Priority Chat', icon: '💬', desc: 'Direct artisan access' },
                                     ].map(opt => (
                                         <button
                                             key={opt.value}

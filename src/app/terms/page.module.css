@@ -1,0 +1,82 @@
+.container {
+    padding: calc(var(--nav-height) + 80px) var(--gutter) 80px;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: var(--font-body);
+    color: var(--charcoal);
+}
+
+.title {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 300;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: var(--stone);
+    text-align: center;
+    margin-bottom: 48px;
+    letter-spacing: 0.05em;
+    font-family: var(--font-sc);
+    text-transform: uppercase;
+}
+
+.content {
+    line-height: 1.8;
+}
+
+.section {
+    margin-bottom: 40px;
+}
+
+.sectionTitle {
+    font-family: var(--font-secondary);
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--charcoal);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.text {
+    font-size: 16px;
+    color: var(--stone);
+    margin-bottom: 16px;
+}
+
+.list {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 16px;
+}
+
+.listItem {
+    margin-bottom: 12px;
+    padding-left: 20px;
+    position: relative;
+    font-size: 15px;
+    color: var(--stone);
+}
+
+.listItem::before {
+    content: "•";
+    color: var(--rose);
+    position: absolute;
+    left: 0;
+}
+
+.contactLink {
+    color: var(--charcoal);
+    text-decoration: underline;
+    text-decoration-color: var(--rose);
+    text-underline-offset: 4px;
+    transition: color 0.2s;
+}
+
+.contactLink:hover {
+    color: var(--rose);
+}

@@ -17,8 +17,9 @@ export default function BlogForm({ initialData = null, isEdit = false }: BlogFor
     const [formData, setFormData] = useState({
         title: '',
         slug: '',
+        excerpt: '',
         content: '',
-        author: 'Riolls Atelier',
+        authorName: 'Riolls Atelier',
         category: 'Guides',
         isPublished: true,
         isFeatured: false,
@@ -34,16 +35,17 @@ export default function BlogForm({ initialData = null, isEdit = false }: BlogFor
             setFormData({
                 title: initialData.title || '',
                 slug: initialData.slug || '',
+                excerpt: initialData.excerpt || '',
                 content: initialData.content || '',
-                author: initialData.author || '',
+                authorName: initialData.authorName || initialData.author?.name || '',
                 category: initialData.category || '',
                 isPublished: initialData.isPublished ?? true,
                 isFeatured: initialData.isFeatured || false,
                 tags: initialData.tags ? initialData.tags.join(', ') : ''
             });
 
-            if (initialData.coverImage) {
-                setExistingImage(initialData.coverImage);
+            if (initialData.image || initialData.coverImage) {
+                setExistingImage(initialData.image || initialData.coverImage);
             }
         }
     }, [initialData]);
@@ -69,7 +71,7 @@ export default function BlogForm({ initialData = null, isEdit = false }: BlogFor
                 const payload = {
                     ...formData,
                     tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean),
-                    coverImage: existingImage
+                    image: existingImage
                 };
 
                 const res = await adminFetch(`/blog/admin/${initialData._id}`, {
@@ -86,8 +88,9 @@ export default function BlogForm({ initialData = null, isEdit = false }: BlogFor
                 const submitData = new FormData();
                 submitData.append('title', formData.title);
                 submitData.append('slug', formData.slug);
+                submitData.append('excerpt', formData.excerpt);
                 submitData.append('content', formData.content);
-                submitData.append('author', formData.author);
+                submitData.append('authorName', formData.authorName);
                 submitData.append('category', formData.category);
                 submitData.append('isPublished', String(formData.isPublished));
                 submitData.append('isFeatured', String(formData.isFeatured));
@@ -96,7 +99,7 @@ export default function BlogForm({ initialData = null, isEdit = false }: BlogFor
                 tagsList.forEach(t => submitData.append('tags', t));
 
                 if (newImage) {
-                    submitData.append('coverImage', newImage);
+                    submitData.append('image', newImage);
                 }
 
                 const res = await adminFetch(`/blog/admin`, {
@@ -135,13 +138,18 @@ export default function BlogForm({ initialData = null, isEdit = false }: BlogFor
                 </div>
 
                 <div className={styles.formGroup}>
+                    <label className={styles.label}>Excerpt *</label>
+                    <input className={styles.input} required value={formData.excerpt} onChange={e => setFormData({ ...formData, excerpt: e.target.value })} />
+                </div>
+
+                <div className={styles.formGroup}>
                     <label className={styles.label}>Category</label>
                     <input className={styles.input} required value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} placeholder="e.g. Guides" />
                 </div>
 
                 <div className={styles.formGroup}>
                     <label className={styles.label}>Author</label>
-                    <input className={styles.input} value={formData.author} onChange={e => setFormData({ ...formData, author: e.target.value })} />
+                    <input className={styles.input} value={formData.authorName} onChange={e => setFormData({ ...formData, authorName: e.target.value })} />
                 </div>
 
                 <div className={styles.formGroup}>

@@ -75,6 +75,7 @@ export default function Footer() {
                     <span className={styles.colTitle}>Our Company</span>
                     <Link href="/about">About Us</Link>
                     <Link href="/careers">Careers</Link>
+                    <Link href="/terms">Terms & Conditions</Link>
                 </div>
 
                 {/* Right column */}

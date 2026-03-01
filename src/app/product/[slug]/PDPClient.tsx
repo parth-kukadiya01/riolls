@@ -24,16 +24,13 @@ export default function PDPClient({ product }: { product: Product }) {
     const [wishlisted, setWishlisted] = useState(product.is_wishlisted ?? false);
     const [added, setAdded] = useState(false);
     const [activeImageIdx, setActiveImageIdx] = useState(0);
+    const [acceptedTerms, setAcceptedTerms] = useState(false);
 
     const metals = [
         { id: 'yellow-gold', label: `${selectedPurity} Yellow Gold`, color: '#C9A96E' },
         { id: 'white-gold', label: `${selectedPurity} White Gold`, color: '#D8D8D8' },
         { id: 'rose-gold', label: `${selectedPurity} Rose Gold`, color: '#E8A898' },
-    ].filter(m => {
-        if (!product.availableMetals || product.availableMetals.length === 0) return true;
-        const colorName = m.id.replace('-gold', '').replace('-', ' ');
-        return product.availableMetals.some(am => (am as string).toLowerCase().includes(colorName.toLowerCase()));
-    });
+    ];
 
     const handleAddToBag = () => {
         // Use MongoDB _id when available (API product), fall back to static id
@@ -230,11 +227,27 @@ export default function PDPClient({ product }: { product: Product }) {
                     {/* Description */}
                     <p className={styles.description}>{product.description}</p>
 
+                    {/* Terms & Conditions */}
+                    <div className={styles.termsRow}>
+                        <label className={styles.termsLabel}>
+                            <input
+                                type="checkbox"
+                                checked={acceptedTerms}
+                                onChange={(e) => setAcceptedTerms(e.target.checked)}
+                                className={styles.termsCheckbox}
+                            />
+                            <span>
+                                I accept the <Link href="/terms" className={styles.termsLink} target="_blank">Terms and Conditions</Link>, confirming I understand.
+                            </span>
+                        </label>
+                    </div>
+
                     {/* CTAs */}
                     <div className={styles.ctas}>
                         <button
-                            className={`${styles.addToBag} ${added ? styles.added : ''}`}
+                            className={`${styles.addToBag} ${added ? styles.added : ''} ${!acceptedTerms ? styles.disabledBtn : ''}`}
                             onClick={handleAddToBag}
+                            disabled={!acceptedTerms}
                         >
                             {added ? '✓ Added to Bag' : 'Add to Bag'}
                         </button>

@@ -13,7 +13,29 @@ interface Review {
     userName: string;
     status: 'pending' | 'approved' | 'rejected';
     createdAt: string;
+    images?: string[];
 }
+
+const ReviewText = ({ text }: { text: string }) => {
+    const [expanded, setExpanded] = useState(false);
+    const isLong = text && text.length > 100;
+
+    return (
+        <div>
+            <div className={expanded ? styles.reviewBodyExpanded : styles.reviewBody}>
+                {text}
+            </div>
+            {isLong && (
+                <button
+                    onClick={() => setExpanded(!expanded)}
+                    className={styles.readMoreBtn}
+                >
+                    {expanded ? 'Read Less' : 'Read More'}
+                </button>
+            )}
+        </div>
+    );
+};
 
 export default function AdminReviews() {
     const [reviews, setReviews] = useState<Review[]>([]);
@@ -41,8 +63,9 @@ export default function AdminReviews() {
                         body: r.body,
                         status: r.status,
                         createdAt: r.createdAt,
-                        productName: r.productId?.name || 'Unknown Product',
-                        userName: r.userId ? `${r.userId.firstName} ${r.userId.lastName}` : 'Anonymous'
+                        images: r.images || [],
+                        productName: r.product?.name || 'Unknown Product',
+                        userName: r.userName || 'Anonymous'
                     }));
                 }
                 setReviews(items);
@@ -147,7 +170,16 @@ export default function AdminReviews() {
                                             <span className={styles.rating}>{renderStars(review.rating)}</span>
                                             <span className={styles.reviewTitle}>{review.title}</span>
                                         </div>
-                                        <div className={styles.reviewBody}>{review.body}</div>
+                                        <ReviewText text={review.body} />
+                                        {review.images && review.images.length > 0 && (
+                                            <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+                                                {review.images.map((img, idx) => (
+                                                    <a key={idx} href={img} target="_blank" rel="noopener noreferrer">
+                                                        <img src={img} alt="Review attachment" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #eee' }} />
+                                                    </a>
+                                                ))}
+                                            </div>
+                                        )}
                                     </td>
                                     <td>
                                         <div className={styles.metaInfo}>

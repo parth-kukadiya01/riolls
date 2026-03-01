@@ -8,9 +8,9 @@ export const metadata: Metadata = { title: 'Bespoke Jewellery' };
 
 export default function BespokePage() {
     const steps = [
-        { n: '01', title: 'The Conversation', body: 'Begin with an in-depth appointment with our Creative Director — in person at our London townhouse or via private video call.' },
-        { n: '02', title: 'The Vision', body: 'We sketch, render, and refine. From hand-drawn studies to 3D models, we craft until every detail is exactly as you imagined.' },
-        { n: '03', title: 'The Making', body: 'A single goldsmith dedicates 8 to 12 weeks to your piece. No factory. No shortcuts. Just mastery.' },
+        { n: '01', title: 'The Dialogue', body: 'Commence your journey with a private, in-depth consultation—either at our exclusive atelier or via a discreet virtual appointment.' },
+        { n: '02', title: 'The Vision', body: 'Through masterful sketching and precision 3D rendering, we meticulously refine the design until it flawlessly reflects your deepest desires.' },
+        { n: '03', title: 'The Creation', body: 'Entrusted to a single master goldsmith, your piece is forged over 8 to 12 weeks of uncompromising dedication and unparalleled artistry.' },
     ];
 
     // We delegates gallery to a client component because we need useEffect
@@ -24,19 +24,19 @@ export default function BespokePage() {
                 <div className={styles.heroContent}>
                     <div className={styles.heroBrow}>
                         <span className={styles.heroLine} />
-                        <span className={styles.heroBrowText}>Bespoke Jewellery</span>
+                        <span className={styles.heroBrowText}>The Ultimate Expression</span>
                     </div>
-                    <h1 className={styles.heroH1}>A piece made<br />only for you.</h1>
-                    <p className={styles.heroBody}>Commission a one-of-a-kind jewel, designed in close collaboration with our master goldsmiths over 8–12 weeks.</p>
-                    <Link href="/contact" className={styles.heroCta}>Book a Private Consultation</Link>
+                    <h1 className={styles.heroH1}>A masterpiece crafted<br />exclusively for you.</h1>
+                    <p className={styles.heroBody}>Commission a timeless heirloom, intimately co-created with our master artisans and brought to life over 8–12 weeks of unhurried perfection.</p>
+                    <Link href="/contact" className={styles.heroCta}>Request a Private Consultation</Link>
                 </div>
             </section>
 
             {/* Process */}
             <section className={styles.process}>
                 <div className={styles.sectionCenter}>
-                    <span className={styles.eyebrow}>The Process</span>
-                    <h2 className={styles.sectionH2}>From idea to heirloom.</h2>
+                    <span className={styles.eyebrow}>The Journey</span>
+                    <h2 className={styles.sectionH2}>From inspiration to eternal legacy.</h2>
                 </div>
                 <div className={styles.stepsGrid}>
                     {steps.map(s => (
@@ -51,20 +51,20 @@ export default function BespokePage() {
 
             {/* Gallery */}
             <section className={styles.gallery}>
-                <div className={styles.sectionCenter}>
-                    <span className={styles.eyebrow} style={{ color: 'var(--gold)' }}>Past Commissions</span>
-                    <h2 className={styles.sectionH2} style={{ color: '#F5F0E8' }}>Each one, one of a kind.</h2>
+                <div className={styles.sectionCenter} style={{ marginBottom: '0' }}>
+                    <span className={styles.eyebrow} style={{ color: 'var(--gold)' }}>The Archives</span>
+                    <h2 className={styles.sectionH2} style={{ color: '#686765ff' }}>A legacy of unique masterpieces.</h2>
                 </div>
                 <ClientBespokeGallery />
             </section>
 
             {/* CTA */}
             <section className={styles.cta}>
-                <h2 className={styles.ctaH2}>Begin your commission.</h2>
-                <p className={styles.ctaBody}>Our commissions are available worldwide. Begin with a complimentary consultation to discuss your vision, timeline, and budget.</p>
+                <h2 className={styles.ctaH2}>Initiate your legacy.</h2>
+                <p className={styles.ctaBody}>We serve discerning clientele globally. We invite you to a private, complimentary consultation to explore your vision, timeline, and investment.</p>
                 <div className={styles.ctaRow}>
-                    <Link href="/contact" className={styles.ctaBtnGold}>Book a Consultation</Link>
-                    <a href="https://wa.me/message/CNVYZ7P7GP3SN1?text=Hello" target="_blank" rel="noopener noreferrer" className={styles.ctaBtnGhost}>WhatsApp Us</a>
+                    <Link href="/contact" className={styles.ctaBtnGold}>Request an Appointment</Link>
+                    <a href="https://wa.me/message/CNVYZ7P7GP3SN1?text=Hello" target="_blank" rel="noopener noreferrer" className={styles.ctaBtnGhost}>Inquire via WhatsApp</a>
                 </div>
             </section>
         </>

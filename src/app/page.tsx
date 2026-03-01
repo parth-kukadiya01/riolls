@@ -78,17 +78,16 @@ export default function HomePage() {
                 <div className={styles.heroContent}>
                     <div className={styles.heroEyebrow}>
                         <span className={styles.heroLine} />
-                        <span className={styles.heroEyebrowText}>Est. London, 1998</span>
+                        <span className={styles.heroEyebrowText}>A Legacy of Trust & Excellence • Est. Surat, 2008</span>
                         <span className={styles.heroLine} />
                     </div>
                     <h1 className={styles.heroH1}>
-                        Where your<br />
-                        <em>story becomes</em><br />
-                        stone.
+                        Where your legacy becomes <br />
+                        <em>timeless.</em>
                     </h1>
                     <p className={styles.heroSub}>
-                        Bespoke and collection jewellery, handcrafted by a single goldsmith.<br />
-                        No factory. No shortcuts. Just mastery.
+                        Exquisite bespoke and collection jewellery, meticulously handcrafted with uncompromising quality.<br />
+                        Dedicated to absolute mastery, honoring your trust with every masterpiece.
                     </p>
                     <div className={styles.heroCtas}>
                         <Link href="/shop" className={styles.ctaDark}>Explore Collections</Link>
@@ -114,8 +113,8 @@ export default function HomePage() {
             {/* ── Collections Strip ─────────────────── */}
             <section className={styles.collections}>
                 <div className={styles.sectionHeader}>
-                    <span className={styles.eyebrow}>The Collections</span>
-                    <h2 className={styles.sectionH2}>A world of jewellery awaits.</h2>
+                    <span className={styles.eyebrow}>Curated Elegance</span>
+                    <h2 className={styles.sectionH2}>Discover an exquisite realm of fine jewellery.</h2>
                 </div>
                 <div className={styles.collectionsGrid}>
                     {!loadedCats ? (
@@ -150,8 +149,8 @@ export default function HomePage() {
             {/* ── Featured Products ─────────────────── */}
             <section className={styles.featured}>
                 <div className={styles.sectionHeader}>
-                    <span className={styles.eyebrow}>New In</span>
-                    <h2 className={styles.sectionH2}>Editor&apos;s selection.</h2>
+                    <span className={styles.eyebrow}>Exclusive Acquisitions</span>
+                    <h2 className={styles.sectionH2}>The Pinnacle of Craftsmanship.</h2>
                 </div>
                 <div className={styles.productsGrid}>
                     {!loadedProducts ? (
@@ -180,10 +179,10 @@ export default function HomePage() {
             {/* ── AI Studio Banner ──────────────────── */}
             <section className={styles.aiBanner}>
                 <div className={styles.aiBannerLeft}>
-                    <span className={styles.eyebrow} style={{ color: 'rgba(245,240,232,0.5)' }}>AI Design Studio</span>
-                    <h2 className={styles.aiH2}>Design the piece<br />you&apos;ve always imagined.</h2>
-                    <p className={styles.aiBannerBody}>Our AI studio takes you step-by-step from your vision to a precise design brief — which our goldsmiths then bring to life in gold and gemstone.</p>
-                    <Link href="/ai-studio/step-1" className={styles.aiCta}>Begin Your Design ✦</Link>
+                    <span className={styles.eyebrow} style={{ color: 'rgba(245,240,232,0.5)' }}>Intelligent Craftsmanship</span>
+                    <h2 className={styles.aiH2}>Envision the masterpiece<br />you deserve.</h2>
+                    <p className={styles.aiBannerBody}>Experience the future of high jewellery. Let our AI studio guide you in translating your finest visions into a precise design brief — meticulously brought to life by our master goldsmiths.</p>
+                    <Link href="/ai-studio/step-1" className={styles.aiCta}>Begin Your Legacy ✦</Link>
                 </div>
                 <div className={styles.aiBannerRight}>
                     <div className={styles.aiRings}>
@@ -203,10 +202,10 @@ export default function HomePage() {
 
             {/* ── Bespoke CTA ───────────────────────── */}
             <section className={styles.bespokeCta}>
-                <span className={styles.eyebrow}>Bespoke Jewellery</span>
-                <h2 className={styles.sectionH2}>Commission something<br />made only for you.</h2>
-                <p className={styles.bespokeBody}>Every Riolls Jewels bespoke piece is created by a single goldsmith — one pair of hands, one vision, one heirloom.</p>
-                <Link href="/bespoke" className={styles.bespokeBtn}>Discover Bespoke</Link>
+                <span className={styles.eyebrow}>The Ultimate Expression</span>
+                <h2 className={styles.sectionH2}>Commission a masterpiece,<br />uniquely yours.</h2>
+                <p className={styles.bespokeBody}>At Riolls Jewels, every bespoke creation is an intimate collaboration. Handcrafted with paramount respect for your vision, resulting in a timeless heirloom of unparalleled luxury.</p>
+                <Link href="/bespoke" className={styles.bespokeBtn}>Commission Your Masterpiece</Link>
             </section>
         </>
     );

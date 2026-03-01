@@ -290,6 +290,44 @@
     margin-bottom: 32px;
 }
 
+/* Terms */
+.termsRow {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: var(--cream);
+    border: 1px solid rgba(201, 169, 110, 0.2);
+}
+
+.termsLabel {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--charcoal);
+    line-height: 1.6;
+}
+
+.termsCheckbox {
+    margin-top: 3px;
+    accent-color: var(--gold);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.termsLink {
+    text-decoration: underline;
+    color: var(--gold);
+    transition: color 0.2s;
+}
+
+.termsLink:hover {
+    color: var(--charcoal);
+}
+
 /* CTAs */
 .ctas {
     display: flex;
@@ -310,9 +348,14 @@
     transition: all 0.25s;
 }
 
-.addToBag:hover {
+.addToBag:hover:not(:disabled) {
     background: var(--gold);
     color: var(--deep);
+}
+
+.disabledBtn {
+    opacity: 0.5;
+    cursor: not-allowed !important;
 }
 
 .added {

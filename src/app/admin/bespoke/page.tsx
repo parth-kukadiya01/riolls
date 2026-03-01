@@ -12,6 +12,7 @@ interface BespokeWork {
     tall: boolean;
     order: number;
     isActive: boolean;
+    category?: string;
     type?: string;
 }
 
@@ -33,6 +34,7 @@ export default function AdminBespokePage() {
     const [tall, setTall] = useState(false);
     const [order, setOrder] = useState(0);
     const [isActive, setIsActive] = useState(true);
+    const [category, setCategory] = useState('Ring');
     const [type, setType] = useState('commission');
     const [uploading, setUploading] = useState(false);
     const [formError, setFormError] = useState('');
@@ -100,6 +102,7 @@ export default function AdminBespokePage() {
             setTall(work.tall);
             setOrder(work.order);
             setIsActive(work.isActive);
+            setCategory(work.category || 'Ring');
             setType(work.type || 'commission');
         } else if (work && isAiPromotion) {
             // Preparing to create a NEW permanent bespoke work from an AI concept
@@ -109,6 +112,7 @@ export default function AdminBespokePage() {
             setTall(false);
             setOrder(works.length * 10);
             setIsActive(true);
+            setCategory(work.category || 'Ring');
             setType('ai_concept');
         } else {
             setEditingWork(null);
@@ -117,6 +121,7 @@ export default function AdminBespokePage() {
             setTall(false);
             setOrder(works.length * 10);
             setIsActive(true);
+            setCategory('Ring');
             setType('commission');
         }
         setIsModalOpen(true);
@@ -132,7 +137,7 @@ export default function AdminBespokePage() {
             return;
         }
 
-        const payload = { name, image, tall, order: Number(order), isActive, type };
+        const payload = { name, image, tall, order: Number(order), isActive, category, type };
 
         try {
             const endpoint = editingWork ? `/bespoke/admin/${editingWork._id}` : '/bespoke/admin';
@@ -207,6 +212,7 @@ export default function AdminBespokePage() {
                             <tr>
                                 <th>Image</th>
                                 <th>Name</th>
+                                <th>Category</th>
                                 <th>Type</th>
                                 <th>Layout</th>
                                 <th>Order</th>
@@ -221,6 +227,7 @@ export default function AdminBespokePage() {
                                         <img src={w.image} alt={w.name} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '4px' }} />
                                     </td>
                                     <td style={{ fontWeight: 500 }}>{w.name}</td>
+                                    <td>{w.category || 'None'}</td>
                                     <td>
                                         <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--stone)', background: 'var(--cream)', padding: '2px 6px', borderRadius: '4px' }}>
                                             {w.type === 'ai_concept' ? 'AI Concept' : 'Commission'}
@@ -286,9 +293,25 @@ export default function AdminBespokePage() {
                         {formError && <div className={styles.formError}>{formError}</div>}
 
                         <form onSubmit={handleSubmit} className={styles.form}>
-                            <div className={styles.formGroup}>
-                                <label>Name</label>
-                                <input type="text" value={name} onChange={e => setName(e.target.value)} required />
+                            <div className={styles.formRow}>
+                                <div className={styles.formGroup} style={{ flex: 2 }}>
+                                    <label>Name</label>
+                                    <input type="text" value={name} onChange={e => setName(e.target.value)} required />
+                                </div>
+                                <div className={styles.formGroup} style={{ flex: 1 }}>
+                                    <label>Category</label>
+                                    <select value={category} onChange={e => setCategory(e.target.value)}>
+                                        <option value="Ring">Ring</option>
+                                        <option value="Necklace">Necklace</option>
+                                        <option value="Earrings">Earrings</option>
+                                        <option value="Bracelet">Bracelet</option>
+                                        <option value="Pendant">Pendant</option>
+                                        <option value="Hip Hop">Hip Hop</option>
+                                        <option value="Chain">Chain</option>
+                                        <option value="Man's hoops">Man's hoops</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <div className={styles.formGroup}>

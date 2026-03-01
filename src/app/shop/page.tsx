@@ -155,6 +155,36 @@ function ShopContent() {
                     </div>
 
                     <div className={styles.filterGroup}>
+                        <span className={styles.filterLabel}>Collections</span>
+                        {['Celestine Collection', 'Aurora Series', 'Tempest Line'].map((c: string) => (
+                            <label key={c} className={styles.filterItem}>
+                                <input type="checkbox" checked={filters.badge === c} onChange={() => toggle('badge', c)} />
+                                <span>{c}</span>
+                            </label>
+                        ))}
+                    </div>
+
+                    <div className={styles.filterGroup}>
+                        <span className={styles.filterLabel}>By Occasion</span>
+                        {['Bridal & Engagement', 'Anniversary Gifts', 'High Jewellery'].map((o: string) => (
+                            <label key={o} className={styles.filterItem}>
+                                <input type="checkbox" checked={filters.badge === o} onChange={() => toggle('badge', o)} />
+                                <span>{o}</span>
+                            </label>
+                        ))}
+                    </div>
+
+                    <div className={styles.filterGroup}>
+                        <span className={styles.filterLabel}>Specials</span>
+                        {['New In', 'Last Piece', 'Best Seller'].map((b: string) => (
+                            <label key={b} className={styles.filterItem}>
+                                <input type="checkbox" checked={filters.badge === b} onChange={() => toggle('badge', b)} />
+                                <span>{b}</span>
+                            </label>
+                        ))}
+                    </div>
+
+                    <div className={styles.filterGroup}>
                         <span className={styles.filterLabel}>Price Range</span>
                         <input
                             type="range"
