@@ -833,6 +833,16 @@
     outline: none;
 }
 
+.countryOptionName {
+    flex: 1;
+}
+
+.countryOptionCode {
+    color: var(--stone);
+    font-size: 11px;
+}
+
+/* Contact Preference Buttons */
 .contactBtns {
     display: flex;
     gap: 8px;
@@ -840,14 +850,16 @@
 }
 
 .contactBtn {
-    padding: 8px 18px;
+    flex: 1;
+    min-width: 80px;
+    padding: 10px 14px;
+    background: var(--cream);
     border: 1px solid var(--border);
     font-family: var(--font-sc);
     font-size: 10px;
     letter-spacing: 0.12em;
     color: var(--stone);
     cursor: pointer;
-    background: var(--cream);
     transition: all 0.2s;
 }
 
@@ -857,10 +869,49 @@
 
 .contactBtnActive {
     border-color: var(--rose) !important;
-    color: var(--rose) !important;
     background: var(--rose-pale) !important;
+    color: var(--rose) !important;
 }
 
+/* Terms Checkbox */
+.termsRow {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: var(--cream);
+    border: 1px solid rgba(139, 92, 82, 0.2);
+}
+
+.termsLabel {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--charcoal);
+    line-height: 1.6;
+}
+
+.termsCheckbox {
+    margin-top: 3px;
+    accent-color: var(--rose);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.termsLink {
+    text-decoration: underline;
+    color: var(--rose);
+    transition: color 0.2s;
+}
+
+.termsLink:hover {
+    color: var(--charcoal);
+}
+
+/* Submit Button */
 .submitBtn {
     width: 100%;
     padding: 18px;
@@ -868,15 +919,19 @@
     color: var(--white);
     font-family: var(--font-sc);
     font-size: 12px;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.2em;
     border: none;
     cursor: pointer;
-    margin-top: 8px;
     transition: background 0.2s;
 }
 
-.submitBtn:hover {
+.submitBtn:hover:not(:disabled) {
     background: var(--rose);
+}
+
+.disabledBtn {
+    opacity: 0.5;
+    cursor: not-allowed !important;
 }
 
 /* CTA buttons */

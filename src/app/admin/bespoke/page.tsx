@@ -12,6 +12,7 @@ interface BespokeWork {
     tall: boolean;
     order: number;
     isActive: boolean;
+    category?: string;
 }
 
 export default function AdminBespokePage() {
@@ -32,6 +33,7 @@ export default function AdminBespokePage() {
     const [tall, setTall] = useState(false);
     const [order, setOrder] = useState(0);
     const [isActive, setIsActive] = useState(true);
+    const [category, setCategory] = useState('Ring');
     const [uploading, setUploading] = useState(false);
     const [formError, setFormError] = useState('');
 
@@ -98,6 +100,7 @@ export default function AdminBespokePage() {
             setTall(work.tall);
             setOrder(work.order);
             setIsActive(work.isActive);
+            setCategory(work.category || 'Ring');
         } else if (work && isAiPromotion) {
             // Preparing to create a NEW permanent bespoke work from an AI concept
             setEditingWork(null);
@@ -106,6 +109,7 @@ export default function AdminBespokePage() {
             setTall(false);
             setOrder(works.length * 10);
             setIsActive(true);
+            setCategory(work.category || 'Ring');
         } else {
             setEditingWork(null);
             setName('');
@@ -113,6 +117,7 @@ export default function AdminBespokePage() {
             setTall(false);
             setOrder(works.length * 10);
             setIsActive(true);
+            setCategory('Ring');
         }
         setIsModalOpen(true);
     };
@@ -127,7 +132,7 @@ export default function AdminBespokePage() {
             return;
         }
 
-        const payload = { name, image, tall, order: Number(order), isActive };
+        const payload = { name, image, tall, order: Number(order), isActive, category };
 
         try {
             const endpoint = editingWork ? `/bespoke/admin/${editingWork._id}` : '/bespoke/admin';
@@ -202,6 +207,7 @@ export default function AdminBespokePage() {
                             <tr>
                                 <th>Image</th>
                                 <th>Name</th>
+                                <th>Category</th>
                                 <th>Layout</th>
                                 <th>Order</th>
                                 <th>Status</th>
@@ -215,6 +221,7 @@ export default function AdminBespokePage() {
                                         <img src={w.image} alt={w.name} style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '4px' }} />
                                     </td>
                                     <td style={{ fontWeight: 500 }}>{w.name}</td>
+                                    <td>{w.category || 'None'}</td>
                                     <td>{w.tall ? 'Tall (2 rows)' : 'Standard (1 row)'}</td>
                                     <td>{w.order}</td>
                                     <td>
@@ -267,9 +274,25 @@ export default function AdminBespokePage() {
                         {formError && <div className={styles.formError}>{formError}</div>}
 
                         <form onSubmit={handleSubmit} className={styles.form}>
-                            <div className={styles.formGroup}>
-                                <label>Name</label>
-                                <input type="text" value={name} onChange={e => setName(e.target.value)} required />
+                            <div className={styles.formRow}>
+                                <div className={styles.formGroup} style={{ flex: 2 }}>
+                                    <label>Name</label>
+                                    <input type="text" value={name} onChange={e => setName(e.target.value)} required />
+                                </div>
+                                <div className={styles.formGroup} style={{ flex: 1 }}>
+                                    <label>Category</label>
+                                    <select value={category} onChange={e => setCategory(e.target.value)}>
+                                        <option value="Ring">Ring</option>
+                                        <option value="Necklace">Necklace</option>
+                                        <option value="Earrings">Earrings</option>
+                                        <option value="Bracelet">Bracelet</option>
+                                        <option value="Pendant">Pendant</option>
+                                        <option value="Hip Hop">Hip Hop</option>
+                                        <option value="Chain">Chain</option>
+                                        <option value="Man's hoops">Man's hoops</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <div className={styles.formGroup}>

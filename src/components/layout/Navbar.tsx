@@ -151,20 +151,21 @@ export default function Navbar() {
                     <div className={styles.mega} onMouseEnter={keepMega} onMouseLeave={closeMega}>
                         <div className={styles.megaCol}>
                             <span className={styles.megaTitle}>Featured</span>
-                            <Link href="/shop?badge=celestine">Celestine Collection</Link>
-                            <Link href="/shop?badge=aurora">Aurora Series</Link>
-                            <Link href="/shop?badge=tempest">Tempest Line</Link>
+                            <Link href="/shop?badge=Celestine Collection">Celestine Collection</Link>
+                            <Link href="/shop?badge=Aurora Series">Aurora Series</Link>
+                            <Link href="/shop?badge=Tempest Line">Tempest Line</Link>
                         </div>
                         <div className={styles.megaCol}>
                             <span className={styles.megaTitle}>By Occasion</span>
-                            <Link href="/shop?cat=rings">Bridal &amp; Engagement</Link>
-                            <Link href="/shop">Anniversary Gifts</Link>
-                            <Link href="/shop">High Jewellery</Link>
+                            <Link href="/shop?badge=Bridal %26 Engagement">Bridal &amp; Engagement</Link>
+                            <Link href="/shop?badge=Anniversary Gifts">Anniversary Gifts</Link>
+                            <Link href="/shop?badge=High Jewellery">High Jewellery</Link>
                         </div>
                         <div className={styles.megaCol}>
                             <span className={styles.megaTitle}>New &amp; Limited</span>
-                            <Link href="/shop?badge=new-in">New In</Link>
-                            <Link href="/shop?badge=last-pieces">Last Pieces</Link>
+                            <Link href="/shop?badge=New In">New In</Link>
+                            <Link href="/shop?badge=Last Piece">Last Pieces</Link>
+                            <Link href="/shop?badge=Best Seller">Best Sellers</Link>
                         </div>
                         <div className={styles.megaImg} style={{ backgroundImage: 'url("https://res.cloudinary.com/dl6cdbdzl/image/upload/v1771997169/buddy-an-bUQZomnihtI-unsplash_gfm2y4.jpg")', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                             <span className={styles.megaImgCaption}>The Aurora Collection</span>

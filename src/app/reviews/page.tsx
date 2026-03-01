@@ -36,6 +36,27 @@ function StarPicker({ value, onChange }: { value: number; onChange: (n: number) 
     );
 }
 
+function ReviewText({ text }: { text: string }) {
+    const [expanded, setExpanded] = useState(false);
+    const isLong = text && text.length > 200;
+
+    return (
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+            <p className={expanded ? styles.reviewBodyExpanded : styles.reviewBody}>
+                {text}
+            </p>
+            {isLong && (
+                <button
+                    onClick={() => setExpanded(!expanded)}
+                    className={styles.readMoreBtn}
+                >
+                    {expanded ? 'Read Less' : 'Read More'}
+                </button>
+            )}
+        </div>
+    );
+}
+
 export default function ReviewsPage() {
     const { user } = useAuth();
     const writeRef = useRef<HTMLElement>(null);
@@ -202,7 +223,20 @@ export default function ReviewsPage() {
                                 <Stars rating={review.rating} />
                                 <p className={styles.reviewProduct}>{review.product?.name}</p>
                                 <p className={styles.reviewTitle}>{review.title}</p>
-                                <p className={styles.reviewBody}>{review.body}</p>
+                                <ReviewText text={review.body} />
+                                {review.images && review.images.length > 0 && (
+                                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '8px', marginBottom: '8px' }}>
+                                        {review.images.map((img: string, idx: number) => (
+                                            <a key={idx} href={img} target="_blank" rel="noopener noreferrer">
+                                                <img
+                                                    src={img}
+                                                    alt="Review photo"
+                                                    style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '4px', border: '1px solid var(--border)' }}
+                                                />
+                                            </a>
+                                        ))}
+                                    </div>
+                                )}
                                 <span className={styles.reviewDate}>{formatDate(review.createdAt)}</span>
                             </div>
                         ))}

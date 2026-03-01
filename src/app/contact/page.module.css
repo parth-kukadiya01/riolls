@@ -12,7 +12,12 @@
 }
 
 .heroInner {
-    max-width: 600px;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .eyebrow {
@@ -38,7 +43,8 @@
     font-size: 17px;
     color: var(--stone);
     line-height: 1.75;
-    max-width: 480px;
+    max-width: 520px;
+    margin: 0 auto;
 }
 
 /* ── Cards strip ── */

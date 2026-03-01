@@ -16,6 +16,7 @@ export default function AIStep5() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [acceptedTerms, setAcceptedTerms] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     const [form, setForm] = useState({
@@ -273,8 +274,27 @@ export default function AIStep5() {
                             />
                         </div>
 
+                        {/* Terms & Conditions */}
+                        <div className={styles.termsRow}>
+                            <label className={styles.termsLabel}>
+                                <input
+                                    type="checkbox"
+                                    checked={acceptedTerms}
+                                    onChange={(e) => setAcceptedTerms(e.target.checked)}
+                                    className={styles.termsCheckbox}
+                                />
+                                <span>
+                                    I accept the <Link href="/terms" className={styles.termsLink} target="_blank">Terms and Conditions</Link>, confirming I understand.
+                                </span>
+                            </label>
+                        </div>
+
                         {errorMsg && <p style={{ color: 'var(--alert)', marginBottom: '1rem', fontSize: '0.9rem' }}>{errorMsg}</p>}
-                        <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
+                        <button
+                            type="submit"
+                            className={`${styles.submitBtn} ${!acceptedTerms ? styles.disabledBtn : ''}`}
+                            disabled={isSubmitting || !acceptedTerms}
+                        >
                             {isSubmitting ? 'Sending...' : 'Send My Quote Request →'}
                         </button>
                     </form>

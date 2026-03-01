@@ -13,6 +13,7 @@ interface BespokeWork {
     order: number;
     isActive: boolean;
     type?: 'commission' | 'ai_concept';
+    category?: string;
 }
 
 import { useRouter } from 'next/navigation';
@@ -25,6 +26,7 @@ export default function ClientBespokeGallery() {
     const [works, setWorks] = useState<BespokeWork[]>([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState<'all' | 'commission' | 'ai_concept'>('all');
+    const [catFilter, setCatFilter] = useState('all');
 
     useEffect(() => {
         bespokeApi.list(true) // only active
@@ -44,12 +46,17 @@ export default function ClientBespokeGallery() {
     if (works.length === 0) {
         return (
             <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--stone)' }}>
-                <p>New portfolio pieces arriving soon.</p>
+                <p>An exclusive collection is currently being curated.</p>
             </div>
         );
     }
 
-    const filteredWorks = filter === 'all' ? works : works.filter(w => w.type === filter);
+    const typeFiltered = filter === 'all' ? works : works.filter(w => w.type === filter);
+    const filteredWorks = catFilter === 'all'
+        ? typeFiltered
+        : typeFiltered.filter(w => (w.category || '').toLowerCase() === catFilter.toLowerCase());
+
+    const availableCategories = Array.from(new Set(typeFiltered.map(w => w.category).filter(Boolean)));
 
     const handleInquiryClick = (piece: BespokeWork) => {
         setGalleryReference({
@@ -68,21 +75,42 @@ export default function ClientBespokeGallery() {
                     className={`${styles.filterBtn} ${filter === 'all' ? styles.filterBtnActive : ''}`}
                     onClick={() => setFilter('all')}
                 >
-                    All Works
+                    Complete Archives
                 </button>
                 <button
                     className={`${styles.filterBtn} ${filter === 'commission' ? styles.filterBtnActive : ''}`}
                     onClick={() => setFilter('commission')}
                 >
-                    Past Commissions
+                    Private Commissions
                 </button>
                 <button
                     className={`${styles.filterBtn} ${filter === 'ai_concept' ? styles.filterBtnActive : ''}`}
                     onClick={() => setFilter('ai_concept')}
                 >
-                    Community Concepts
+                    Conceptual Visions
                 </button>
             </div>
+
+            {/* Category Filters */}
+            {availableCategories.length > 0 && (
+                <div className={styles.galleryFilters} style={{ marginTop: '16px' }}>
+                    <button
+                        className={`${styles.filterBtn} ${catFilter === 'all' ? styles.filterBtnActive : ''}`}
+                        onClick={() => setCatFilter('all')}
+                    >
+                        All Categories
+                    </button>
+                    {availableCategories.map((cat: any) => (
+                        <button
+                            key={cat}
+                            className={`${styles.filterBtn} ${catFilter === cat ? styles.filterBtnActive : ''}`}
+                            onClick={() => setCatFilter(cat)}
+                        >
+                            {cat}
+                        </button>
+                    ))}
+                </div>
+            )}
 
             <div className={styles.masonry}>
                 {filteredWorks.map((w: BespokeWork) => (
@@ -100,9 +128,9 @@ export default function ClientBespokeGallery() {
                             />
                         </div>
                         <div className={cardStyles.info}>
-                            <span className={cardStyles.category}>{w.type === 'ai_concept' ? 'AI Concept' : 'Commission'}</span>
+                            <span className={cardStyles.category}>{w.type === 'ai_concept' ? 'Intelligent Vision' : 'Private Commission'}</span>
                             <div className={cardStyles.name}>{w.name}</div>
-                            <span className={cardStyles.price} style={{ textDecoration: 'underline', opacity: 0.8 }}>POA - Inquire</span>
+                            <span className={cardStyles.price} style={{ textDecoration: 'underline', opacity: 0.8 }}>Price Upon Request</span>
                         </div>
                     </div>
                 ))}

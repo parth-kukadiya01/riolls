@@ -17,7 +17,7 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
                 // Or try fetching by ID directly if the backend supports it.
                 // Looking at `blog.py`, `GET /{slug}` exists but we only have `id`.
                 // Let's fetch all and find by ID:
-                const res = await adminFetch(`/blog?limit=100`);
+                const res = await adminFetch(`/blog?limit=50`);
                 const json = await res.json();
 
                 if (res.ok) {

@@ -271,6 +271,33 @@
     color: var(--stone);
     line-height: 1.7;
     flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.reviewBodyExpanded {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--stone);
+    line-height: 1.7;
+    flex: 1;
+}
+
+.readMoreBtn {
+    background: none;
+    border: none;
+    color: var(--charcoal);
+    font-size: 13px;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 4px;
+    margin-bottom: 8px;
+    text-decoration: underline;
+    font-family: var(--font-body);
 }
 
 .reviewDate {

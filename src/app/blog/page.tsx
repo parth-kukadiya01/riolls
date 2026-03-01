@@ -118,7 +118,7 @@ export default function BlogPage() {
             </section>
 
             {/* Newsletter strip */}
-            <section className={styles.newsletter}>
+            {/* <section className={styles.newsletter}>
                 <h2 className={styles.newsletterH2}>Never miss a story.</h2>
                 <p className={styles.newsletterSub}>New articles, collection drops, and exclusive atelier access — delivered to your inbox monthly.</p>
                 {subscribed ? (
@@ -136,7 +136,7 @@ export default function BlogPage() {
                         <button type="submit" className={styles.newsletterBtn}>Subscribe</button>
                     </form>
                 )}
-            </section>
+            </section> */}
         </>
     );
 }

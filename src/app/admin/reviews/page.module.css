@@ -111,6 +111,25 @@
     -webkit-box-orient: vertical;
 }
 
+.reviewBodyExpanded {
+    font-size: 0.75rem;
+    color: #666;
+    max-width: 400px;
+    line-height: 1.4;
+}
+
+.readMoreBtn {
+    background: none;
+    border: none;
+    color: var(--dark);
+    font-size: 0.7rem;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 4px;
+    text-decoration: underline;
+    font-family: inherit;
+}
+
 .metaInfo {
     font-size: 0.75rem;
     color: #888;

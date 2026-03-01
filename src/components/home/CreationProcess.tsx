@@ -7,28 +7,28 @@ import styles from './CreationProcess.module.css';
 const steps = [
     {
         num: '1',
-        title: 'Consultation',
-        desc: 'Meet our experts virtually or in-studio to discuss your ideas, budget, and timeline.'
+        title: 'Bespoke Consultation',
+        desc: 'An intimate dialogue with our artisans to understand your distinct vision, desires, and legacy.'
     },
     {
         num: '2',
-        title: 'Design & CAD',
-        desc: 'See your vision come to life with detailed 3D renderings before production begins.'
+        title: 'Artistic Rendering',
+        desc: 'Witness your imagination materialize through impeccable 3D artistry and precision CAD modeling.'
     },
     {
         num: '3',
-        title: 'Stone Selection',
-        desc: 'Hand-pick GIA/IGI certified diamonds and gemstones that match your criteria.'
+        title: 'Gemstone Curation',
+        desc: 'Select from an exclusive cache of globally sourced, ethically verified diamonds and rare gemstones.'
     },
     {
         num: '4',
-        title: 'Production & Finish',
-        desc: 'Your piece is created and finished using BIS hallmarked gold with strict quality checks.'
+        title: 'Masterful Artistry',
+        desc: 'Our master goldsmiths forge your jewel with uncompromising dedication to perfection and heritage techniques.'
     },
     {
         num: '5',
-        title: 'Delivery',
-        desc: 'Your masterpiece is insured and delivered safely with all authenticity certificates.'
+        title: 'Prestigious Presentation',
+        desc: 'Your heirloom is securely hand-delivered, accompanied by distinguished certificates of authenticity and valor.'
     }
 ];
 
@@ -58,10 +58,10 @@ export default function CreationProcess() {
         <section ref={sectionRef} className={styles.section}>
             <div className={styles.container}>
                 <div className={`${styles.header} ${isVisible ? styles.animateIn : ''}`}>
-                    <span className={styles.eyebrow}>How We Work</span>
-                    <h2 className={styles.title}>Our Creation Process</h2>
+                    <span className={styles.eyebrow}>The Art of Perfection</span>
+                    <h2 className={styles.title}>The Journey to Mastery</h2>
                     <p className={styles.subtitle}>
-                        From your first spark of inspiration to the final reveal, we ensure a transparent and collaborative journey.
+                        From your first spark of inspiration to the sublime final reveal, we curate an exclusive, highly personalized experience defined by unwavering trust and absolute discretion.
                     </p>
                 </div>
 
