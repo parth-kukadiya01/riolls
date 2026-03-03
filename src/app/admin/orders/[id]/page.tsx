@@ -8,13 +8,13 @@ import styles from './page.module.css';
 
 interface OrderItem {
     productId: string;
-    productName: string;
-    productImage: string;
+    name?: string;
+    image?: string;
     quantity: number;
     price: number;
     metal?: string;
     stone?: string;
-    ringSize?: string;
+    size?: string;
     engravingText?: string;
 }
 
@@ -81,7 +81,7 @@ export default function AdminOrderDetails({ params }: { params: Promise<{ id: st
                 body: JSON.stringify({
                     status: updateStatus,
                     trackingNumber,
-                    adminNotes
+                    notes: adminNotes
                 })
             });
             const json = await res.json();
@@ -175,13 +175,13 @@ export default function AdminOrderDetails({ params }: { params: Promise<{ id: st
                                     <tr key={idx}>
                                         <td>
                                             <div className={styles.itemInfo}>
-                                                <img src={item.productImage || 'https://via.placeholder.com/60'} alt={item.productName} className={styles.itemImg} />
+                                                <img src={item.image || 'https://via.placeholder.com/60'} alt={item.name || 'Product'} className={styles.itemImg} />
                                                 <div>
-                                                    <div className={styles.itemName}>{item.productName}</div>
+                                                    <div className={styles.itemName}>{item.name}</div>
                                                     <div className={styles.itemMeta}>
                                                         {item.metal && <span>{item.metal}</span>}
                                                         {item.stone && <span> | {item.stone}</span>}
-                                                        {item.ringSize && <span> | Size {item.ringSize}</span>}
+                                                        {item.size && <span> | Size {item.size}</span>}
                                                     </div>
                                                     {item.engravingText && (
                                                         <div className={styles.itemMeta} style={{ marginTop: '0.25rem', fontStyle: 'italic' }}>

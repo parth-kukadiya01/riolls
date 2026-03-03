@@ -1,5 +1,8 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState } from 'react';
 import styles from './page.module.css';
 
 // Using constants for images so they can be easily managed by an admin later
@@ -12,6 +15,8 @@ const IMAGES = {
 };
 
 export default function DiamondBuyingGuide() {
+    const [activeFaq, setActiveFaq] = useState<number | null>(null);
+
     return (
         <div className={styles.page} style={{ paddingTop: 'var(--nav-height)' }}>
             {/* ── Hero ── */}
@@ -188,6 +193,50 @@ export default function DiamondBuyingGuide() {
                             <p className={styles.certDesc}>The Bureau of Indian Standards hallmark guarantees the exact purity and fineness of the gold used in your jewelry.</p>
                         </div>
 
+                    </div>
+                </div>
+
+                {/* FAQ Section */}
+                <div className={`${styles.article} ${styles.grayBlock}`}>
+                    <div className={styles.sectionHeaderCenter}>
+                        <h2 className={styles.sectionTitle}>Frequently Asked Questions</h2>
+                        <p className={styles.textCenter}>Common questions about choosing the perfect diamond.</p>
+                    </div>
+
+                    <div style={{ maxWidth: '800px', margin: '0 auto', width: '100%' }}>
+                        {[
+                            {
+                                q: "Are Lab-Grown diamonds real diamonds?",
+                                a: "Yes. Lab-grown diamonds are chemically, physically, and optically identical to mined diamonds. The only difference is their origin. They even receive the same certifications from the GIA and IGI."
+                            },
+                            {
+                                q: "Which of the 4Cs is most important?",
+                                a: "Cut is universally considered the most important of the 4Cs. A poorly cut diamond will seem dull even with perfect color and clarity, while an Excellent cut makes lower color/clarity grades appear much brighter by maximizing light reflection."
+                            },
+                            {
+                                q: "What does 'eye-clean' mean?",
+                                a: "An 'eye-clean' diamond means that no inclusions or blemishes are visible to the naked eye without magnification. VS2, SI1, and sometimes SI2 diamonds can be perfectly eye-clean, offering substantial value."
+                            },
+                            {
+                                q: "Do you offer conflict-free natural diamonds?",
+                                a: "Absolutely. All our natural diamonds are sourced through suppliers adhering to the strict guidelines of the Kimberley Process, ensuring they are conflict-free."
+                            }
+                        ].map((faq, i) => (
+                            <div key={i} className={styles.faqItem}>
+                                <button
+                                    className={styles.faqTrigger}
+                                    onClick={() => setActiveFaq(activeFaq === i ? null : i)}
+                                >
+                                    {faq.q}
+                                    <span className={styles.faqIcon}>
+                                        {activeFaq === i ? '−' : '+'}
+                                    </span>
+                                </button>
+                                {activeFaq === i && (
+                                    <p className={styles.faqBody}>{faq.a}</p>
+                                )}
+                            </div>
+                        ))}
                     </div>
                 </div>
 

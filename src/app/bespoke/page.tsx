@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { bespokeApi } from '@/lib/api';
 import styles from './page.module.css';
 import ClientBespokeGallery from './ClientBespokeGallery';
+import MaterialGuarantee from '@/components/ui/MaterialGuarantee';
 
 export const metadata: Metadata = { title: 'Bespoke Jewellery' };
 
@@ -46,6 +47,10 @@ export default function BespokePage() {
                             <p className={styles.stepBody}>{s.body}</p>
                         </div>
                     ))}
+                </div>
+
+                <div style={{ maxWidth: '1000px', margin: '40px auto 0' }}>
+                    <MaterialGuarantee />
                 </div>
             </section>
 

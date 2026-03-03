@@ -9,6 +9,7 @@ import React, {
     ReactNode,
 } from 'react';
 import { authApi, userApi, getToken, setToken, removeToken } from '@/lib/api';
+import { setAdminToken, removeAdminToken } from '@/lib/adminAuth';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -65,6 +66,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setToken(jwt);
         setTokenState(jwt);
         setUser(userData);
+        if (userData.role === 'admin') {
+            setAdminToken(jwt);
+        }
         return userData;
     }, []);
 
@@ -83,6 +87,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setToken(jwt);
             setTokenState(jwt);
             setUser(userData);
+            if (userData.role === 'admin') {
+                setAdminToken(jwt);
+            }
             return userData;
         },
         [],
@@ -95,6 +102,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setToken(jwt);
             setTokenState(jwt);
             setUser(userData);
+            if (userData.role === 'admin') {
+                setAdminToken(jwt);
+            }
             return userData;
         },
         [],
@@ -102,6 +112,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const logout = useCallback(() => {
         removeToken();
+        removeAdminToken();
         setTokenState(null);
         setUser(null);
     }, []);

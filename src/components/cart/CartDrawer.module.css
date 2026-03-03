@@ -208,11 +208,11 @@
 .checkoutBtn {
     display: block;
     width: 100%;
-    padding: 17px;
+    padding: 13px;
     background: var(--charcoal);
     color: var(--white);
     font-family: var(--font-sc);
-    font-size: 12px;
+    font-size: 10px;
     letter-spacing: 0.22em;
     text-align: center;
     border: none;

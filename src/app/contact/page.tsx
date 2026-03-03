@@ -98,6 +98,29 @@ export default function ContactPage() {
                     <p className={styles.heroSub}>
                         Our dedicated concierges are available Monday through Saturday to assist with discerning acquisitions, bespoke commissions, and private viewings.
                     </p>
+                    <div className={styles.heroActions}>
+                        <button
+                            onClick={() => {
+                                setMode('appointment');
+                                document.getElementById('form-section')?.scrollIntoView({ behavior: 'smooth' });
+                            }}
+                            className={styles.primaryBtn}
+                        >
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                            Book a Consultation
+                        </button>
+                        <a href="https://wa.me/message/CNVYZ7P7GP3SN1?text=Hello" target="_blank" rel="noopener noreferrer" className={styles.secondaryBtn}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" />
+                            </svg>
+                            WhatsApp Us
+                        </a>
+                    </div>
                 </div>
             </section>
 
@@ -165,7 +188,7 @@ export default function ContactPage() {
             </section>
 
             {/* ── Form + Map ── */}
-            <section className={styles.mainSection}>
+            <section id="form-section" className={styles.mainSection}>
                 {/* Form Wrap */}
                 <div className={styles.formWrap}>
                     <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
@@ -432,31 +455,43 @@ export default function ContactPage() {
                         </form>
                     )}
                 </div>
+            </section >
 
-                {/* Map */}
-                <div className={styles.mapWrap}>
-                    <div className={styles.mapFrame}>
-                        <iframe
-                            title="Riolls Jewels — Surat"
-                            src="https://maps.google.com/maps?q=Surat,Gujarat,India&z=13&output=embed"
-                            width="100%"
-                            height="100%"
-                            style={{ border: 0, display: 'block' }}
-                            allowFullScreen
-                            loading="lazy"
-                        />
-                    </div>
-                    <a
-                        href="https://maps.app.goo.gl/JWDQiDaJYzi83cxx8"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles.mapBtn}
-                    >
-                        Open in Google Maps →
-                    </a>
+            {/* Map */}
+            <div className={styles.mapWrap}>
+                <div className={styles.mapFrame}>
+                    <iframe
+                        title="Riolls Jewels — Surat"
+                        src="https://maps.google.com/maps?q=Surat,Gujarat,India&z=13&output=embed"
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0, display: 'block' }}
+                        allowFullScreen
+                        loading="lazy"
+                    />
                 </div>
-            </section>
+                <a
+                    href="https://maps.app.goo.gl/JWDQiDaJYzi83cxx8"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.mapBtn}
+                >
+                    Open in Google Maps →
+                </a>
+            </div>
 
+            {/* Floating WhatsApp Button */}
+            <a
+                href="https://wa.me/message/CNVYZ7P7GP3SN1?text=Hello"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.floatingWhatsapp}
+                aria-label="Chat with us on WhatsApp"
+            >
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" />
+                </svg>
+            </a>
         </div>
     );
 }

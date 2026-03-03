@@ -295,7 +295,7 @@
 .generateBtn {
     display: block;
     width: 100%;
-    padding: 18px;
+    padding: 13px;
     background: var(--charcoal);
     color: var(--white);
     font-family: var(--font-sc);
@@ -894,7 +894,7 @@
 
 .submitBtn {
     width: 100%;
-    padding: 18px;
+    padding: 13px;
     background: var(--charcoal);
     color: var(--white);
     font-family: var(--font-sc);
@@ -915,7 +915,7 @@
     display: block;
     width: 100%;
     max-width: 320px;
-    padding: 18px;
+    padding: 13px;
     background: var(--charcoal);
     color: var(--white);
     font-family: var(--font-sc);
@@ -1009,5 +1009,24 @@
     .container,
     .results {
         padding: var(--space-md) var(--gutter);
+    }
+}
+
+@media (max-width: 480px) {
+    .answerGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .answerCard {
+        padding: 18px 14px;
+    }
+
+    .designGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .cutGrid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }

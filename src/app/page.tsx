@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import ProductCard from '@/components/ui/ProductCard';
 import CreationProcess from '@/components/home/CreationProcess';
+import HomeTrustStrip from '@/components/home/HomeTrustStrip';
 import { productsApi, categoriesApi } from '@/lib/api';
 import styles from './page.module.css';
 
@@ -199,6 +200,8 @@ export default function HomePage() {
                     </div>
                 </div>
             </section>
+
+            <HomeTrustStrip />
 
             {/* ── Bespoke CTA ───────────────────────── */}
             <section className={styles.bespokeCta}>

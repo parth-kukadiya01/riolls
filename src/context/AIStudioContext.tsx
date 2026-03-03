@@ -133,6 +133,14 @@ export function AIStudioProvider({ children }: { children: ReactNode }) {
                 }
             }
 
+            // Save ALL generated concept images (up to 3) so the profile page can show them
+            const ideaImages = state.generatedConcepts
+                .map(c => c.image_data)
+                .filter(Boolean) as string[];
+            if (ideaImages.length > 0) {
+                (payload as any).ideaImages = ideaImages;
+            }
+
             // Or if they came directly from the Bespoke Gallery
             if (state.galleryReference) {
                 const typeLabel = state.galleryReference.type === 'ai_concept' ? 'AI Concept' : 'Bespoke Commission';

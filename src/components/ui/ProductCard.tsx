@@ -7,6 +7,7 @@ import { formatPrice } from '@/lib/products';
 import { useCart } from '@/context/CartContext';
 import { wishlistApi, getToken } from '@/lib/api';
 import styles from './ProductCard.module.css';
+import ProtectedImage from './ProtectedImage';
 
 interface Props {
     product: Product;
@@ -73,11 +74,11 @@ export default function ProductCard({ product }: Props) {
             {/* Image area */}
             <div className={styles.image}>
                 {hasImage ? (
-                    <img
+                    <ProtectedImage
                         src={product.images![0]}
                         alt={product.name}
                         className={styles.imgMain}
-                        style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                        style={{ objectFit: 'cover', width: '100%', height: '100%', pointerEvents: 'none' }}
                     />
                 ) : (
                     <>
