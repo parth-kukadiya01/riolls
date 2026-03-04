@@ -12,7 +12,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 60px;
+    padding: 0 var(--gutter);
     position: sticky;
     top: 0;
     z-index: 10;
@@ -37,13 +37,14 @@
 
 /* Step bar */
 .stepBar {
-    padding: 16px 60px;
+    padding: 16px var(--gutter);
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0;
     background: var(--white);
+    overflow-x: auto;
 }
 
 .stepBarItem {
@@ -87,12 +88,12 @@
 }
 
 .left {
-    padding: 60px 80px;
+    padding: 48px var(--gutter);
     background: var(--white);
 }
 
 .right {
-    padding: 48px 40px;
+    padding: 48px 32px;
     background: var(--cream);
     border-left: 1px solid var(--border);
 }
@@ -109,6 +110,7 @@
 .row {
     display: flex;
     gap: 16px;
+    flex-wrap: wrap;
 }
 
 .field {
@@ -282,11 +284,11 @@
 .placeOrder {
     display: block;
     width: 100%;
-    padding: 20px;
+    padding: 14px;
     background: var(--rose);
     color: var(--white);
     font-family: var(--font-sc);
-    font-size: 13px;
+    font-size: 11px;
     letter-spacing: 0.25em;
     text-align: center;
     margin-top: 24px;
@@ -400,11 +402,38 @@
     .right {
         border-left: none;
         border-top: 1px solid var(--border);
-        padding: 32px 20px;
+        padding: 28px var(--gutter);
     }
 
     .header,
     .stepBar {
-        padding: 0 20px;
+        padding: 0 var(--gutter);
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        font-size: 15px;
+        letter-spacing: 0.2em;
+    }
+
+    .stepBarBtn {
+        font-size: 9px;
+        padding: 4px 4px;
+        letter-spacing: 0.08em;
+    }
+
+    .stepH2 {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+
+    .row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .right {
+        padding: 20px var(--gutter);
     }
 }

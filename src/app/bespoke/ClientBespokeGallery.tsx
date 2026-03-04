@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { bespokeApi } from '@/lib/api';
 import styles from './page.module.css';
 import cardStyles from '@/components/ui/ProductCard.module.css';
+import ProtectedImage from '@/components/ui/ProtectedImage';
 
 interface BespokeWork {
     _id: string;
@@ -117,18 +118,18 @@ export default function ClientBespokeGallery() {
                 {filteredWorks.map((w: BespokeWork) => (
                     <div
                         key={w._id}
-                        className={cardStyles.card}
+                        className={`${cardStyles.card} ${styles.masonryCard}`}
                         onClick={() => handleInquiryClick(w)}
                     >
-                        <div className={cardStyles.image}>
-                            <img
+                        <div className={`${cardStyles.image} ${styles.masonryImg}`}>
+                            <ProtectedImage
                                 src={w.image}
                                 alt={w.name}
                                 className={cardStyles.imgMain}
                                 style={{ objectFit: 'cover', width: '100%', height: '100%' }}
                             />
                         </div>
-                        <div className={cardStyles.info}>
+                        <div className={`${cardStyles.info} ${styles.masonryInfo}`}>
                             <span className={cardStyles.category}>{w.type === 'ai_concept' ? 'Intelligent Vision' : 'Private Commission'}</span>
                             <div className={cardStyles.name}>{w.name}</div>
                             <span className={cardStyles.price} style={{ textDecoration: 'underline', opacity: 0.8 }}>Price Upon Request</span>

@@ -44,7 +44,7 @@ const securityHeaders = [
   // Prevent cross-origin info leaks
   {
     key: "Cross-Origin-Opener-Policy",
-    value: "same-origin-allow-popups",
+    value: "same-origin",
   },
   {
     key: "Cross-Origin-Embedder-Policy",
@@ -54,20 +54,20 @@ const securityHeaders = [
   {
     key: "Content-Security-Policy",
     value: [
-      "default-src 'self' https:",
-      // Scripts: allow self + inline + eval (required by Next.js) + Google
+      "default-src 'self'",
+      // Scripts: 'unsafe-eval' only in dev (required by Next.js Turbopack / React internals)
       scriptSrc,
-      // Styles: allow self + inline + any HTTPS (Google Fonts, CDNs, etc.)
-      "style-src 'self' 'unsafe-inline' https:",
-      // Fonts: allow self + any HTTPS + data URIs
-      "font-src 'self' https: data:",
-      // Images: allow all origins + data + blob
+      // Styles: allow self + inline (needed for CSS-in-JS) + Google Fonts + Google Sign-In
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://maps.googleapis.com https://accounts.google.com",
+      // Fonts: allow self + Google Fonts CDN
+      "font-src 'self' https://fonts.gstatic.com data:",
+      // Images: allow self + data URIs + Cloudinary + any https CDN
       "img-src 'self' data: blob: https: http:",
-      // Media: allow all HTTPS sources (Cloudinary, Pexels, any CDN)
-      "media-src 'self' https: blob:",
-      // Connect: allow all HTTPS + WSS + localhost
-      "connect-src 'self' http://localhost:8000 http://localhost:* https: wss:",
-      // Frames: allow Google services
+      // Media: allow self
+      "media-src 'self'",
+      // Connect (API calls): allow self + localhost backend (dev) + any https + Stripe + Google Maps + Google Sign-In
+      "connect-src 'self' http://localhost:8000 http://localhost:* https: wss: https://api.stripe.com https://checkout.stripe.com https://maps.googleapis.com https://accounts.google.com",
+      // Frames: allow Google Maps embed + Google Sign-In
       "frame-src 'self' https://www.google.com https://maps.google.com https://google.com https://accounts.google.com",
       // Prevent object/embed tags
       "object-src 'none'",
@@ -91,14 +91,6 @@ const nextConfig: NextConfig = {
   },
   // Prevent exposing Next.js version in headers
   poweredByHeader: false,
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "res.cloudinary.com",
-      },
-    ],
-  },
 };
 
 export default nextConfig;

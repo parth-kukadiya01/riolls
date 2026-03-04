@@ -224,3 +224,22 @@
         display: flex;
     }
 }
+
+@media (max-width: 480px) {
+    .icons {
+        gap: 12px;
+    }
+
+    .logoText {
+        font-size: 13px;
+        letter-spacing: 0.25em;
+    }
+
+    .hamburger {
+        gap: 4px;
+    }
+
+    .hamburger span {
+        width: 20px;
+    }
+}

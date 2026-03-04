@@ -13,6 +13,7 @@
     background: var(--cream);
     border-bottom: 1px solid rgba(201, 169, 110, 0.1);
     flex-wrap: wrap;
+    overflow-x: auto;
 }
 
 .breadcrumb a {
@@ -337,11 +338,11 @@
 
 .addToBag {
     flex: 1;
-    padding: 17px;
+    padding: 13px;
     background: var(--charcoal);
     color: #F5F0E8;
     font-family: var(--font-sc);
-    font-size: 12px;
+    font-size: 10px;
     letter-spacing: 0.2em;
     border: none;
     cursor: pointer;
@@ -364,8 +365,8 @@
 }
 
 .wishlistBtn {
-    width: 52px;
-    height: 52px;
+    width: 44px;
+    height: 44px;
     flex-shrink: 0;
     border: 1px solid rgba(26, 25, 22, 0.18);
     display: flex;
@@ -404,7 +405,8 @@
 /* Trust strip */
 .trustStrip {
     display: flex;
-    gap: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
     padding: 20px 0;
     border-top: 1px solid rgba(201, 169, 110, 0.12);
     border-bottom: 1px solid rgba(201, 169, 110, 0.12);
@@ -470,7 +472,7 @@
 @media (max-width: 1024px) {
     .layout {
         grid-template-columns: 1fr;
-        padding: 0 40px;
+        padding: 0 var(--gutter);
         gap: 40px;
     }
 
@@ -481,10 +483,42 @@
 
 @media (max-width: 600px) {
     .layout {
-        padding: 0 20px;
+        padding: 0 var(--gutter);
     }
 
     .breadcrumb {
-        padding: 12px 20px;
+        padding: 12px var(--gutter);
+    }
+
+    .ctas {
+        flex-direction: row;
+    }
+
+    .panel {
+        padding: 24px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .ctas {
+        flex-wrap: wrap;
+    }
+
+    .addToBag {
+        padding: 15px 10px;
+        font-size: 11px;
+    }
+
+    .trustItem {
+        flex: 1 1 40%;
+    }
+
+    .thumbs {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+    }
+
+    .price {
+        font-size: 28px;
     }
 }

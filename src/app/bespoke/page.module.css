@@ -76,11 +76,11 @@
 
 .heroCta {
     display: inline-block;
-    padding: 16px 40px;
+    padding: 11px 28px;
     background: var(--charcoal);
     color: var(--white);
     font-family: var(--font-sc);
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 0.22em;
     transition: background 0.3s;
 }
@@ -166,8 +166,21 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: auto auto;
-    gap: 12px;
+    gap: 10px;
     margin-top: 32px;
+}
+
+/* Bespoke gallery image overrides — smaller and more compact */
+.masonryImg {
+    aspect-ratio: 4/5 !important;
+}
+
+.masonryCard {
+    overflow: hidden;
+}
+
+.masonryInfo {
+    padding: 10px 10px 14px !important;
 }
 
 .galleryFilters {
@@ -309,11 +322,11 @@
 
 .ctaBtnGold {
     display: inline-block;
-    padding: 16px 40px;
+    padding: 11px 28px;
     background: var(--charcoal);
     color: var(--white);
     font-family: var(--font-sc);
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 0.2em;
     transition: background 0.2s;
 }
@@ -323,11 +336,11 @@
 }
 
 .ctaBtnGhost {
-    padding: 16px 40px;
+    padding: 11px 28px;
     border: 1px solid rgba(26, 26, 26, 0.3);
     color: var(--charcoal);
     font-family: var(--font-sc);
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 0.2em;
     cursor: pointer;
     background: none;
@@ -353,6 +366,7 @@
 
     .masonry {
         grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
     }
 
     .masonryTall {
@@ -365,5 +379,86 @@
     .gallery,
     .cta {
         padding: var(--space-lg) var(--gutter);
+    }
+}
+
+@media (max-width: 600px) {
+    .heroH1 {
+        font-size: clamp(30px, 8vw, 44px);
+        line-height: 1.1;
+    }
+
+    .heroBody {
+        font-size: 15px;
+        margin: 16px auto 28px;
+    }
+
+    .masonry {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+    }
+
+    .masonryImg {
+        aspect-ratio: 1/1 !important;
+    }
+
+    .masonryInfo {
+        padding: 8px 8px 12px !important;
+    }
+
+    .stepsGrid {
+        gap: 10px;
+    }
+
+    .sectionCenter {
+        margin-bottom: 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .masonry {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 5px;
+    }
+
+    .heroH1 {
+        font-size: clamp(28px, 7.5vw, 38px);
+    }
+
+    .stepsGrid {
+        gap: 12px;
+    }
+
+    .step {
+        padding: 24px 16px;
+    }
+
+    .stepNum {
+        font-size: 54px;
+    }
+
+    .storiesH2,
+    .ctaH2 {
+        font-size: clamp(24px, 7vw, 36px);
+    }
+
+    .ctaRow {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .ctaBtnGold,
+    .ctaBtnGhost {
+        text-align: center;
+        padding: 14px 20px;
+    }
+
+    .galleryFilters {
+        gap: 8px;
+    }
+
+    .filterBtn {
+        padding: 6px 14px;
+        font-size: 10px;
     }
 }

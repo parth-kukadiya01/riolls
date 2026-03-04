@@ -2,6 +2,11 @@ export const ADMIN_API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhos
 
 export function getAdminToken() {
     if (typeof window !== 'undefined') {
+        const cookieToken = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('admin_token='))
+            ?.split('=')[1];
+        if (cookieToken) return cookieToken;
         return localStorage.getItem('admin_token');
     }
     return null;
@@ -10,12 +15,15 @@ export function getAdminToken() {
 export function setAdminToken(token: string) {
     if (typeof window !== 'undefined') {
         localStorage.setItem('admin_token', token);
+        // Set cookie so proxy.ts (middleware) can read it
+        document.cookie = `admin_token=${token}; path=/; max-age=86400; SameSite=Lax`;
     }
 }
 
 export function removeAdminToken() {
     if (typeof window !== 'undefined') {
         localStorage.removeItem('admin_token');
+        document.cookie = 'admin_token=; path=/; max-age=0';
     }
 }
 

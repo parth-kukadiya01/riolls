@@ -1,14 +1,14 @@
 .adminLayout {
     display: flex;
     min-height: 100vh;
-    background-color: var(--light);
+    background-color: var(--admin-bg);
 }
 
 .mainContent {
     flex: 1;
     margin-left: 260px;
     /* Width of sidebar */
-    padding: 1.5rem;
+    padding: 2rem;
     overflow-y: auto;
 }
 
@@ -22,5 +22,5 @@
 
 .loginWrapper {
     min-height: 100vh;
-    background-color: var(--light);
+    background-color: var(--admin-bg);
 }

@@ -8,6 +8,8 @@ import { formatPrice } from '@/lib/products';
 import { useCart } from '@/context/CartContext';
 import { wishlistApi, getToken } from '@/lib/api';
 import styles from './PDP.module.css';
+import MaterialGuarantee from '@/components/ui/MaterialGuarantee';
+import ProtectedImage, { proxyImageUrl } from '@/components/ui/ProtectedImage';
 
 export default function PDPClient({ product }: { product: Product }) {
     const router = useRouter();
@@ -97,7 +99,11 @@ export default function PDPClient({ product }: { product: Product }) {
                 <div className={styles.gallery}>
                     <div className={styles.mainImg} style={{ background: hasImages ? 'transparent' : product.gradient, position: 'relative', overflow: 'hidden' }}>
                         {hasImages && (
-                            <img src={product.images![activeImageIdx]} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0 }} />
+                            <ProtectedImage
+                                src={product.images![activeImageIdx]}
+                                alt={product.name}
+                                style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0 }}
+                            />
                         )}
                         {product.badge && (
                             <span className={styles.badge}>{product.badge}</span>
@@ -119,7 +125,7 @@ export default function PDPClient({ product }: { product: Product }) {
                                 <div
                                     key={i}
                                     className={`${styles.thumb} ${i === activeImageIdx ? styles.thumbActive : ''}`}
-                                    style={{ backgroundImage: `url(${img})`, backgroundSize: 'cover', backgroundPosition: 'center', cursor: 'pointer' }}
+                                    style={{ backgroundImage: `url(${proxyImageUrl(img)})`, backgroundSize: 'cover', backgroundPosition: 'center', cursor: 'pointer' }}
                                     onClick={() => setActiveImageIdx(i)}
                                 />
                             ))}
@@ -277,6 +283,8 @@ export default function PDPClient({ product }: { product: Product }) {
                             </div>
                         ))}
                     </div>
+
+                    <MaterialGuarantee />
 
                     {/* Accordion */}
                     <div className={styles.accordion}>

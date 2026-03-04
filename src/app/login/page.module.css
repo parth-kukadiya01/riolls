@@ -111,11 +111,11 @@
 .submitBtn {
     margin-top: 16px;
     width: 100%;
-    padding: 18px;
+    padding: 13px;
     background: var(--charcoal);
     color: var(--white);
     font-family: var(--font-sc);
-    font-size: 12px;
+    font-size: 11px;
     letter-spacing: 0.2em;
     border: none;
     cursor: pointer;
@@ -165,5 +165,25 @@
 @media (max-width: 768px) {
     .authBox {
         padding: 48px 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .page {
+        padding: var(--space-md) var(--gutter);
+        align-items: flex-start;
+        padding-top: 60px;
+    }
+
+    .authBox {
+        padding: 40px 20px;
+    }
+
+    .title {
+        font-size: 32px;
+    }
+
+    .header {
+        margin-bottom: 32px;
     }
 }

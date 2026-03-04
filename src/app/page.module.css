@@ -91,7 +91,7 @@
     font-weight: 300;
     font-size: var(--text-hero);
     color: var(--charcoal);
-    line-height: 0.95;
+    line-height: 1.0;
 }
 
 .heroH1 em {
@@ -142,11 +142,11 @@
 }
 
 .ctaDark {
-    padding: 16px 40px;
+    padding: 11px 28px;
     background: var(--charcoal);
     color: var(--white);
     font-family: var(--font-sc);
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 0.22em;
     transition: background 0.25s;
     display: inline-block;
@@ -175,11 +175,11 @@
 }
 
 .ctaGhost {
-    padding: 16px 40px;
+    padding: 11px 28px;
     border: 1px solid rgba(26, 26, 26, 0.25);
     color: var(--charcoal);
     font-family: var(--font-sc);
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 0.22em;
     transition: all 0.25s;
     display: inline-block;
@@ -392,11 +392,11 @@
 
 .aiCta {
     display: inline-block;
-    padding: 16px 40px;
+    padding: 11px 28px;
     background: var(--charcoal);
     color: var(--white);
     font-family: var(--font-sc);
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 0.22em;
     transition: background 0.25s;
 }
@@ -531,11 +531,11 @@
 
 .bespokeBtn {
     display: inline-block;
-    padding: 16px 48px;
+    padding: 11px 28px;
     background: var(--charcoal);
     color: var(--white);
     font-family: var(--font-sc);
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 0.22em;
     transition: background 0.25s;
 }
@@ -607,6 +607,10 @@
         padding: var(--space-lg) var(--gutter);
     }
 
+    .sectionHeader {
+        margin-bottom: 32px;
+    }
+
     .collectionsGrid {
         grid-template-columns: repeat(2, 1fr);
         gap: 8px;
@@ -622,7 +626,12 @@
     }
 
     .aiBannerRight {
-        min-height: 260px;
+        padding: 40px var(--gutter);
+    }
+
+    .aiRings {
+        width: 220px;
+        height: 220px;
     }
 
     .heroCtas {
@@ -631,15 +640,13 @@
     }
 
     .ctaDark,
-    .ctaGhost,
-    .ctaGold,
-    .ctaGhostLight {
+    .ctaGhost {
         width: 100%;
         text-align: center;
         padding: 16px 24px;
     }
 
-    .bespokeBodyLight {
+    .bespokeBody {
         font-size: 16px;
     }
 }
@@ -650,8 +657,7 @@
         padding-bottom: 40px;
     }
 
-    .heroH1,
-    .heroH1Video {
+    .heroH1 {
         font-size: clamp(26px, 7vw, 36px);
         line-height: 1.05;
     }
@@ -663,21 +669,18 @@
         gap: 8px;
     }
 
-    .heroEyebrowText,
-    .heroEyebrowTextLight {
+    .heroEyebrowText {
         white-space: normal;
         text-align: center;
         font-size: 9px;
         letter-spacing: 0.25em;
     }
 
-    .heroLine,
-    .heroLineLight {
+    .heroLine {
         display: none;
     }
 
-    .heroSub,
-    .heroSubVideo {
+    .heroSub {
         font-size: 15px;
         margin: 20px auto 32px;
     }
@@ -697,8 +700,7 @@
     }
 
     .aiCta,
-    .bespokeBtn,
-    .bespokeBtnGold {
+    .bespokeBtn {
         width: 100%;
         text-align: center;
         padding: 14px 20px;
@@ -706,9 +708,5 @@
 
     .viewAllWrap {
         margin-top: 28px;
-    }
-
-    .bespokeCta {
-        min-height: 360px;
     }
 }

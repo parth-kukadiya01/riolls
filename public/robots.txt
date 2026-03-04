@@ -1,0 +1,29 @@
+# Riolls Jewels — robots.txt
+# Allow legitimate search engines only
+
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /profile/
+Disallow: /checkout
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /profile/
+
+User-agent: Applebot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# Block all other bots / scrapers by default
+User-agent: *
+Disallow: /
+
+# Sitemap
+Sitemap: https://riolls.com/sitemap.xml
