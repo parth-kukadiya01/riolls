@@ -8,17 +8,15 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 var(--gutter);
-    background: var(--glass-bg);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    border-bottom: var(--glass-border);
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--border);
     transition: background 0.4s var(--ease), border-color 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
 
 .scrolled {
-    background: rgba(255, 255, 255, 0.85);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
-    border-bottom-color: rgba(255, 255, 255, 0.5);
+    background: #FFFFFF;
+    box-shadow: var(--shadow-sm);
+    border-bottom-color: var(--border);
 }
 
 /* Logo */
@@ -150,11 +148,9 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: var(--glass-bg);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    border-bottom: var(--glass-border);
-    box-shadow: var(--glass-shadow);
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-md);
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 280px;
     padding: 48px var(--gutter);

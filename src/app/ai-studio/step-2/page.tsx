@@ -15,7 +15,7 @@ const get = (val: string | string[] | undefined) => (Array.isArray(val) ? val[0]
 
 export default function AIStep2() {
     const router = useRouter();
-    const { state, updateProfile, resetGeneration } = useAIStudio();
+    const { state, updateProfile, generateIdeas } = useAIStudio();
     const { user } = useAuth();
 
     const p = state.profile;
@@ -344,8 +344,12 @@ export default function AIStep2() {
             ...selected // Spread everything directly
         };
 
+        const mergedProfile = { ...state.profile, ...profileUpdate };
         updateProfile(profileUpdate);
-        resetGeneration();
+
+        // Call generation immediately with the exact merged profile so we don't 
+        // rely on React's async state to flush before step 3 mounts
+        generateIdeas(mergedProfile);
 
         if (!user) {
             router.push(`/login?callbackUrl=${encodeURIComponent('/ai-studio/step-3')}`);

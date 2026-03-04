@@ -20,6 +20,7 @@ export interface AIStudioState {
     isGenerating: boolean;
     error: string | null;
     galleryReference: { name: string; image: string; type: string } | null;
+    revisionCount: number;
 }
 
 interface AIStudioContextType {
@@ -27,10 +28,10 @@ interface AIStudioContextType {
     updateProfile: (data: Record<string, string | string[]>) => void;
     updateCustomisations: (data: Record<string, any>) => void;
     setSelectedConcept: (index: number) => void;
-    generateIdeas: () => Promise<boolean>;
+    generateIdeas: (immediateProfile?: Record<string, any>, revisionCount?: number) => Promise<boolean>;
     submitQuote: (contactData: Record<string, string>) => Promise<boolean>;
     setGalleryReference: (piece: { name: string; image: string; type: string } | null) => void;
-    resetGeneration: () => void;
+    generateVariations: () => Promise<boolean>;
     reset: () => void;
 }
 
@@ -44,6 +45,7 @@ const initialState: AIStudioState = {
     isGenerating: false,
     error: null,
     galleryReference: null,
+    revisionCount: 0,
 };
 
 const AIStudioContext = createContext<AIStudioContextType | undefined>(undefined);
@@ -70,7 +72,7 @@ export function AIStudioProvider({ children }: { children: ReactNode }) {
     // Ref-based lock to prevent duplicate API calls (state check alone fails due to async batching)
     const generatingRef = useRef(false);
 
-    const generateIdeas = async () => {
+    const generateIdeas = async (immediateProfile?: Record<string, any>, overrideRevisionCount?: number) => {
         // Synchronous ref check prevents double-calls from React Strict Mode or rapid clicks
         if (generatingRef.current) return false;
         generatingRef.current = true;
@@ -80,8 +82,16 @@ export function AIStudioProvider({ children }: { children: ReactNode }) {
         try {
             // Unpack any single-element arrays (like pieceType) into strings for the API
             const payload: Record<string, any> = {};
-            for (const [key, val] of Object.entries(state.profile)) {
+            const sourceProfile = immediateProfile || state.profile;
+
+            for (const [key, val] of Object.entries(sourceProfile)) {
                 payload[key] = Array.isArray(val) ? val[0] : val;
+            }
+
+            // Use the explicitly passed revisionCount (avoids stale closure from setState)
+            const effectiveRevisionCount = overrideRevisionCount ?? state.revisionCount;
+            if (effectiveRevisionCount > 0) {
+                payload.revisionCount = effectiveRevisionCount;
             }
 
             if (!payload.pieceType) {
@@ -93,14 +103,21 @@ export function AIStudioProvider({ children }: { children: ReactNode }) {
             const res = await aiStudioApi.generateIdeas(payload);
             if (res.success && res.data) {
                 const data = res.data as any;
-                console.log("AI IDEAS DATA:", data);
-                setState(prev => ({
-                    ...prev,
-                    generatedConcepts: data.concepts || [],
-                    styleAnalysis: data.style_analysis || '',
-                    recommendedMaterials: data.recommended_materials || [],
-                    isGenerating: false,
-                }));
+                setState(prev => {
+                    const newConcepts = data.concepts || [];
+                    // If this is a revision (generating variations), append rather than replace
+                    const updatedConcepts = effectiveRevisionCount > 0
+                        ? [...prev.generatedConcepts, ...newConcepts]
+                        : newConcepts;
+
+                    return {
+                        ...prev,
+                        generatedConcepts: updatedConcepts,
+                        styleAnalysis: data.style_analysis || '',
+                        recommendedMaterials: data.recommended_materials || [],
+                        isGenerating: false,
+                    };
+                });
                 generatingRef.current = false;
                 return true;
             } else {
@@ -113,6 +130,15 @@ export function AIStudioProvider({ children }: { children: ReactNode }) {
             generatingRef.current = false;
             return false;
         }
+    };
+
+    const generateVariations = async () => {
+        // Increment the revision count synchronously and pass it directly to generateIdeas
+        // to avoid the stale closure bug (state.revisionCount would still be the old value
+        // if we relied on setState + setTimeout(0) approach).
+        const nextRevisionCount = state.revisionCount + 1;
+        setState(prev => ({ ...prev, revisionCount: nextRevisionCount }));
+        return generateIdeas(undefined, nextRevisionCount);
     };
 
     const submitQuote = async (contactData: Record<string, string>) => {
@@ -156,25 +182,12 @@ export function AIStudioProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    const resetGeneration = () => {
-        setState(prev => ({
-            ...prev,
-            generatedConcepts: [],
-            styleAnalysis: '',
-            recommendedMaterials: [],
-            selectedConceptIndex: null,
-            error: null,
-            isGenerating: false,
-            galleryReference: null,
-        }));
-    };
-
     const reset = () => {
         setState(initialState);
     };
 
     return (
-        <AIStudioContext.Provider value={{ state, updateProfile, updateCustomisations, setSelectedConcept, generateIdeas, submitQuote, setGalleryReference, resetGeneration, reset }}>
+        <AIStudioContext.Provider value={{ state, updateProfile, updateCustomisations, setSelectedConcept, generateIdeas, submitQuote, setGalleryReference, generateVariations, reset }}>
             {children}
         </AIStudioContext.Provider>
     );

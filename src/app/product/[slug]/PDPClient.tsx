@@ -197,7 +197,7 @@ export default function PDPClient({ product }: { product: Product }) {
                     </div>
 
                     {/* Stone size */}
-                    <div className={styles.section}>
+                    {/* <div className={styles.section}>
                         <div className={styles.sectionRow}>
                             <span className={styles.sectionLabel}>Stone Size</span>
                             <span className={styles.sectionValue}>{stoneSize.toFixed(2)} ct</span>
@@ -212,7 +212,7 @@ export default function PDPClient({ product }: { product: Product }) {
                         <div className={styles.sliderBounds}>
                             <span>0.50 ct</span><span>3.00 ct</span>
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* Engraving */}
                     <div className={styles.section}>

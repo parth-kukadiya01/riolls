@@ -1,9 +1,10 @@
-/* ── Homepage — Light Professional Theme ── */
+/* ── Homepage — Cinematic Video Theme ── */
 
 /* Hero */
 .hero {
     min-height: 100vh;
-    background: linear-gradient(150deg, #FFFFFF 0%, #F8F5F2 45%, #F2EBE5 100%);
+    background: linear-gradient(150deg, #1a1208 0%, #0d0a05 100%);
+    /* fallback if video blocked */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -11,22 +12,35 @@
     overflow: hidden;
     margin-top: calc(var(--nav-height) * -1);
     padding-top: var(--nav-height);
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid rgba(201, 169, 110, 0.15);
 }
 
-.heroGlow {
+/* Full-bleed hero video */
+.heroVideo {
     position: absolute;
-    top: 10%;
-    right: 20%;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(ellipse, rgba(139, 92, 82, 0.07) 0%, transparent 70%);
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    filter: brightness(0.6) saturate(1.2);
+}
+
+/* Dark gradient overlay on hero video */
+.heroOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg,
+            rgba(10, 8, 4, 0.75) 0%,
+            rgba(10, 8, 4, 0.45) 50%,
+            rgba(10, 8, 4, 0.30) 100%);
+    z-index: 1;
     pointer-events: none;
 }
 
 .heroContent {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     padding: var(--space-xl) var(--gutter);
     max-width: 680px;
     margin: 0 auto;
@@ -48,11 +62,27 @@
     flex-shrink: 0;
 }
 
+/* Video-mode hero — light versions */
+.heroLineLight {
+    width: 40px;
+    height: 1px;
+    background: rgba(201, 169, 110, 0.7);
+    flex-shrink: 0;
+}
+
 .heroEyebrowText {
     font-family: var(--font-sc);
     font-size: 10px;
     letter-spacing: 0.4em;
     color: var(--rose);
+    white-space: nowrap;
+}
+
+.heroEyebrowTextLight {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: rgba(201, 169, 110, 0.85);
     white-space: nowrap;
 }
 
@@ -69,6 +99,21 @@
     color: var(--rose);
 }
 
+/* Video hero — bright text on dark */
+.heroH1Video {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: var(--text-hero);
+    color: #F8F5EE;
+    line-height: 1.0;
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.6);
+}
+
+.heroH1Video em {
+    font-style: italic;
+    color: #C9A96E;
+}
+
 .heroSub {
     font-family: var(--font-body);
     font-size: 18px;
@@ -76,6 +121,16 @@
     line-height: 1.8;
     margin: 28px auto 44px;
     max-width: 480px;
+}
+
+.heroSubVideo {
+    font-family: var(--font-body);
+    font-size: 18px;
+    color: rgba(248, 245, 238, 0.75);
+    line-height: 1.8;
+    margin: 28px auto 44px;
+    max-width: 480px;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
 }
 
 .heroCtas {
@@ -101,6 +156,24 @@
     background: var(--rose);
 }
 
+/* Gold CTA for dark video backgrounds */
+.ctaGold {
+    padding: 11px 28px;
+    background: #C9A96E;
+    color: #0a0804;
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    transition: background 0.25s, color 0.25s;
+    display: inline-block;
+    font-weight: 600;
+}
+
+.ctaGold:hover {
+    background: #e0c07e;
+    color: #0a0804;
+}
+
 .ctaGhost {
     padding: 11px 28px;
     border: 1px solid rgba(26, 26, 26, 0.25);
@@ -117,13 +190,31 @@
     color: var(--rose);
 }
 
+/* Ghost CTA for dark video backgrounds */
+.ctaGhostLight {
+    padding: 11px 28px;
+    border: 1px solid rgba(201, 169, 110, 0.5);
+    color: rgba(248, 245, 238, 0.85);
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    transition: all 0.25s;
+    display: inline-block;
+}
+
+.ctaGhostLight:hover {
+    border-color: #C9A96E;
+    color: #C9A96E;
+}
+
 .heroDiamond {
     position: absolute;
     right: 12%;
     top: 50%;
     transform: translateY(-50%);
     animation: float 6s ease-in-out infinite;
-    filter: drop-shadow(0 12px 32px rgba(139, 92, 82, 0.15));
+    filter: drop-shadow(0 12px 32px rgba(201, 169, 110, 0.3));
+    z-index: 2;
 }
 
 .heroScroll {
@@ -135,12 +226,13 @@
     flex-direction: column;
     align-items: center;
     gap: 10px;
+    z-index: 2;
 }
 
 .heroScrollLine {
     width: 1px;
     height: 50px;
-    background: var(--rose);
+    background: rgba(201, 169, 110, 0.6);
     animation: scrollLine 2s ease-in-out infinite;
 }
 
@@ -148,7 +240,7 @@
     font-family: var(--font-sc);
     font-size: 9px;
     letter-spacing: 0.3em;
-    color: var(--stone);
+    color: rgba(248, 245, 238, 0.55);
 }
 
 /* Collections */
@@ -276,6 +368,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: flex-start;
     padding: var(--space-xl) var(--gutter);
 }
 
@@ -318,54 +411,103 @@
     justify-content: center;
     position: relative;
     overflow: hidden;
+    min-height: 400px;
+    background: #080605;
+    /* fallback */
 }
 
-.aiRings {
+/* Video filling the AI banner right panel */
+.aiBannerVideo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    filter: brightness(0.55) saturate(1.1);
+}
+
+/* Subtle tint over the AI video */
+.aiBannerVideoOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to left,
+            rgba(5, 4, 2, 0.15) 0%,
+            rgba(5, 4, 2, 0.55) 100%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Watermark diamond over AI banner video */
+.aiDiamondOverVideo {
     position: relative;
-    width: 300px;
-    height: 300px;
+    z-index: 2;
+    animation: float 5s ease-in-out infinite;
+    filter: drop-shadow(0 8px 28px rgba(201, 169, 110, 0.35));
+}
+
+/* Bespoke CTA — Cinematic dark video */
+.bespokeCta {
+    position: relative;
+    padding: 0;
+    overflow: hidden;
+    min-height: 520px;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: #05040a;
+    /* fallback */
+    border-bottom: 1px solid rgba(201, 169, 110, 0.12);
 }
 
-.aiRing1,
-.aiRing2,
-.aiRing3 {
+/* Bespoke video fills the section */
+.bespokeVideo {
     position: absolute;
-    border-radius: 50%;
-    border: 1px solid rgba(139, 92, 82, 0.2);
-    animation: breathe 4s ease-in-out infinite;
-}
-
-.aiRing1 {
+    inset: 0;
     width: 100%;
     height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    filter: brightness(0.45) saturate(1.2);
 }
 
-.aiRing2 {
-    width: 72%;
-    height: 72%;
-    animation-delay: 0.5s;
+/* Deep dark overlay for text legibility */
+.bespokeOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom,
+            rgba(5, 3, 8, 0.60) 0%,
+            rgba(5, 3, 8, 0.40) 50%,
+            rgba(5, 3, 8, 0.60) 100%);
+    z-index: 1;
+    pointer-events: none;
 }
 
-.aiRing3 {
-    width: 44%;
-    height: 44%;
-    animation-delay: 1s;
-}
-
-.aiDiamond {
-    animation: float 5s ease-in-out infinite;
-    filter: drop-shadow(0 8px 20px rgba(139, 92, 82, 0.2));
-}
-
-/* Bespoke CTA */
-.bespokeCta {
-    padding: var(--space-xl) var(--gutter);
-    background: var(--white);
+/* Content container centred over the video */
+.bespokeContent {
+    position: relative;
+    z-index: 2;
     text-align: center;
-    border-bottom: 1px solid var(--border);
+    padding: var(--space-xl) var(--gutter);
+    max-width: 680px;
+}
+
+/* Light versions of typography for bespoke CTA */
+.eyebrowLight {
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: rgba(201, 169, 110, 0.8);
+    display: block;
+    margin-bottom: 16px;
+}
+
+.sectionH2Light {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: var(--text-h2);
+    color: #F8F5EE;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
 }
 
 .bespokeBody {
@@ -375,6 +517,16 @@
     max-width: 520px;
     margin: 20px auto 40px;
     line-height: 1.75;
+}
+
+.bespokeBodyLight {
+    font-family: var(--font-body);
+    font-size: 19px;
+    color: rgba(248, 245, 238, 0.68);
+    max-width: 520px;
+    margin: 20px auto 40px;
+    line-height: 1.75;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
 }
 
 .bespokeBtn {
@@ -392,6 +544,25 @@
     background: var(--rose);
 }
 
+/* Gold-bordered bespoke button for dark video background */
+.bespokeBtnGold {
+    display: inline-block;
+    padding: 10px 28px;
+    background: transparent;
+    border: 1px solid rgba(201, 169, 110, 0.6);
+    color: #C9A96E;
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    transition: all 0.3s;
+}
+
+.bespokeBtnGold:hover {
+    background: rgba(201, 169, 110, 0.15);
+    border-color: #C9A96E;
+    color: #e0c07e;
+}
+
 @media (max-width: 1200px) {
     .collectionsGrid {
         grid-template-columns: repeat(3, 1fr);
@@ -406,7 +577,7 @@
     }
 
     .aiBannerRight {
-        padding: 60px;
+        min-height: 320px;
     }
 }
 
@@ -424,8 +595,15 @@
     }
 
     .collections,
-    .featured,
+    .featured {
+        padding: var(--space-lg) var(--gutter);
+    }
+
     .bespokeCta {
+        min-height: 400px;
+    }
+
+    .bespokeContent {
         padding: var(--space-lg) var(--gutter);
     }
 
