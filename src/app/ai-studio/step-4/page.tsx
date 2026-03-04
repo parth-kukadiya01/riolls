@@ -257,7 +257,7 @@ export default function AIStep4() {
                                     </div>
 
                                     {/* Stone Size */}
-                                    <div className={styles.controlSection}>
+                                    {/* <div className={styles.controlSection}>
                                         <div className={styles.sliderHeader}>
                                             <span className={styles.controlLabel}>Stone Size</span>
                                             <span className={styles.sliderVal}>{stoneSize.toFixed(2)} ct</span>
@@ -268,7 +268,7 @@ export default function AIStep4() {
                                             onChange={e => setStoneSize(+e.target.value)}
                                             className={styles.slider}
                                         />
-                                    </div>
+                                    </div> */}
                                 </>
                             )}
                         </>

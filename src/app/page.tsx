@@ -74,36 +74,49 @@ export default function HomePage() {
         <>
             {/* ── Hero ─────────────────────────────── */}
             <section className={styles.hero}>
-                <div className={styles.heroGlow} />
+                {/* Cinematic video loop background */}
+                <video
+                    className={styles.heroVideo}
+                    src="https://res.cloudinary.com/dl6cdbdzl/video/upload/v1772650014/14788078_2560_1440_30fps_ilmluc.mp4"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="auto"
+                    poster=""
+                />
+                {/* Gradient overlay for legibility */}
+                <div className={styles.heroOverlay} />
                 <div className={styles.heroContent}>
                     <div className={styles.heroEyebrow}>
-                        <span className={styles.heroLine} />
-                        <span className={styles.heroEyebrowText}>A Legacy of Trust & Excellence • Est. Surat, 2008</span>
-                        <span className={styles.heroLine} />
+                        <span className={styles.heroLineLight} />
+                        <span className={styles.heroEyebrowTextLight}>A Legacy of Trust &amp; Excellence • Est. Surat, 2008</span>
+                        <span className={styles.heroLineLight} />
                     </div>
-                    <h1 className={styles.heroH1}>
+                    <h1 className={styles.heroH1Video}>
                         Where your legacy becomes <br />
                         <em>timeless.</em>
                     </h1>
-                    <p className={styles.heroSub}>
+                    <p className={styles.heroSubVideo}>
                         Exquisite bespoke and collection jewellery, meticulously handcrafted with uncompromising quality.<br />
                         Dedicated to absolute mastery, honoring your trust with every masterpiece.
                     </p>
                     <div className={styles.heroCtas}>
-                        <Link href="/shop" className={styles.ctaDark}>Explore Collections</Link>
-                        <Link href="/ai-studio/step-1" className={styles.ctaGhost}>AI Studio ✦</Link>
+                        <Link href="/shop" className={styles.ctaGold}>Explore Collections</Link>
+                        <Link href="/ai-studio/step-1" className={styles.ctaGhostLight}>AI Studio ✦</Link>
                     </div>
                 </div>
                 {/* Floating diamond */}
-                <div className={styles.heroDiamond}>
-                    <svg width="200" height="240" viewBox="0 0 200 240" fill="none" stroke="rgba(201,169,110,0.25)" strokeWidth="0.6">
+                {/* <div className={styles.heroDiamond}>
+                    <svg width="200" height="240" viewBox="0 0 200 240" fill="none" stroke="rgba(201,169,110,0.45)" strokeWidth="0.8">
                         <polygon points="100,8 192,62 165,232 35,232 8,62" />
-                        <polygon points="100,8 165,62 100,95 35,62" fill="rgba(201,169,110,0.08)" />
+                        <polygon points="100,8 165,62 100,95 35,62" fill="rgba(201,169,110,0.12)" />
                         <line x1="35" y1="62" x2="165" y2="62" />
                         <line x1="100" y1="95" x2="35" y2="232" />
                         <line x1="100" y1="95" x2="165" y2="232" />
                     </svg>
-                </div>
+                </div> */}
+                {/* Scroll indicator */}
                 {/* <div className={styles.heroScroll}>
                     <span className={styles.heroScrollLine} />
                     <span className={styles.heroScrollText}>Scroll to discover</span>
@@ -184,28 +197,48 @@ export default function HomePage() {
                     <p className={styles.aiBannerBody}>Experience the future of high jewellery. Let our AI studio guide you in translating your finest visions into a precise design brief — meticulously brought to life by our master goldsmiths.</p>
                     <Link href="/ai-studio/step-1" className={styles.aiCta}>Begin Your Legacy ✦</Link>
                 </div>
+                {/* Cinematic video panel */}
                 <div className={styles.aiBannerRight}>
-                    <div className={styles.aiRings}>
-                        <div className={styles.aiRing1} />
-                        <div className={styles.aiRing2} />
-                        <div className={styles.aiRing3} />
-                        <div className={styles.aiDiamond}>
-                            <svg width="64" height="76" viewBox="0 0 64 76" fill="rgba(201,169,110,0.18)" stroke="#C9A96E" strokeWidth="0.6">
-                                <polygon points="32,4 62,22 52,72 12,72 2,22" />
-                                <polygon points="32,4 52,22 32,34 12,22" />
-                                <line x1="12" y1="22" x2="52" y2="22" />
-                            </svg>
-                        </div>
+                    <video
+                        className={styles.aiBannerVideo}
+                        src="https://videos.pexels.com/video-files/3129671/3129671-hd_1920_1080_25fps.mp4"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="auto"
+                    />
+                    <div className={styles.aiBannerVideoOverlay} />
+                    {/* Subtle diamond watermark over video */}
+                    <div className={styles.aiDiamondOverVideo}>
+                        <svg width="64" height="76" viewBox="0 0 64 76" fill="rgba(201,169,110,0.15)" stroke="rgba(201,169,110,0.6)" strokeWidth="0.8">
+                            <polygon points="32,4 62,22 52,72 12,72 2,22" />
+                            <polygon points="32,4 52,22 32,34 12,22" />
+                            <line x1="12" y1="22" x2="52" y2="22" />
+                        </svg>
                     </div>
                 </div>
             </section>
 
             {/* ── Bespoke CTA ───────────────────────── */}
             <section className={styles.bespokeCta}>
-                <span className={styles.eyebrow}>The Ultimate Expression</span>
-                <h2 className={styles.sectionH2}>Commission a masterpiece,<br />uniquely yours.</h2>
-                <p className={styles.bespokeBody}>At Riolls Jewels, every bespoke creation is an intimate collaboration. Handcrafted with paramount respect for your vision, resulting in a timeless heirloom of unparalleled luxury.</p>
-                <Link href="/bespoke" className={styles.bespokeBtn}>Commission Your Masterpiece</Link>
+                {/* Cinematic dark video background */}
+                <video
+                    className={styles.bespokeVideo}
+                    src="https://res.cloudinary.com/dl6cdbdzl/video/upload/v1772650014/14788078_2560_1440_30fps_ilmluc.mp4"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="auto"
+                />
+                <div className={styles.bespokeOverlay} />
+                <div className={styles.bespokeContent}>
+                    <span className={styles.eyebrowLight}>The Ultimate Expression</span>
+                    <h2 className={styles.sectionH2Light}>Commission a masterpiece,<br />uniquely yours.</h2>
+                    <p className={styles.bespokeBodyLight}>At Riolls Jewels, every bespoke creation is an intimate collaboration. Handcrafted with paramount respect for your vision, resulting in a timeless heirloom of unparalleled luxury.</p>
+                    <Link href="/bespoke" className={styles.bespokeBtnGold}>Commission Your Masterpiece</Link>
+                </div>
             </section>
         </>
     );

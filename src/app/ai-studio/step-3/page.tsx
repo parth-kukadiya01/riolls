@@ -47,7 +47,7 @@ const gradients = [
 
 export default function AIStep3() {
     const router = useRouter();
-    const { state, generateIdeas, setSelectedConcept } = useAIStudio();
+    const { state, generateIdeas, setSelectedConcept, generateVariations, updateProfile } = useAIStudio();
 
     const isHipHop = (Array.isArray(state.profile.pieceType) ? state.profile.pieceType[0] : state.profile.pieceType) === 'Hip Hop / Iced Out';
     const msgs = isHipHop ? loadingMessagesHipHop : loadingMessages;
@@ -55,6 +55,9 @@ export default function AIStep3() {
 
     const [phase, setPhase] = useState<'loading' | 'results' | 'error'>('loading');
     const [msgIdx, setMsgIdx] = useState(0);
+
+    const [showVariationPrompt, setShowVariationPrompt] = useState(false);
+    const [variationNotes, setVariationNotes] = useState('');
 
     useEffect(() => {
         if (state.generatedConcepts.length === 0 && !state.isGenerating && !state.error) {
@@ -126,9 +129,9 @@ export default function AIStep3() {
                             {state.error || "We encountered an issue while crafting your designs. Our AI goldsmith needs a moment."}
                         </p>
                     </div>
-                    <div className={styles.resultsActions} style={{ marginTop: '1rem' }}>
-                        <button className={styles.regenBtn} onClick={() => { setPhase('loading'); generateIdeas(); }}>
-                            Try Again
+                    <div className={styles.resultsActions} style={{ marginTop: '1rem', justifyContent: 'center' }}>
+                        <button className={styles.backBtn} onClick={() => router.push('/ai-studio/step-2')}>
+                            ← Back to Style Profile
                         </button>
                     </div>
                 </div>
@@ -194,17 +197,101 @@ export default function AIStep3() {
                         </div>
                     )}
 
-                    <div className={styles.resultsActions} style={{ marginTop: '4rem' }}>
-                        <button className={styles.regenBtn} onClick={() => { setPhase('loading'); generateIdeas(); }}>
-                            ↻ Regenerate
-                        </button>
-                        <Link
-                            href="/ai-studio/step-4"
-                            className={`${styles.continueBtn} ${state.selectedConceptIndex === null ? styles.continueBtnDisabled : ''}`}
-                        >
-                            Customise This Design →
-                        </Link>
-                    </div>
+                    {state.isGenerating && (
+                        <div className={styles.loading} style={{ position: 'relative', minHeight: '300px', marginTop: '3rem', height: 'auto', background: 'transparent' }}>
+                            <div className={styles.loaderAssembly} style={{ marginBottom: '2rem' }}>
+                                <div className={styles.loaderRing}></div>
+                                <div className={styles.loaderRing2}></div>
+                                <div className={styles.loadingDiamond}>
+                                    <svg width="60" height="72" viewBox="0 0 80 96" fill="rgba(201,169,110,0.15)" stroke="#C9A96E" strokeWidth="1">
+                                        <polygon points="40,4 76,24 62,92 18,92 4,24" />
+                                        <polygon points="40,4 62,24 40,36 18,24" />
+                                        <line x1="18" y1="24" x2="62" y2="24" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div className={styles.loadingMsgContainer}>
+                                <h3 className={styles.loadingMsg} style={{ fontSize: '1.2rem' }}>{msgs[msgIdx]}</h3>
+                                <div className={styles.dots} style={{ marginTop: '0.5rem' }}>
+                                    <span className={styles.dot} />
+                                    <span className={styles.dot} />
+                                    <span className={styles.dot} />
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {!state.isGenerating && (
+                        <div className={styles.resultsActions} style={{ marginTop: '4rem', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
+                            <Link
+                                href="/ai-studio/step-4"
+                                className={`${styles.continueBtn} ${state.selectedConceptIndex === null ? styles.continueBtnDisabled : ''}`}
+                                style={{ width: '100%', maxWidth: '400px' }}
+                            >
+                                Customise This Design →
+                            </Link>
+
+                            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center', width: '100%' }}>
+                                {!showVariationPrompt ? (
+                                    <button
+                                        className={styles.regenBtn}
+                                        onClick={() => setShowVariationPrompt(true)}
+                                    >
+                                        ✧ Explore Different Variations
+                                    </button>
+                                ) : null}
+                                <button
+                                    className={styles.backBtn}
+                                    onClick={() => router.push('/ai-studio/step-2')}
+                                    style={{ margin: 0 }}
+                                >
+                                    ← Change My Preferences
+                                </button>
+                            </div>
+
+                            {showVariationPrompt && (
+                                <div className={styles.variationPromptContainer}>
+                                    <p className={styles.variationPromptText}>
+                                        To help our AI goldsmith perfectly refine your vision, please respectfully share what specific details you would like to adjust or explore in these new variations:
+                                    </p>
+                                    <textarea
+                                        className={styles.variationTextarea}
+                                        value={variationNotes}
+                                        onChange={(e) => setVariationNotes(e.target.value)}
+                                        placeholder="e.g., 'Make the band slightly thicker', 'Try a more vintage aesthetic', or 'Focus more on the diamond cluster...'"
+                                    />
+                                    <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                                        <button
+                                            className={styles.backBtn}
+                                            onClick={() => setShowVariationPrompt(false)}
+                                            style={{ margin: 0 }}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            className={styles.regenBtn}
+                                            onClick={() => {
+                                                if (variationNotes.trim()) {
+                                                    const currentNotes = (state.profile.additionalNotes as string) || '';
+                                                    const updatedNotes = currentNotes
+                                                        ? `${currentNotes}\n\nClient Revision Details: ${variationNotes}`
+                                                        : `Client Revision Details: ${variationNotes}`;
+                                                    updateProfile({ additionalNotes: updatedNotes });
+                                                }
+                                                setShowVariationPrompt(false);
+                                                setVariationNotes('');
+                                                generateVariations();
+                                            }}
+                                            disabled={!variationNotes.trim()}
+                                            style={{ opacity: !variationNotes.trim() ? 0.5 : 1 }}
+                                        >
+                                            Submit Revision →
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
             )}
         </div>
