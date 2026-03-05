@@ -15,6 +15,7 @@ interface ProtectedImageProps extends React.ImgHTMLAttributes<HTMLImageElement> 
  * 2. Disables right-click context menu (blocks "Save Image As")
  * 3. Disables drag (blocks drag-to-desktop saving)
  * 4. Sets draggable=false
+ * 5. Safely lazy loads out-of-viewport images
  */
 export default function ProtectedImage({
     src,
@@ -22,6 +23,7 @@ export default function ProtectedImage({
     unprotected = false,
     style,
     className,
+    loading = "lazy",
     ...rest
 }: ProtectedImageProps) {
     // Encode the real URL so it's not visible to users
@@ -42,6 +44,8 @@ export default function ProtectedImage({
             onContextMenu={blockEvent}
             onDragStart={blockEvent}
             className={className}
+            loading={loading}
+            decoding="async"
             style={{
                 userSelect: 'none',
                 WebkitUserSelect: 'none',

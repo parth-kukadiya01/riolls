@@ -55,7 +55,7 @@ export default function AdminOrders() {
     }, [page, statusFilter]);
 
     const formatCurrency = (val: number) => {
-        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', minimumFractionDigits: 2 }).format(val);
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(val);
     };
 
     return (
@@ -129,7 +129,7 @@ export default function AdminOrders() {
                                             </Link>
                                         </td>
                                         <td>
-                                            {new Date(order.createdAt).toLocaleDateString('en-GB', {
+                                            {new Date(order.createdAt).toLocaleDateString('en-US', {
                                                 day: '2-digit', month: 'short', year: 'numeric'
                                             })}
                                         </td>

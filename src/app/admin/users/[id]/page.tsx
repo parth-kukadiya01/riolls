@@ -59,7 +59,7 @@ export default function AdminUserDetails({ params }: { params: Promise<{ id: str
     const { profile, orders } = data;
 
     const formatCurrency = (val: number) => {
-        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', minimumFractionDigits: 2 }).format(val);
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(val);
     };
 
     const getInitials = (first: string, last: string) => {
@@ -82,7 +82,7 @@ export default function AdminUserDetails({ params }: { params: Promise<{ id: str
                         </span>
                     </div>
                     <p className={styles.subtitle}>
-                        Customer since {new Date(profile.createdAt).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}
+                        Customer since {new Date(profile.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                     </p>
                 </div>
             </div>
@@ -162,7 +162,7 @@ export default function AdminUserDetails({ params }: { params: Promise<{ id: str
                                                         {order.orderNumber}
                                                     </Link>
                                                 </td>
-                                                <td>{new Date(order.createdAt).toLocaleDateString('en-GB')}</td>
+                                                <td>{new Date(order.createdAt).toLocaleDateString('en-US')}</td>
                                                 <td>{order.items || '-'}</td>
                                                 <td>{formatCurrency(order.total)}</td>
                                                 <td>

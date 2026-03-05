@@ -36,7 +36,7 @@ export default function BlogPostPage() {
     };
 
     const formatDate = (iso?: string) =>
-        iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+        iso ? new Date(iso).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
 
     if (status === 'loading') {
         return (

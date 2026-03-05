@@ -62,7 +62,7 @@ export default function AdminDashboard() {
             return;
         }
 
-        if (!confirm(`Are you sure you want to update all product prices based on £${goldPrice}/g?`)) {
+        if (!confirm(`Are you sure you want to update all product prices based on $${goldPrice}/g?`)) {
             return;
         }
 
@@ -93,7 +93,7 @@ export default function AdminDashboard() {
     const maxChartValue = Math.max(...(data.revenueChart?.data || [1]));
 
     const formatCurrency = (val: number) => {
-        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(val);
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(val);
     };
 
     return (
@@ -173,7 +173,7 @@ export default function AdminDashboard() {
                     </div>
                     <div className={styles.goldInputGroup}>
                         <div className={styles.inputWrapper}>
-                            <span className={styles.currencyPrefix}>£</span>
+                            <span className={styles.currencyPrefix}>$</span>
                             <input
                                 type="number"
                                 step="0.01"
@@ -281,7 +281,7 @@ export default function AdminDashboard() {
                                                 {order.orderNumber}
                                             </Link>
                                         </td>
-                                        <td>{new Date(order.createdAt).toLocaleDateString('en-GB')}</td>
+                                        <td>{new Date(order.createdAt).toLocaleDateString('en-US')}</td>
                                         <td>{formatCurrency(order.total)}</td>
                                         <td>
                                             <span className={`${styles.status} ${styles[order.status.toLowerCase().replace(' ', '-')]}`}>

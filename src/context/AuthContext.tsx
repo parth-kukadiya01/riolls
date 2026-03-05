@@ -49,7 +49,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
         const stored = getToken();
         if (stored) {
-            setTokenState(stored);
             userApi
                 .getProfile()
                 .then((res: any) => setUser(res.data))

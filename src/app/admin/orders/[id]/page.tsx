@@ -126,7 +126,7 @@ export default function AdminOrderDetails({ params }: { params: Promise<{ id: st
     if (!order) return null;
 
     const formatCurrency = (val: number) => {
-        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', minimumFractionDigits: 2 }).format(val);
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(val);
     };
 
     const user = typeof order.userId === 'object' ? order.userId : null;
@@ -145,7 +145,7 @@ export default function AdminOrderDetails({ params }: { params: Promise<{ id: st
                         </span>
                     </div>
                     <p className={styles.subtitle}>
-                        Placed on {new Date(order.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                        Placed on {new Date(order.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                     </p>
                 </div>
                 <div className={styles.headerActions}>

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { notFound, useParams } from 'next/navigation';
-import { getProductBySlug, PRODUCTS } from '@/lib/products';
 import { productsApi } from '@/lib/api';
 import PDPClient from './PDPClient';
 
@@ -16,15 +15,7 @@ export default function ProductPage() {
     useEffect(() => {
         if (!slug) return;
 
-        // 1. Try static data first (instant)
-        const staticProduct = getProductBySlug(slug);
-        if (staticProduct) {
-            setProduct(staticProduct);
-            setStatus('found');
-            return;
-        }
-
-        // 2. Fetch from backend API (for products added via admin panel)
+        // Fetch from backend API
         productsApi
             .getBySlug(slug)
             .then((res: any) => {

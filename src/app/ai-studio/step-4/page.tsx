@@ -164,7 +164,7 @@ export default function AIStep4() {
                     </div>
                     <div className={styles.priceEstimate}>
                         <span className={styles.priceLabel}>Estimated Range</span>
-                        <span className={styles.priceValue}>£{low.toLocaleString()} – £{high.toLocaleString()}</span>
+                        <span className={styles.priceValue}>${low.toLocaleString()} – ${high.toLocaleString()}</span>
                     </div>
                 </div>
 

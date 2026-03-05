@@ -56,7 +56,7 @@ export default function AdminUsers() {
     const paginatedUsers = filteredUsers.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
     const formatCurrency = (val: number) => {
-        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(val);
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(val);
     };
 
     const getInitials = (first: string, last: string) => {
@@ -125,7 +125,7 @@ export default function AdminUsers() {
                                     </td>
                                     <td>{user.ordersCount}</td>
                                     <td>{formatCurrency(user.totalSpent)}</td>
-                                    <td>{new Date(user.createdAt).toLocaleDateString('en-GB')}</td>
+                                    <td>{new Date(user.createdAt).toLocaleDateString('en-US')}</td>
                                     <td style={{ textAlign: 'right' }}>
                                         <Link href={`/admin/users/${user._id}`} className={styles.actionBtn}>
                                             View Profile
