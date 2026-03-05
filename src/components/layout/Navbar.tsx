@@ -187,7 +187,7 @@ export default function Navbar() {
                             <span className={styles.megaTitle}>Community</span>
                             <Link href="/reviews">Customer Reviews</Link>
                             <Link href="/reviews#write">Write a Review</Link>
-                            <Link href="/bespoke">Book a Consultation</Link>
+                            <Link href="/contact">Book a Consultation</Link>
                         </div>
                         <div className={styles.megaCol}>
                             <span className={styles.megaTitle}>Quick Links</span>

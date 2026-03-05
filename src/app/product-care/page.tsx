@@ -56,7 +56,7 @@ export default function ProductCarePage() {
                         <p className={styles.ctaText}>
                             We know how much meaning your favourite pieces hold and offer a range of services to keep your pieces as beautiful as day one, including cleaning, polishing, fit alterations and more.
                         </p>
-                        <Link href="/bespoke" className={styles.ctaBtn}>
+                        <Link href="/contact" className={styles.ctaBtn}>
                             Book an Appointment
                         </Link>
                     </div>

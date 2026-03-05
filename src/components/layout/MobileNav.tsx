@@ -12,15 +12,20 @@ interface Props {
     onClose: () => void;
 }
 
+const Chevron = () => (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <polyline points="6 9 12 15 18 9" />
+    </svg>
+);
+
 export default function MobileNav({ isOpen, onClose }: Props) {
     const { totalItems, openCart } = useCart();
     const { user, logout } = useAuth();
     const router = useRouter();
-    const [expandedSection, setExpandedSection] = useState<string | null>('shop');
+    const [expanded, setExpanded] = useState<string | null>(null);
 
-    const toggle = (section: string) => {
-        setExpandedSection(prev => prev === section ? null : section);
-    };
+    const toggle = (section: string) =>
+        setExpanded(prev => prev === section ? null : section);
 
     const handleLogout = () => {
         logout();
@@ -31,128 +36,153 @@ export default function MobileNav({ isOpen, onClose }: Props) {
     return (
         <>
             {/* Backdrop */}
-            <div
-                className={`${styles.backdrop} ${isOpen ? styles.open : ''}`}
-                onClick={onClose}
-            />
+            <div className={`${styles.backdrop} ${isOpen ? styles.open : ''}`} onClick={onClose} />
 
-            {/* Overlay */}
+            {/* Slide-in panel */}
             <nav className={`${styles.overlay} ${isOpen ? styles.open : ''}`} aria-label="Mobile navigation">
+
+                {/* ── Header ── */}
                 <div className={styles.header}>
-                    <button className={styles.closeBtn} onClick={onClose} aria-label="Close menu">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <button className={styles.iconBtn} onClick={onClose} aria-label="Close menu">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                             <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
                         </svg>
                     </button>
-                    <span className={styles.headerLogo}>RIOLLS JEWELS</span>
-                    <button className={styles.cartIcon} onClick={() => { onClose(); openCart(); }} aria-label="Cart">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <Link href="/" className={styles.headerLogo} onClick={onClose}>RIOLLS JEWELS</Link>
+                    <button className={styles.iconBtn} onClick={() => { onClose(); openCart(); }} aria-label="Cart">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                             <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
-                            <line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 01-8 0" />
+                            <line x1="3" y1="6" x2="21" y2="6" />
+                            <path d="M16 10a4 4 0 01-8 0" />
                         </svg>
                         {totalItems > 0 && <span className={styles.badge}>{totalItems}</span>}
                     </button>
                 </div>
 
-                {/* Auth greeting */}
-                {user && (
-                    <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid var(--border)', fontSize: '0.85rem', color: 'var(--stone)' }}>
-                        Signed in as <strong style={{ color: 'var(--charcoal)' }}>{user.firstName} {user.lastName}</strong>
-                    </div>
-                )}
-
+                {/* ── Scrollable nav items ── */}
                 <div className={styles.items}>
-                    {/* Shop acc */}
-                    <div className={styles.item}>
-                        <div className={styles.mainLink} onClick={() => toggle('shop')}>
-                            Shop
-                            <span className={`${styles.accIcon} ${expandedSection === 'shop' ? styles.open : ''}`}>+</span>
-                        </div>
-                        {expandedSection === 'shop' && (
-                            <div className={styles.subItems}>
-                                <Link href="/shop?cat=rings" className={styles.subLink} onClick={onClose}>Rings</Link>
-                                <Link href="/shop?cat=necklaces" className={styles.subLink} onClick={onClose}>Necklaces</Link>
-                                <Link href="/shop?cat=earrings" className={styles.subLink} onClick={onClose}>Earrings</Link>
-                                <Link href="/shop?cat=bracelets" className={styles.subLink} onClick={onClose}>Bracelets</Link>
-                                <Link href="/shop" className={styles.subLink} onClick={onClose}>All Jewellery</Link>
-                            </div>
-                        )}
-                    </div>
 
-                    {/* Collections acc */}
-                    <div className={styles.item}>
-                        <div className={styles.mainLink} onClick={() => toggle('col')}>
-                            Collections
-                            <span className={`${styles.accIcon} ${expandedSection === 'col' ? styles.open : ''}`}>+</span>
-                        </div>
-                        {expandedSection === 'col' && (
-                            <div className={styles.subItems}>
-                                <Link href="/shop?cat=rings" className={styles.subLink} onClick={onClose}>Rings</Link>
-                                <Link href="/shop?cat=necklaces" className={styles.subLink} onClick={onClose}>Necklaces</Link>
-                                <Link href="/shop?cat=earrings" className={styles.subLink} onClick={onClose}>Earrings</Link>
-                                <Link href="/shop?cat=bracelets" className={styles.subLink} onClick={onClose}>Bracelets</Link>
-                                <Link href="/shop?badge=New+In" className={styles.subLink} onClick={onClose}>New In</Link>
-                                <Link href="/shop?badge=Last+Piece" className={styles.subLink} onClick={onClose}>Last Pieces</Link>
-                            </div>
-                        )}
-                    </div>
-
-                    <div className={styles.item}>
-                        <Link href="/ai-studio/step-1" className={`${styles.mainLink} ${styles.gold}`} onClick={onClose}>
-                            AI Studio ✦
+                    {/* AI Studio — featured pill */}
+                    <div className={styles.featuredItem}>
+                        <Link href="/ai-studio/step-1" className={styles.aiLink} onClick={onClose}>
+                            <span className={styles.aiIcon}>✦</span>
+                            AI Studio
+                            <span className={styles.aiTag}>New</span>
                         </Link>
                     </div>
+
+                    <div className={styles.divider} />
+
+                    {/* Shop */}
                     <div className={styles.item}>
-                        <Link href="/bespoke" className={styles.mainLink} onClick={onClose}>Bespoke</Link>
+                        <button className={styles.mainLink} onClick={() => toggle('shop')}>
+                            <span>Shop</span>
+                            <span className={`${styles.chevron} ${expanded === 'shop' ? styles.chevronOpen : ''}`}><Chevron /></span>
+                        </button>
+                        <div className={`${styles.subItems} ${expanded === 'shop' ? styles.subItemsOpen : ''}`}>
+                            <Link href="/shop?cat=rings" className={styles.subLink} onClick={onClose}><span className={styles.subDot} />Rings</Link>
+                            <Link href="/shop?cat=necklaces" className={styles.subLink} onClick={onClose}><span className={styles.subDot} />Necklaces</Link>
+                            <Link href="/shop?cat=earrings" className={styles.subLink} onClick={onClose}><span className={styles.subDot} />Earrings</Link>
+                            <Link href="/shop?cat=bracelets" className={styles.subLink} onClick={onClose}><span className={styles.subDot} />Bracelets</Link>
+                            <Link href="/shop" className={`${styles.subLink} ${styles.subLinkAll}`} onClick={onClose}>View All →</Link>
+                        </div>
                     </div>
+
+                    {/* Collections */}
                     <div className={styles.item}>
-                        <Link href="/about" className={styles.mainLink} onClick={onClose}>Our Story</Link>
+                        <button className={styles.mainLink} onClick={() => toggle('col')}>
+                            <span>Collections</span>
+                            <span className={`${styles.chevron} ${expanded === 'col' ? styles.chevronOpen : ''}`}><Chevron /></span>
+                        </button>
+                        <div className={`${styles.subItems} ${expanded === 'col' ? styles.subItemsOpen : ''}`}>
+                            <Link href="/shop?badge=New+In" className={styles.subLink} onClick={onClose}><span className={styles.subDot} />New In</Link>
+                            <Link href="/shop?badge=Last+Piece" className={styles.subLink} onClick={onClose}><span className={styles.subDot} />Last Pieces</Link>
+                            <Link href="/shop?badge=Best+Seller" className={styles.subLink} onClick={onClose}><span className={styles.subDot} />Best Sellers</Link>
+                            <Link href="/shop?badge=Bridal" className={styles.subLink} onClick={onClose}><span className={styles.subDot} />Bridal &amp; Engagement</Link>
+                            <Link href="/shop?badge=High+Jewellery" className={styles.subLink} onClick={onClose}><span className={styles.subDot} />High Jewellery</Link>
+                        </div>
                     </div>
+
+                    {/* Bespoke */}
+                    <div className={styles.item}>
+                        <Link href="/bespoke" className={styles.mainLink} onClick={onClose}><span>Bespoke</span></Link>
+                    </div>
+
+                    {/* Journal */}
+                    <div className={styles.item}>
+                        <button className={styles.mainLink} onClick={() => toggle('journal')}>
+                            <span>Journal</span>
+                            <span className={`${styles.chevron} ${expanded === 'journal' ? styles.chevronOpen : ''}`}><Chevron /></span>
+                        </button>
+                        <div className={`${styles.subItems} ${expanded === 'journal' ? styles.subItemsOpen : ''}`}>
+                            <Link href="/blog" className={styles.subLink} onClick={onClose}><span className={styles.subDot} />All Articles</Link>
+                            <Link href="/blog?category=Guides" className={styles.subLink} onClick={onClose}><span className={styles.subDot} />Guides</Link>
+                            <Link href="/blog?category=Behind the Craft" className={styles.subLink} onClick={onClose}><span className={styles.subDot} />Behind the Craft</Link>
+                            <Link href="/blog?category=Inspiration" className={styles.subLink} onClick={onClose}><span className={styles.subDot} />Inspiration</Link>
+                        </div>
+                    </div>
+
+                    {/* Our Story */}
+                    <div className={styles.item}>
+                        <Link href="/about" className={styles.mainLink} onClick={onClose}><span>Our Story</span></Link>
+                    </div>
+
+                    {/* Contact */}
+                    <div className={styles.item}>
+                        <Link href="/contact" className={styles.mainLink} onClick={onClose}><span>Contact</span></Link>
+                    </div>
+
+                    <div className={styles.divider} style={{ marginTop: '6px' }} />
+
+                    {/* Account — accordion (with Sign Out inside) */}
+                    {user ? (
+                        <div className={styles.item}>
+                            <button className={styles.mainLink} onClick={() => toggle('account')}>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <span className={styles.avatarDot}>{user.firstName[0]}{user.lastName[0]}</span>
+                                    My Account
+                                </span>
+                                <span className={`${styles.chevron} ${expanded === 'account' ? styles.chevronOpen : ''}`}><Chevron /></span>
+                            </button>
+                            <div className={`${styles.subItems} ${expanded === 'account' ? styles.subItemsOpen : ''}`}>
+                                <Link href="/profile" className={styles.subLink} onClick={onClose}><span className={styles.subDot} />Profile</Link>
+                                <Link href="/profile?tab=orders" className={styles.subLink} onClick={onClose}><span className={styles.subDot} />My Orders</Link>
+                                <Link href="/profile?tab=wishlist" className={styles.subLink} onClick={onClose}><span className={styles.subDot} />Wishlist</Link>
+                                <button
+                                    onClick={handleLogout}
+                                    className={`${styles.subLink} ${styles.signOutLink}`}
+                                    style={{ width: '100%', background: 'none', border: 'none', cursor: 'pointer', font: 'inherit', textAlign: 'left' }}
+                                >
+                                    <span className={styles.subDot} />Sign Out
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className={styles.item}>
+                            <button className={styles.mainLink} onClick={() => toggle('account')}>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" />
+                                    </svg>
+                                    Account
+                                </span>
+                                <span className={`${styles.chevron} ${expanded === 'account' ? styles.chevronOpen : ''}`}><Chevron /></span>
+                            </button>
+                            <div className={`${styles.subItems} ${expanded === 'account' ? styles.subItemsOpen : ''}`}>
+                                <Link href="/login" className={styles.subLink} onClick={onClose}><span className={styles.subDot} />Sign In</Link>
+                                <Link href="/signup" className={styles.subLink} onClick={onClose}><span className={styles.subDot} />Create Account</Link>
+                            </div>
+                        </div>
+                    )}
                 </div>
 
+                {/* ── Bottom bar (social only) ── */}
                 <div className={styles.bottom}>
-                    <div className={styles.utils}>
-                        <Link href="/search" className={styles.utilLink} onClick={onClose}>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
-                            </svg>
-                            Search
-                        </Link>
-
-                        {/* Auth links at bottom */}
-                        {user ? (
-                            <>
-                                <Link href="/profile" className={styles.utilLink} onClick={onClose}>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" />
-                                    </svg>
-                                    My Account
-                                </Link>
-                                <button className={styles.utilLink} onClick={handleLogout} style={{ background: 'none', border: 'none', cursor: 'pointer', font: 'inherit', padding: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" />
-                                    </svg>
-                                    Sign Out
-                                </button>
-                            </>
-                        ) : (
-                            <>
-                                <Link href="/login" className={styles.utilLink} onClick={onClose}>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" />
-                                    </svg>
-                                    Sign In
-                                </Link>
-                                <Link href="/signup" className={styles.utilLink} onClick={onClose}>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                        <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><line x1="19" y1="8" x2="19" y2="14" /><line x1="22" y1="11" x2="16" y2="11" />
-                                    </svg>
-                                    Register
-                                </Link>
-                            </>
-                        )}
+                    <div className={styles.socialRow}>
+                        <a href="https://instagram.com" target="_blank" rel="noreferrer" className={styles.socialLink}>Instagram</a>
+                        <span className={styles.socialSep}>·</span>
+                        <a href="https://pinterest.com" target="_blank" rel="noreferrer" className={styles.socialLink}>Pinterest</a>
                     </div>
-                    <span className={styles.social}>Instagram &nbsp;·&nbsp; Pinterest</span>
                 </div>
             </nav>
         </>
