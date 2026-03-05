@@ -21,6 +21,7 @@ export interface AIStudioState {
     error: string | null;
     galleryReference: { name: string; image: string; type: string } | null;
     revisionCount: number;
+    generationStatus: { used: number; limit: number; remaining: number } | null;
 }
 
 interface AIStudioContextType {
@@ -32,6 +33,7 @@ interface AIStudioContextType {
     submitQuote: (contactData: Record<string, string>) => Promise<boolean>;
     setGalleryReference: (piece: { name: string; image: string; type: string } | null) => void;
     generateVariations: () => Promise<boolean>;
+    fetchGenerationStatus: () => Promise<void>;
     reset: () => void;
 }
 
@@ -46,6 +48,7 @@ const initialState: AIStudioState = {
     error: null,
     galleryReference: null,
     revisionCount: 0,
+    generationStatus: null,
 };
 
 const AIStudioContext = createContext<AIStudioContextType | undefined>(undefined);
@@ -141,6 +144,17 @@ export function AIStudioProvider({ children }: { children: ReactNode }) {
         return generateIdeas(undefined, nextRevisionCount);
     };
 
+    const fetchGenerationStatus = async () => {
+        try {
+            const res = await aiStudioApi.getGenerationStatus();
+            if (res.success && res.data) {
+                setState(prev => ({ ...prev, generationStatus: res.data as { used: number; limit: number; remaining: number } }));
+            }
+        } catch {
+            // Silent fail — status is optional UI enhancement
+        }
+    };
+
     const submitQuote = async (contactData: Record<string, string>) => {
         try {
             // Combine everything into the payload expected by the backend QuoteRequest
@@ -187,7 +201,7 @@ export function AIStudioProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <AIStudioContext.Provider value={{ state, updateProfile, updateCustomisations, setSelectedConcept, generateIdeas, submitQuote, setGalleryReference, generateVariations, reset }}>
+        <AIStudioContext.Provider value={{ state, updateProfile, updateCustomisations, setSelectedConcept, generateIdeas, submitQuote, setGalleryReference, generateVariations, fetchGenerationStatus, reset }}>
             {children}
         </AIStudioContext.Provider>
     );
