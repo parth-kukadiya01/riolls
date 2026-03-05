@@ -26,6 +26,7 @@ export default function HomePage() {
     const [featuredProducts, setFeatured] = useState<any[]>([]);
     const [loadedCats, setLoadedCats] = useState(false);
     const [loadedProducts, setLoadedProducts] = useState(false);
+    const [showAllCollections, setShowAllCollections] = useState(false);
 
     // Fetch categories and featured products concurrently
     useEffect(() => {
@@ -84,9 +85,9 @@ export default function HomePage() {
                 <div className={styles.heroOverlay} />
                 <div className={styles.heroContent}>
                     <div className={styles.heroEyebrow}>
-                        <span className={styles.heroLineLight} />
+                        {/* <span className={styles.heroLineLight} /> */}
                         <span className={styles.heroEyebrowTextLight}>A Legacy of Trust &amp; Excellence • Est. Surat, 2008</span>
-                        <span className={styles.heroLineLight} />
+                        {/* <span className={styles.heroLineLight} /> */}
                     </div>
                     <h1 className={styles.heroH1Video}>
                         Where your legacy becomes <br />
@@ -124,14 +125,14 @@ export default function HomePage() {
                     <span className={styles.eyebrow}>Curated Elegance</span>
                     <h2 className={styles.sectionH2}>Discover an exquisite realm of fine jewellery.</h2>
                 </div>
-                <div className={styles.collectionsGrid}>
+                <div className={`${styles.collectionsGrid} ${!showAllCollections ? styles.collectionsGridCollapsed : ''}`}>
                     {!loadedCats ? (
                         <p style={{ gridColumn: '1/-1', textAlign: 'center', opacity: 0.6, padding: '2rem' }}>Loading collections…</p>
                     ) : collections.length === 0 ? (
                         <p style={{ gridColumn: '1/-1', textAlign: 'center', opacity: 0.6, padding: '2rem' }}>
                             Our collection is being updated. <Link href="/shop">Browse all pieces →</Link>
                         </p>
-                    ) : collections.map(col => {
+                    ) : (showAllCollections ? collections : collections.slice(0, 4)).map((col, index) => {
                         const slug = col.slug ?? col.name?.toLowerCase().replace(/\s+/g, '-');
                         const grad = CAT_GRADS[slug] ?? CAT_GRADS.default;
                         const count = col.productCount != null
@@ -152,6 +153,17 @@ export default function HomePage() {
                         );
                     })}
                 </div>
+
+                {loadedCats && collections.length > 4 && (
+                    <div className={styles.showMoreWrap}>
+                        <button
+                            className={styles.showMoreBtn}
+                            onClick={() => setShowAllCollections(prev => !prev)}
+                        >
+                            {showAllCollections ? 'Show Less' : 'Show More'}
+                        </button>
+                    </div>
+                )}
             </section>
 
             {/* ── Featured Products ─────────────────── */}

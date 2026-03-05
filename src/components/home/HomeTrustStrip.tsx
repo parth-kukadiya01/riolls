@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './HomeTrustStrip.module.css';
 
 export default function HomeTrustStrip() {
     const features = [
@@ -45,54 +46,17 @@ export default function HomeTrustStrip() {
     ];
 
     return (
-        <section style={{
-            background: 'var(--cream, #F9F5F0)',
-            padding: '48px 24px',
-            borderTop: '1px solid var(--border)',
-            borderBottom: '1px solid var(--border)'
-        }}>
-            <div style={{
-                maxWidth: '1200px',
-                margin: '0 auto',
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-                gap: '32px',
-                textAlign: 'center'
-            }}>
+        <section className={styles.section}>
+            <div className={styles.grid}>
                 {features.map((f, i) => (
-                    <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <div style={{
-                            width: '48px',
-                            height: '48px',
-                            borderRadius: '50%',
-                            background: 'var(--white)',
-                            border: '1px solid var(--border)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            marginBottom: '16px',
-                            color: 'var(--gold)'
-                        }}>
+                    <div key={i} className={styles.feature}>
+                        <div className={styles.iconWrap}>
                             {f.icon}
                         </div>
-                        <h3 style={{
-                            fontFamily: 'var(--font-sc)',
-                            fontSize: '12px',
-                            letterSpacing: '0.15em',
-                            fontWeight: 600,
-                            color: 'var(--charcoal)',
-                            marginBottom: '8px',
-                            textTransform: 'uppercase'
-                        }}>
+                        <h3 className={styles.title}>
                             {f.title}
                         </h3>
-                        <p style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '14px',
-                            color: 'var(--stone)',
-                            lineHeight: 1.5,
-                            margin: 0
-                        }}>
+                        <p className={styles.desc}>
                             {f.desc}
                         </p>
                     </div>

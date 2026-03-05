@@ -158,11 +158,11 @@
 
 /* Gold CTA for dark video backgrounds */
 .ctaGold {
-    padding: 11px 28px;
+    padding: 8px 20px;
     background: #C9A96E;
     color: #0a0804;
     font-family: var(--font-sc);
-    font-size: 10px;
+    font-size: 9px;
     letter-spacing: 0.22em;
     transition: background 0.25s, color 0.25s;
     display: inline-block;
@@ -192,11 +192,11 @@
 
 /* Ghost CTA for dark video backgrounds */
 .ctaGhostLight {
-    padding: 11px 28px;
+    padding: 8px 20px;
     border: 1px solid rgba(201, 169, 110, 0.5);
     color: rgba(248, 245, 238, 0.85);
     font-family: var(--font-sc);
-    font-size: 10px;
+    font-size: 9px;
     letter-spacing: 0.22em;
     transition: all 0.25s;
     display: inline-block;
@@ -320,6 +320,30 @@
     color: rgba(248, 246, 244, 0.7);
     display: block;
     margin-top: 4px;
+}
+
+.showMoreWrap {
+    text-align: center;
+    margin-top: 24px;
+    display: none;
+}
+
+.showMoreBtn {
+    background: transparent;
+    border: 1px solid rgba(201, 169, 110, 0.4);
+    color: var(--charcoal);
+    font-family: var(--font-sc);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    padding: 10px 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+}
+
+.showMoreBtn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
 }
 
 /* Featured */
@@ -616,6 +640,10 @@
         gap: 8px;
     }
 
+    .showMoreWrap {
+        display: block;
+    }
+
     .productsGrid {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
@@ -641,9 +669,17 @@
 
     .ctaDark,
     .ctaGhost {
-        width: 100%;
-        text-align: center;
-        padding: 16px 24px;
+        width: auto;
+        padding: 12px 24px;
+        min-width: 200px;
+    }
+
+    .ctaGold,
+    .ctaGhostLight {
+        width: fit-content;
+        align-self: center;
+        padding: 8px 18px;
+        min-width: unset;
     }
 
     .bespokeBody {
@@ -669,7 +705,8 @@
         gap: 8px;
     }
 
-    .heroEyebrowText {
+    .heroEyebrowText,
+    .heroEyebrowTextLight {
         white-space: normal;
         text-align: center;
         font-size: 9px;
@@ -701,9 +738,11 @@
 
     .aiCta,
     .bespokeBtn {
-        width: 100%;
-        text-align: center;
-        padding: 14px 20px;
+        width: auto;
+        padding: 12px 24px;
+        min-width: 200px;
+        margin: 0 auto;
+        display: block;
     }
 
     .viewAllWrap {
