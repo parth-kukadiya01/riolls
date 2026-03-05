@@ -58,7 +58,7 @@ export default function AdminBespokePage() {
             if (!portfolioRes.ok) throw new Error(portfolioJson.message || 'Failed to load portfolio');
             if (!aiRes.ok) throw new Error(aiJson.message || 'Failed to load AI concepts');
 
-            setWorks((portfolioJson.data as BespokeWork[]) || []);
+            setWorks((portfolioJson.data?.items as BespokeWork[]) || (portfolioJson.data as BespokeWork[]) || []);
             setAiConcepts((aiJson.data as BespokeWork[]) || []);
         } catch (err: any) {
             console.error('Failed to load bespoke works:', err);

@@ -47,31 +47,48 @@ const gradients = [
 
 export default function AIStep3() {
     const router = useRouter();
-    const { state, generateIdeas, setSelectedConcept, generateVariations, updateProfile } = useAIStudio();
+    const { state, generateIdeas, setSelectedConcept, generateVariations, updateProfile, fetchGenerationStatus } = useAIStudio();
 
     const isHipHop = (Array.isArray(state.profile.pieceType) ? state.profile.pieceType[0] : state.profile.pieceType) === 'Hip Hop / Iced Out';
     const msgs = isHipHop ? loadingMessagesHipHop : loadingMessages;
     const subMsgs = isHipHop ? loadingSubMessagesHipHop : loadingSubMessages;
 
-    const [phase, setPhase] = useState<'loading' | 'results' | 'error'>('loading');
+    const [phase, setPhase] = useState<'loading' | 'results' | 'error' | 'limit_reached'>('loading');
     const [msgIdx, setMsgIdx] = useState(0);
 
     const [showVariationPrompt, setShowVariationPrompt] = useState(false);
     const [variationNotes, setVariationNotes] = useState('');
 
     useEffect(() => {
-        if (state.generatedConcepts.length === 0 && !state.isGenerating && !state.error) {
-            generateIdeas();
-        }
+        // Fetch generation status first; if limit reached, show message without generating
+        const init = async () => {
+            await fetchGenerationStatus();
+        };
+        init();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
-        if (state.generatedConcepts.length > 0) {
+        // If status loaded and limit exhausted (and no concepts yet), show limit message
+        if (state.generationStatus && state.generationStatus.remaining === 0 && state.generatedConcepts.length === 0) {
+            setPhase('limit_reached');
+            return;
+        }
+
+        if (state.generatedConcepts.length === 0 && !state.isGenerating && !state.error && phase !== 'limit_reached') {
+            generateIdeas();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [state.generationStatus]);
+
+    useEffect(() => {
+        if (state.error && state.error.toLowerCase().includes('limit')) {
+            setPhase('limit_reached');
+        } else if (state.generatedConcepts.length > 0) {
             setPhase('results');
         } else if (state.error) {
             setPhase('error');
-        } else {
+        } else if (phase !== 'limit_reached') {
             setPhase('loading');
         }
     }, [state.generatedConcepts, state.error, state.isGenerating]);
@@ -80,7 +97,7 @@ export default function AIStep3() {
         if (phase !== 'loading') return;
         const interval = setInterval(() => {
             setMsgIdx(i => i >= loadingMessages.length - 1 ? i : i + 1);
-        }, 3000); // Slower interval for readability
+        }, 3000);
         return () => clearInterval(interval);
     }, [phase]);
 
@@ -109,6 +126,60 @@ export default function AIStep3() {
                             <span className={styles.dot} />
                             <span className={styles.dot} />
                             <span className={styles.dot} />
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {phase === 'limit_reached' && (
+                <div className={styles.loading}>
+                    <div className={styles.loadingDiamond} style={{ animation: 'none', opacity: 0.6 }}>
+                        <svg width="80" height="96" viewBox="0 0 80 96" fill="rgba(201,169,110,0.08)" stroke="#C9A96E" strokeWidth="0.8">
+                            <polygon points="40,4 76,24 62,92 18,92 4,24" />
+                            <polygon points="40,4 62,24 40,36 18,24" />
+                            <line x1="18" y1="24" x2="62" y2="24" />
+                        </svg>
+                    </div>
+                    <div style={{ textAlign: 'center', maxWidth: '480px', padding: '0 1rem' }}>
+                        <h2 className={styles.resultsH2} style={{ textAlign: 'center', marginBottom: '1rem', fontSize: '1.6rem' }}>
+                            Generation Limit Reached
+                        </h2>
+                        <div style={{
+                            background: 'linear-gradient(135deg, rgba(201,169,110,0.12), rgba(201,169,110,0.06))',
+                            border: '1px solid rgba(201,169,110,0.3)',
+                            borderRadius: '12px',
+                            padding: '1.5rem 2rem',
+                            marginBottom: '1.5rem',
+                        }}>
+                            <p style={{ color: 'var(--stone)', fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
+                                You have reached your image generation limit
+                                {state.generationStatus ? ` (${state.generationStatus.used}/${state.generationStatus.limit} used)` : ''}.
+                            </p>
+                            <p style={{ color: 'var(--gold)', fontWeight: 600, fontSize: '1rem', marginTop: '0.75rem', marginBottom: 0 }}>
+                                Please contact the Riolls team to increase your limit.
+                            </p>
+                        </div>
+                        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                            <a
+                                href="mailto:hello@riolls.com"
+                                style={{
+                                    display: 'inline-block',
+                                    padding: '0.75rem 1.75rem',
+                                    background: 'linear-gradient(135deg, #C9A96E, #a8824a)',
+                                    color: '#0a0a0a',
+                                    fontWeight: 700,
+                                    fontSize: '0.9rem',
+                                    letterSpacing: '0.04em',
+                                    borderRadius: '6px',
+                                    textDecoration: 'none',
+                                    textTransform: 'uppercase',
+                                }}
+                            >
+                                Contact Riolls Team
+                            </a>
+                            <button className={styles.backBtn} onClick={() => router.push('/ai-studio/step-2')} style={{ margin: 0 }}>
+                                ← Back to Profile
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -149,6 +220,26 @@ export default function AIStep3() {
                             {state.styleAnalysis}
                         </p>
                     </div>
+
+                    {/* Generation usage indicator */}
+                    {state.generationStatus && (
+                        <div style={{ textAlign: 'center', marginTop: '0.5rem', marginBottom: '0.5rem' }}>
+                            <span style={{
+                                fontSize: '0.8rem',
+                                color: state.generationStatus.remaining === 0 ? '#c0392b' : 'var(--stone)',
+                                background: 'rgba(255,255,255,0.04)',
+                                border: '1px solid rgba(201,169,110,0.15)',
+                                borderRadius: '20px',
+                                padding: '0.3rem 0.9rem',
+                                letterSpacing: '0.03em',
+                            }}>
+                                {state.generationStatus.remaining === 0
+                                    ? '✦ Generation limit reached'
+                                    : `✦ ${state.generationStatus.used} of ${state.generationStatus.limit} generations used`}
+                            </span>
+                        </div>
+                    )}
+
                     <div className={styles.designGrid}>
                         {state.generatedConcepts.map((d, idx) => (
                             <button
@@ -232,13 +323,17 @@ export default function AIStep3() {
                             </Link>
 
                             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center', width: '100%' }}>
-                                {!showVariationPrompt ? (
+                                {!showVariationPrompt && state.generationStatus?.remaining !== 0 ? (
                                     <button
                                         className={styles.regenBtn}
                                         onClick={() => setShowVariationPrompt(true)}
                                     >
                                         ✧ Explore Different Variations
                                     </button>
+                                ) : !showVariationPrompt && state.generationStatus?.remaining === 0 ? (
+                                    <span style={{ fontSize: '0.85rem', color: 'var(--stone)', fontStyle: 'italic' }}>
+                                        Generation limit reached — contact the Riolls team for more.
+                                    </span>
                                 ) : null}
                                 <button
                                     className={styles.backBtn}

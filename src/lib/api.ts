@@ -224,6 +224,7 @@ export const bespokeApi = {
 export const aiStudioApi = {
     generateIdeas: (data: any) => apiFetch('/ai-studio/generate-ideas', { method: 'POST', body: JSON.stringify(data) }),
     requestQuote: (data: any) => apiFetch('/designs/quote-request', { method: 'POST', body: JSON.stringify(data) }),
+    getGenerationStatus: () => apiFetch<{ used: number; limit: number; remaining: number }>('/ai-studio/generation-status'),
 };
 
 /** Appointments */

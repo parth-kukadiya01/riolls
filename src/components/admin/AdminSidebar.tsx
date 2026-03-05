@@ -43,6 +43,7 @@ const navGroups = [
     {
         title: 'System',
         items: [
+            { label: 'AI Limits', href: '/admin/ai-limits', icon: <><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></> },
             { label: 'Settings', href: '/admin/settings', icon: <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" /> },
         ]
     }
