@@ -202,7 +202,7 @@ export default function HomePage() {
                 <div className={styles.aiBannerRight}>
                     <video
                         className={styles.aiBannerVideo}
-                        src="https://videos.pexels.com/video-files/3129671/3129671-hd_1920_1080_25fps.mp4"
+                        src="#"
                         autoPlay
                         muted
                         loop

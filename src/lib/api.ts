@@ -212,7 +212,8 @@ export const categoriesApi = {
 };
 
 export const bespokeApi = {
-    list: (activeOnly: boolean = true) => apiFetch(`/bespoke?active_only=${activeOnly}`),
+    list: (activeOnly: boolean = true, limit: number = 8, offset: number = 0) =>
+        apiFetch(`/bespoke?active_only=${activeOnly}&limit=${limit}&offset=${offset}`),
     adminListAiConcepts: () => apiFetch('/bespoke/admin/ai-concepts'),
     create: (data: any) => apiFetch('/bespoke/admin', { method: 'POST', body: JSON.stringify(data) }),
     update: (id: string, data: any) => apiFetch(`/bespoke/admin/${id}`, { method: 'PUT', body: JSON.stringify(data) }),

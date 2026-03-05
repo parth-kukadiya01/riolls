@@ -41,10 +41,12 @@ const securityHeaders = [
     key: "Permissions-Policy",
     value: "camera=(), microphone=(), geolocation=(self), usb=(), payment=(self), fullscreen=(self)",
   },
-  // Prevent cross-origin info leaks
+  // Must be unsafe-none for Google OAuth popup postMessage to work.
+  // same-origin or same-origin-allow-popups both set window.opener = null
+  // in the Google accounts.google.com popup, crashing postMessage.
   {
     key: "Cross-Origin-Opener-Policy",
-    value: "same-origin",
+    value: "unsafe-none",
   },
   {
     key: "Cross-Origin-Embedder-Policy",
@@ -54,19 +56,19 @@ const securityHeaders = [
   {
     key: "Content-Security-Policy",
     value: [
-      "default-src 'self'",
+      "default-src 'self' https:",
       // Scripts: 'unsafe-eval' only in dev (required by Next.js Turbopack / React internals)
       scriptSrc,
-      // Styles: allow self + inline (needed for CSS-in-JS) + Google Fonts + Google Sign-In
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://maps.googleapis.com https://accounts.google.com",
-      // Fonts: allow self + Google Fonts CDN
-      "font-src 'self' https://fonts.gstatic.com data:",
+      // Styles: allow self + inline + any HTTPS
+      "style-src 'self' 'unsafe-inline' https:",
+      // Fonts: allow self + any HTTPS + data URIs
+      "font-src 'self' https: data:",
       // Images: allow self + data URIs + Cloudinary + any https CDN
       "img-src 'self' data: blob: https: http:",
-      // Media: allow self
-      "media-src 'self'",
-      // Connect (API calls): allow self + localhost backend (dev) + any https + Stripe + Google Maps + Google Sign-In
-      "connect-src 'self' http://localhost:8000 http://localhost:* https: wss: https://api.stripe.com https://checkout.stripe.com https://maps.googleapis.com https://accounts.google.com",
+      // Media: allow all HTTPS sources (Cloudinary, Pexels, any CDN) + blob
+      "media-src 'self' https: blob:",
+      // Connect: allow all HTTPS + WSS + localhost
+      "connect-src 'self' http://localhost:8000 http://localhost:* https: wss:",
       // Frames: allow Google Maps embed + Google Sign-In
       "frame-src 'self' https://www.google.com https://maps.google.com https://google.com https://accounts.google.com",
       // Prevent object/embed tags
