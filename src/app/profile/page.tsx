@@ -152,8 +152,8 @@ export default function ProfilePage() {
         return <div style={{ paddingTop: 'var(--nav-height)', textAlign: 'center', padding: '4rem' }}>Loading…</div>;
     }
 
-    const formatPrice = (p: number) => `£ ${p.toLocaleString('en-GB')}`;
-    const formatDate = (d: string) => new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    const formatPrice = (p: number) => `$ ${p.toLocaleString('en-US')}`;
+    const formatDate = (d: string) => new Date(d).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
 
     const renderContent = () => {
         switch (activeTab) {
@@ -243,10 +243,10 @@ export default function ProfilePage() {
                                                 {o.items.map((item: any, i: number) => (
                                                     <div key={i} className={styles.orderItem}>
                                                         <div className={styles.orderItemImg}>
-                                                            {item.productImage ? (
+                                                            {item.image ? (
                                                                 <ProtectedImage
-                                                                    src={item.productImage}
-                                                                    alt={item.productName || 'Product'}
+                                                                    src={item.image}
+                                                                    alt={item.name || 'Product'}
                                                                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                                                 />
                                                             ) : (
@@ -254,7 +254,7 @@ export default function ProfilePage() {
                                                             )}
                                                         </div>
                                                         <div className={styles.orderItemInfo}>
-                                                            <div className={styles.orderItemName}>{item.productName || 'Jewellery Piece'}</div>
+                                                            <div className={styles.orderItemName}>{item.name || 'Jewellery Piece'}</div>
                                                             {item.metal && <div className={styles.orderItemMeta}>{item.metal}</div>}
                                                             {item.purity && <div className={styles.orderItemMeta}>{item.purity}</div>}
                                                             <div className={styles.orderItemMeta}>Qty: {item.quantity ?? 1}</div>
@@ -478,7 +478,7 @@ export default function ProfilePage() {
                                                         <div className={styles.designField} style={{ gridColumn: '1 / -1' }}>
                                                             <span className={styles.designFieldLabel}>Estimated Price</span>
                                                             <span className={styles.designFieldValue} style={{ color: 'var(--gold)', fontWeight: 600 }}>
-                                                                £{d.estimatedPriceLow?.toLocaleString() ?? '—'} – £{d.estimatedPriceHigh?.toLocaleString() ?? '—'}
+                                                                ${d.estimatedPriceLow?.toLocaleString() ?? '—'} – ${d.estimatedPriceHigh?.toLocaleString() ?? '—'}
                                                             </span>
                                                         </div>
                                                     )}

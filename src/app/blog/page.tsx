@@ -43,7 +43,7 @@ export default function BlogPage() {
     };
 
     const formatDate = (iso: string) =>
-        new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+        new Date(iso).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
 
     const [featured, ...rest] = posts;
 

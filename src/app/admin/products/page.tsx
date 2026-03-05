@@ -76,7 +76,7 @@ export default function AdminProducts() {
 
     const formatCurrency = (val: number | null) => {
         if (val === null) return 'POA';
-        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(val);
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(val);
     };
 
     return (

@@ -305,23 +305,23 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                     <div className={styles.optionGroupLabel} style={{ marginBottom: '1rem' }}>Pricing Strategy</div>
                     <div className={styles.formGrid} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
                         <div className={styles.formGroup}>
-                            <label className={styles.label}>Price (Main) £</label>
+                            <label className={styles.label}>Price (Main) $</label>
                             <input className={styles.input} type="text" placeholder="POA" value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value.replace(/[^0-9.]/g, '') })} />
                         </div>
                         <div className={styles.formGroup}>
-                            <label className={styles.label}>Price (9k) £</label>
+                            <label className={styles.label}>Price (9k) $</label>
                             <input className={styles.input} type="text" value={formData.price9k} onChange={e => setFormData({ ...formData, price9k: e.target.value.replace(/[^0-9.]/g, '') })} />
                         </div>
                         <div className={styles.formGroup}>
-                            <label className={styles.label}>Price (14k) £</label>
+                            <label className={styles.label}>Price (14k) $</label>
                             <input className={styles.input} type="text" value={formData.price14k} onChange={e => setFormData({ ...formData, price14k: e.target.value.replace(/[^0-9.]/g, '') })} />
                         </div>
                         <div className={styles.formGroup}>
-                            <label className={styles.label}>Price (18k) £</label>
+                            <label className={styles.label}>Price (18k) $</label>
                             <input className={styles.input} type="text" value={formData.price18k} onChange={e => setFormData({ ...formData, price18k: e.target.value.replace(/[^0-9.]/g, '') })} />
                         </div>
                         <div className={styles.formGroup}>
-                            <label className={styles.label}>Price (22k) £</label>
+                            <label className={styles.label}>Price (22k) $</label>
                             <input className={styles.input} type="text" value={formData.price22k} onChange={e => setFormData({ ...formData, price22k: e.target.value.replace(/[^0-9.]/g, '') })} />
                         </div>
                     </div>
@@ -453,7 +453,7 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                     <input className={styles.input} type="text" value={formData.weight} onChange={e => setFormData({ ...formData, weight: e.target.value.replace(/[^0-9.]/g, '') })} />
                 </div>
                 <div className={styles.formGroup}>
-                    <label className={styles.label}>Additional Charge (£)</label>
+                    <label className={styles.label}>Additional Charge ($)</label>
                     <input className={styles.input} type="text" value={formData.additionalCharge} onChange={e => setFormData({ ...formData, additionalCharge: e.target.value.replace(/[^0-9.]/g, '') })} />
                 </div>
 

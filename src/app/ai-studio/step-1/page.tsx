@@ -430,7 +430,7 @@ function buildFlow(answers: Record<string, string>) {
         {
             id: 'budget',
             question: 'What is your comfortable investment range?',
-            answers: ['Under £1,000', '£1,000 - £2,000', '£2,000 – £5,000', '£5,000 – £8,000', '£8,000+', 'I prefer not to set a limit']
+            answers: ['Under $1,000', '$1,000 - $2,000', '$2,000 – $5,000', '$5,000 – $8,000', '$8,000+', 'I prefer not to set a limit']
         }
     );
 

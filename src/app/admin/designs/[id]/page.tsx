@@ -97,7 +97,7 @@ export default function AdminDesignRequestDetails({ params }: { params: Promise<
 
     const formatCurrency = (val: number | null) => {
         if (!val) return 'Not quoted';
-        return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0 }).format(val);
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(val);
     };
 
     const aiPromptReconstruction = `I want to design ${pieceType || 'a piece'} ${request.metal || 'in 18k gold'} ${request.stone || 'with diamonds'} ${request.designStyle || 'in an elegant style'} ${request.setting || 'with a classic setting'} ${budget ? `within ${budget}` : ''}.`;
@@ -209,7 +209,7 @@ export default function AdminDesignRequestDetails({ params }: { params: Promise<
                         </div>
                         {(estimatedPriceLow || estimatedPriceHigh) && (
                             <div className={styles.detailSection}>
-                                <div className={styles.detailValue} style={{ fontStyle: 'italic', color: '#666' }}>AI Estimate: £{estimatedPriceLow} - £{estimatedPriceHigh}</div>
+                                <div className={styles.detailValue} style={{ fontStyle: 'italic', color: '#666' }}>AI Estimate: ${estimatedPriceLow} - ${estimatedPriceHigh}</div>
                             </div>
                         )}
                         <div className={styles.detailSection} style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #eee' }}>
@@ -272,7 +272,7 @@ export default function AdminDesignRequestDetails({ params }: { params: Promise<
                             </div>
 
                             <div className={styles.formGroup}>
-                                <label className={styles.detailLabel}>Quoted Price (£)</label>
+                                <label className={styles.detailLabel}>Quoted Price ($)</label>
                                 <input
                                     type="number"
                                     className={styles.input}

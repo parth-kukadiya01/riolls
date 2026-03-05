@@ -1,22 +1,50 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
-import { PRODUCTS } from '@/lib/products';
+import { useState, useEffect, useCallback } from 'react';
+import { productsApi } from '@/lib/api';
 import ProductCard from '@/components/ui/ProductCard';
 import styles from './page.module.css';
 
+// Simple debounce helper
+function useDebounce<T>(value: T, delay: number): T {
+    const [debouncedValue, setDebouncedValue] = useState<T>(value);
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedValue(value);
+        }, delay);
+        return () => clearTimeout(handler);
+    }, [value, delay]);
+    return debouncedValue;
+}
+
 export default function SearchPage() {
     const [query, setQuery] = useState('');
+    const [results, setResults] = useState<any[]>([]);
+    const [loading, setLoading] = useState(false);
 
-    const results = query.trim().length > 0
-        ? PRODUCTS.filter(p =>
-            p.name.toLowerCase().includes(query.toLowerCase()) ||
-            p.category.toLowerCase().includes(query.toLowerCase()) ||
-            p.metal.toLowerCase().includes(query.toLowerCase()) ||
-            p.stone.toLowerCase().includes(query.toLowerCase())
-        )
-        : [];
+    const debouncedQuery = useDebounce(query, 500);
+
+    const fetchResults = useCallback(async (searchQuery: string) => {
+        if (!searchQuery.trim()) {
+            setResults([]);
+            return;
+        }
+        try {
+            setLoading(true);
+            const res: any = await productsApi.search(searchQuery, 1, 12);
+            setResults(res.data || []);
+        } catch (err) {
+            console.error('Search error:', err);
+            setResults([]);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchResults(debouncedQuery);
+    }, [debouncedQuery, fetchResults]);
 
     return (
         <div className={styles.page} style={{ paddingTop: 'var(--nav-height)' }}>
@@ -53,23 +81,27 @@ export default function SearchPage() {
             {query.trim().length > 0 && (
                 <div className={styles.results}>
                     <div className={styles.resultsHeader}>
-                        <span className={styles.resultsCount}>
-                            {results.length} {results.length === 1 ? 'result' : 'results'} for &ldquo;{query}&rdquo;
-                        </span>
+                        {loading ? (
+                            <span className={styles.resultsCount}>Searching...</span>
+                        ) : (
+                            <span className={styles.resultsCount}>
+                                {results.length} {results.length === 1 ? 'result' : 'results'} for &ldquo;{query}&rdquo;
+                            </span>
+                        )}
                         <Link href="/shop" className={styles.viewAll}>View all products →</Link>
                     </div>
 
-                    {results.length > 0 ? (
+                    {!loading && results.length > 0 ? (
                         <div className={styles.grid}>
-                            {results.map(p => <ProductCard key={p.id} product={p} />)}
+                            {results.map(p => <ProductCard key={p._id || p.id} product={p} />)}
                         </div>
-                    ) : (
+                    ) : !loading ? (
                         <div className={styles.empty}>
                             <p className={styles.emptyText}>No results for &ldquo;{query}&rdquo;</p>
                             <p className={styles.emptySub}>Try searching for a category, metal, or gemstone.</p>
                             <Link href="/shop" className={styles.shopBtn}>Browse All Jewellery</Link>
                         </div>
-                    )}
+                    ) : null}
                 </div>
             )}
         </div>

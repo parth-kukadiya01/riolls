@@ -20,21 +20,49 @@ interface BespokeWork {
 import { useRouter } from 'next/navigation';
 import { useAIStudio } from '@/context/AIStudioContext';
 
+const LIMIT = 8;
+
 export default function ClientBespokeGallery() {
     const router = useRouter();
     const { setGalleryReference } = useAIStudio();
 
     const [works, setWorks] = useState<BespokeWork[]>([]);
     const [loading, setLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
+    const [hasMore, setHasMore] = useState(false);
+    const [offset, setOffset] = useState(0);
     const [filter, setFilter] = useState<'all' | 'commission' | 'ai_concept'>('all');
     const [catFilter, setCatFilter] = useState('all');
 
     useEffect(() => {
-        bespokeApi.list(true) // only active
-            .then(res => setWorks((res.data as BespokeWork[]) || []))
+        setLoading(true);
+        bespokeApi.list(true, LIMIT, 0)
+            .then(res => {
+                const data = res.data as any;
+                const items = Array.isArray(data) ? data : (data?.items ?? []);
+                setWorks(items);
+                setHasMore(data?.has_more ?? false);
+                setOffset(LIMIT);
+            })
             .catch(() => setWorks([]))
             .finally(() => setLoading(false));
     }, []);
+
+    const handleLoadMore = async () => {
+        setLoadingMore(true);
+        try {
+            const res = await bespokeApi.list(true, LIMIT, offset);
+            const data = res.data as any;
+            const items = Array.isArray(data) ? data : (data?.items ?? []);
+            setWorks(prev => [...prev, ...items]);
+            setHasMore(data?.has_more ?? false);
+            setOffset(prev => prev + LIMIT);
+        } catch {
+            // silently fail
+        } finally {
+            setLoadingMore(false);
+        }
+    };
 
     if (loading) {
         return (
@@ -58,7 +86,6 @@ export default function ClientBespokeGallery() {
         : typeFiltered.filter(w => (w.category || '').toLowerCase() === catFilter.toLowerCase());
 
     const availableCategories = Array.from(new Set(typeFiltered.map(w => w.category).filter(Boolean)));
-
 
     const handleInquiryClick = (piece: BespokeWork) => {
         setGalleryReference({
@@ -121,7 +148,7 @@ export default function ClientBespokeGallery() {
                         className={`${cardStyles.card} ${styles.masonryCard}`}
                         onClick={() => handleInquiryClick(w)}
                     >
-                        <div className={`${cardStyles.image} ${styles.masonryImg}`}>
+                        <div className={`${cardStyles.image} ${styles.masonryImg}`} style={{ position: 'relative' }}>
                             <ProtectedImage
                                 src={w.image}
                                 alt={w.name}
@@ -137,6 +164,35 @@ export default function ClientBespokeGallery() {
                     </div>
                 ))}
             </div>
+
+            {/* See More Button */}
+            {hasMore && (
+                <div style={{ textAlign: 'center', marginTop: '48px', marginBottom: '16px' }}>
+                    <button
+                        onClick={handleLoadMore}
+                        disabled={loadingMore}
+                        style={{
+                            display: 'inline-block',
+                            padding: '14px 48px',
+                            background: 'transparent',
+                            border: '1px solid var(--charcoal)',
+                            color: 'var(--charcoal)',
+                            fontFamily: 'var(--font-sc)',
+                            fontSize: '11px',
+                            letterSpacing: '0.22em',
+                            cursor: loadingMore ? 'not-allowed' : 'pointer',
+                            opacity: loadingMore ? 0.5 : 1,
+                            transition: 'all 0.25s',
+                        }}
+                        onMouseEnter={e => { if (!loadingMore) (e.target as HTMLElement).style.background = 'var(--charcoal)'; (e.target as HTMLElement).style.color = 'var(--white)'; }}
+                        onMouseLeave={e => { (e.target as HTMLElement).style.background = 'transparent'; (e.target as HTMLElement).style.color = 'var(--charcoal)'; }}
+                    >
+                        {loadingMore ? 'Loading...' : 'See More'}
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
+
+

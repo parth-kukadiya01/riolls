@@ -235,8 +235,8 @@ export default function AIStep5() {
                             <div className={styles.priceEstimate}>
                                 <span className={styles.priceLabel}>Estimated Range</span>
                                 <span className={styles.priceValue}>
-                                    {state.customisations.estimatedPriceLow ? `£ ${state.customisations.estimatedPriceLow.toLocaleString()}` : ''}
-                                    {state.customisations.estimatedPriceHigh ? ` – £ ${state.customisations.estimatedPriceHigh.toLocaleString()}` : ''}
+                                    {state.customisations.estimatedPriceLow ? `$ ${state.customisations.estimatedPriceLow.toLocaleString()}` : ''}
+                                    {state.customisations.estimatedPriceHigh ? ` – $ ${state.customisations.estimatedPriceHigh.toLocaleString()}` : ''}
                                 </span>
                             </div>
                         </div>
@@ -290,7 +290,7 @@ export default function AIStep5() {
                             <label className={styles.formLabel}>Country *</label>
                             <input
                                 type="text"
-                                placeholder="United Kingdom"
+                                placeholder="India"
                                 className={styles.formInput}
                                 value={form.country}
                                 onChange={e => setForm(p => ({ ...p, country: e.target.value }))}

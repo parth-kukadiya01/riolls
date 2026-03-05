@@ -27,26 +27,18 @@ export default function HomePage() {
     const [loadedCats, setLoadedCats] = useState(false);
     const [loadedProducts, setLoadedProducts] = useState(false);
 
-    // Fetch categories with product counts
+    // Fetch categories and featured products concurrently
     useEffect(() => {
-        categoriesApi
-            .list()
-            .then((res: any) => {
-                const cats: any[] = res.data ?? [];
-                if (cats.length > 0) {
-                    setCollections(cats);
-                }
-            })
-            .catch(() => { })
-            .finally(() => setLoadedCats(true));
-    }, []);
-
-    // Fetch featured / new-in products
-    useEffect(() => {
-        productsApi
-            .list({ page: 1, limit: 5, sort: '-createdAt' })
-            .then((res: any) => {
-                const items: any[] = Array.isArray(res.data) ? res.data : [];
+        Promise.allSettled([
+            categoriesApi.list(),
+            productsApi.list({ page: 1, limit: 5, sort: '-createdAt' })
+        ]).then(([catsRes, prodsRes]) => {
+            if (catsRes.status === 'fulfilled') {
+                const cats: any[] = (catsRes.value as any).data ?? [];
+                if (cats.length > 0) setCollections(cats);
+            }
+            if (prodsRes.status === 'fulfilled') {
+                const items: any[] = Array.isArray((prodsRes.value as any).data) ? (prodsRes.value as any).data : [];
                 if (items.length > 0) {
                     setFeatured(items.map((p: any) => ({
                         id: p._id,
@@ -66,9 +58,11 @@ export default function HomePage() {
                         images: p.images,
                     })));
                 }
-            })
-            .catch(() => { })
-            .finally(() => setLoadedProducts(true));
+            }
+        }).finally(() => {
+            setLoadedCats(true);
+            setLoadedProducts(true);
+        });
     }, []);
 
     return (
@@ -83,8 +77,8 @@ export default function HomePage() {
                     muted
                     loop
                     playsInline
-                    preload="auto"
-                    poster=""
+                    preload="metadata"
+                    poster="https://res.cloudinary.com/dl6cdbdzl/video/upload/so_0/v1772650014/14788078_2560_1440_30fps_ilmluc.jpg"
                 />
                 {/* Gradient overlay for legibility */}
                 <div className={styles.heroOverlay} />
@@ -202,22 +196,19 @@ export default function HomePage() {
                 <div className={styles.aiBannerRight}>
                     <video
                         className={styles.aiBannerVideo}
-                        src="https://videos.pexels.com/video-files/3129671/3129671-hd_1920_1080_25fps.mp4"
-                        autoPlay
-                        muted
-                        loop
                         playsInline
-                        preload="auto"
+                        preload="none"
+                        poster="https://res.cloudinary.com/dl6cdbdzl/image/upload/v1771997169/buddy-an-bUQZomnihtI-unsplash_gfm2y4.jpg" /* Temporary fallback image */
                     />
                     <div className={styles.aiBannerVideoOverlay} />
                     {/* Subtle diamond watermark over video */}
-                    <div className={styles.aiDiamondOverVideo}>
+                    {/* <div className={styles.aiDiamondOverVideo}>
                         <svg width="64" height="76" viewBox="0 0 64 76" fill="rgba(201,169,110,0.15)" stroke="rgba(201,169,110,0.6)" strokeWidth="0.8">
                             <polygon points="32,4 62,22 52,72 12,72 2,22" />
                             <polygon points="32,4 52,22 32,34 12,22" />
                             <line x1="12" y1="22" x2="52" y2="22" />
                         </svg>
-                    </div>
+                    </div> */}
                 </div>
             </section>
 
@@ -233,7 +224,8 @@ export default function HomePage() {
                     muted
                     loop
                     playsInline
-                    preload="auto"
+                    preload="none"
+                    poster="https://res.cloudinary.com/dl6cdbdzl/video/upload/so_0/v1772650014/14788078_2560_1440_30fps_ilmluc.jpg"
                 />
                 <div className={styles.bespokeOverlay} />
                 <div className={styles.bespokeContent}>

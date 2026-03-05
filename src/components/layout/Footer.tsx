@@ -81,7 +81,7 @@ export default function Footer() {
                 {/* Right column */}
                 <div className={styles.colRight}>
                     <span className={styles.shipping}>
-                        Shipping to <Link href="#" className={styles.shippingLink}>United Kingdom (£)</Link>
+                        Shipping to <Link href="#" className={styles.shippingLink}>India ($)</Link>
                     </span>
 
                     <div className={styles.socials}>

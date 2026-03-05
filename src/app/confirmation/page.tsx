@@ -46,7 +46,7 @@ export default function ConfirmationPage() {
                             <span className={styles.specVal}>{v}</span>
                         </div>
                     ))}
-                    <p className={styles.orderTotal}>£ 8,500</p>
+                    <p className={styles.orderTotal}>$ 8,500</p>
                 </div>
 
                 <span className={styles.nextTitle}>What Happens Next</span>

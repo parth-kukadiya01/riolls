@@ -141,7 +141,7 @@ export default function ReviewsPage() {
     };
 
     const formatDate = (iso: string) =>
-        new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+        new Date(iso).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
 
 
     return (

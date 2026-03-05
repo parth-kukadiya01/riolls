@@ -6,6 +6,21 @@ import ProductCard from '@/components/ui/ProductCard';
 import { productsApi, categoriesApi } from '@/lib/api';
 import styles from './page.module.css';
 
+// Static Filter Options extracted to avoid recreation on every render
+const DB_CATEGORIES = [
+    { name: 'Rings', slug: 'rings' },
+    { name: 'Necklaces', slug: 'necklaces' },
+    { name: 'Earrings', slug: 'earrings' },
+    { name: 'Bracelets', slug: 'bracelets' },
+    { name: "Men's Collection", slug: 'men-collection' },
+];
+
+const DB_METALS = ["9k", "14k", "18k", "22k"];
+
+const DB_METAL_COLORS = ["Rose Gold", "White Gold", "Yellow Gold"];
+
+const DB_STONES = ["Diamond", "Lab Diamond", "Moissanite", "CZ"];
+
 function ShopContent() {
     const sp = useSearchParams();
 
@@ -13,32 +28,6 @@ function ShopContent() {
     const [loading, setLoading] = useState(true);
     const [total, setTotal] = useState(0);
     const [page, setPage] = useState(1);
-
-    // Dynamic Filter Options
-    const [dbCategories] = useState<{ name: string, slug: string }[]>([
-        { name: 'Rings', slug: 'rings' },
-        { name: 'Necklaces', slug: 'necklaces' },
-        { name: 'Earrings', slug: 'earrings' },
-        { name: 'Bracelets', slug: 'bracelets' },
-        { name: "Men's Collection", slug: 'men-collection' },
-    ]);
-    const [dbMetals] = useState<string[]>([
-        "9k",
-        "14k",
-        "18k",
-        "22k",
-    ]);
-    const [dbMetalColors] = useState<string[]>([
-        "Rose Gold",
-        "White Gold",
-        "Yellow Gold",
-    ]);
-    const [dbStones, setDbStones] = useState<string[]>([
-        "Diamond",
-        "Lab Diamond",
-        "Moissanite",
-        "CZ"
-    ]);
 
     const [filters, setFilters] = useState<{
         cat: string | null;
@@ -116,7 +105,7 @@ function ShopContent() {
 
                     <div className={styles.filterGroup}>
                         <span className={styles.filterLabel}>Category</span>
-                        {dbCategories.map(c => (
+                        {DB_CATEGORIES.map(c => (
                             <label key={c.slug} className={styles.filterItem}>
                                 <input type="checkbox" checked={filters.cat === c.slug} onChange={() => toggle('cat', c.slug)} />
                                 <span style={{ textTransform: 'capitalize' }}>{c.name}</span>
@@ -126,7 +115,7 @@ function ShopContent() {
 
                     <div className={styles.filterGroup}>
                         <span className={styles.filterLabel}>Metal Purity</span>
-                        {dbMetals.map((m: string) => (
+                        {DB_METALS.map((m: string) => (
                             <label key={m} className={styles.filterItem}>
                                 <input type="checkbox" checked={filters.metal === m} onChange={() => toggle('metal', m)} />
                                 <span style={{ textTransform: 'capitalize' }}>{m}</span>
@@ -136,7 +125,7 @@ function ShopContent() {
 
                     <div className={styles.filterGroup}>
                         <span className={styles.filterLabel}>Metal Colour</span>
-                        {dbMetalColors.map((mc: string) => (
+                        {DB_METAL_COLORS.map((mc: string) => (
                             <label key={mc} className={styles.filterItem}>
                                 <input type="checkbox" checked={filters.metalColor === mc} onChange={() => toggle('metalColor', mc)} />
                                 <span style={{ textTransform: 'capitalize' }}>{mc}</span>
@@ -146,7 +135,7 @@ function ShopContent() {
 
                     <div className={styles.filterGroup}>
                         <span className={styles.filterLabel}>Stone</span>
-                        {dbStones.map((s: string) => (
+                        {DB_STONES.map((s: string) => (
                             <label key={s} className={styles.filterItem}>
                                 <input type="checkbox" checked={filters.stone === s} onChange={() => toggle('stone', s)} />
                                 <span style={{ textTransform: 'capitalize' }}>{s}</span>
@@ -194,7 +183,7 @@ function ShopContent() {
                             className={styles.priceRange}
                         />
                         <span className={styles.priceRangeLabel}>
-                            Up to £{filters.maxPrice.toLocaleString()}
+                            Up to ${filters.maxPrice.toLocaleString()}
                         </span>
                     </div>
                 </aside>

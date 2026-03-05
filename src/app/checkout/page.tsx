@@ -170,8 +170,8 @@ export default function CheckoutPage() {
                             </div>
                             {[
                                 { id: 'free', label: 'Free Insured Delivery', desc: '7–15 working days', price: 'FREE' },
-                                // { id: 'express', label: 'Express Insured', desc: '2–3 working days', price: '£ 25' },
-                                // { id: 'next', label: 'Next Day', desc: 'Order before 12pm', price: '£ 45' },
+                                // { id: 'express', label: 'Express Insured', desc: '2–3 working days', price: '$ 25' },
+                                // { id: 'next', label: 'Next Day', desc: 'Order before 12pm', price: '$ 45' },
                             ].map(d => (
                                 <div
                                     key={d.id}
