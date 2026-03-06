@@ -130,7 +130,8 @@ export function proxy(req: NextRequest) {
     }
 
     // 2. Block headless browsers ONLY on page routes (not API routes, which may be server-side Next.js fetches)
-    if (!pathname.startsWith('/api/') && !pathname.startsWith('/_next/') && looksHeadless(req)) {
+    // DISABLED to prevent false positives blocking valid traffic
+    if (false && !pathname.startsWith('/api/') && !pathname.startsWith('/_next/') && looksHeadless(req)) {
         return new NextResponse('Forbidden', {
             status: 403,
             headers: { 'Content-Type': 'text/plain' },

@@ -3,8 +3,9 @@
  * All frontend ↔ backend communication goes through here.
  */
 
-export const API_URL =
-    process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
+export const API_URL = typeof window === 'undefined'
+    ? (process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1')
+    : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1');
 
 // ─── Token helpers ────────────────────────────────────────────────────────────
 
