@@ -640,6 +640,10 @@
         gap: 8px;
     }
 
+    .collectionsGridCollapsed> :nth-child(n+5) {
+        display: none;
+    }
+
     .showMoreWrap {
         display: block;
     }

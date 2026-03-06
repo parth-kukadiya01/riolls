@@ -132,7 +132,7 @@ export default function HomePage() {
                         <p style={{ gridColumn: '1/-1', textAlign: 'center', opacity: 0.6, padding: '2rem' }}>
                             Our collection is being updated. <Link href="/shop">Browse all pieces →</Link>
                         </p>
-                    ) : (showAllCollections ? collections : collections.slice(0, 4)).map((col, index) => {
+                    ) : (showAllCollections ? collections : collections.slice(0, 5)).map((col, index) => {
                         const slug = col.slug ?? col.name?.toLowerCase().replace(/\s+/g, '-');
                         const grad = CAT_GRADS[slug] ?? CAT_GRADS.default;
                         const count = col.productCount != null
