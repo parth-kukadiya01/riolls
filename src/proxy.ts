@@ -139,16 +139,16 @@ export function proxy(req: NextRequest) {
     }
 
     // 3. Rate limit — max 120 requests/minute per IP
-    if (!checkRateLimit(ip)) {
-        return new NextResponse('Too Many Requests', {
-            status: 429,
-            headers: {
-                'Content-Type': 'text/plain',
-                'Retry-After': '60',
-                'X-RateLimit-Limit': String(RATE_LIMIT),
-            },
-        });
-    }
+    // if (!checkRateLimit(ip)) {
+    //     return new NextResponse('Too Many Requests', {
+    //         status: 429,
+    //         headers: {
+    //             'Content-Type': 'text/plain',
+    //             'Retry-After': '60',
+    //             'X-RateLimit-Limit': String(RATE_LIMIT),
+    //         },
+    //     });
+    // }
 
     // 4. Admin route protection
     if (pathname.startsWith('/admin')) {

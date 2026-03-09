@@ -38,6 +38,8 @@ export async function apiFetch<T = unknown>(
         ...(options.headers as Record<string, string> | undefined),
     };
 
+    console.log(`[apiFetch] ${endpoint} - Token present:`, !!token, '- Headers:', headers);
+
     const res = await fetch(`${API_URL}${endpoint}`, { ...options, headers });
 
     // 401 → clear token so UI can redirect

@@ -194,7 +194,17 @@ export default function AIStudioLayout({ children }: { children: React.ReactNode
                     })}
                 </div>
 
-                <span className={styles.brand}>AI Studio</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <Link
+                        href="/ai-studio/my-listings"
+                        className={`${styles.back} ${pathname?.includes('my-listings') ? styles.stepLinkActive : ''}`}
+                        style={{ opacity: 0.85, fontSize: '11px', letterSpacing: '0.18em' }}
+                    >
+                        ♦ My Listings
+                    </Link>
+                    <span className={styles.brand}>AI Studio</span>
+                </div>
+
             </div>
 
             <main className={styles.main}>{children}</main>

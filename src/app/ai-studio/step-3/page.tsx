@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import styles from './step.module.css';
 import { useAIStudio } from '@/context/AIStudioContext';
+import { useAuth } from '@/context/AuthContext';
+import { saveListing } from '../my-listings/etsyGenerator';
 
 const loadingMessages = [
     'Analysing your style profile…',
@@ -58,15 +60,30 @@ export default function AIStep3() {
 
     const [showVariationPrompt, setShowVariationPrompt] = useState(false);
     const [variationNotes, setVariationNotes] = useState('');
+    const [savedToast, setSavedToast] = useState(false);
+
+    const handleSave = () => {
+        const idx = state.selectedConceptIndex;
+        const concept = idx !== null ? state.generatedConcepts[idx] : state.generatedConcepts[0];
+        if (!concept) return;
+        saveListing({ concept, profile: state.profile as Record<string, string | string[] | undefined> });
+        setSavedToast(true);
+        setTimeout(() => setSavedToast(false), 3000);
+    };
+
+    const { user, loading } = useAuth();
 
     useEffect(() => {
+        // Wait for auth to finish loading before making authenticated API requests
+        if (loading || !user) return;
+
         // Fetch generation status first; if limit reached, show message without generating
         const init = async () => {
             await fetchGenerationStatus();
         };
         init();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [loading, user]);
 
     useEffect(() => {
         // If status loaded and limit exhausted (and no concepts yet), show limit message
@@ -336,6 +353,13 @@ export default function AIStep3() {
                                     </span>
                                 ) : null}
                                 <button
+                                    className={styles.regenBtn}
+                                    onClick={handleSave}
+                                    style={{ background: 'rgba(201,169,110,0.12)', borderColor: 'rgba(201,169,110,0.5)' }}
+                                >
+                                    ♦ Save to My Listings
+                                </button>
+                                <button
                                     className={styles.backBtn}
                                     onClick={() => router.push('/ai-studio/step-2')}
                                     style={{ margin: 0 }}
@@ -387,6 +411,22 @@ export default function AIStep3() {
                             )}
                         </div>
                     )}
+                </div>
+            )}
+
+            {/* Save toast */}
+            {savedToast && (
+                <div style={{
+                    position: 'fixed', bottom: '32px', left: '50%', transform: 'translateX(-50%)',
+                    background: '#111', color: '#fff', padding: '14px 24px',
+                    fontFamily: 'var(--font-sc)', fontSize: '11px', letterSpacing: '0.18em',
+                    zIndex: 9999, display: 'flex', alignItems: 'center', gap: '16px',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.3)', whiteSpace: 'nowrap',
+                }}>
+                    ✓ Design saved to My Listings
+                    <a href="/ai-studio/my-listings" style={{ color: 'var(--gold)', textDecoration: 'none', letterSpacing: '0.15em' }}>
+                        View →
+                    </a>
                 </div>
             )}
         </div>

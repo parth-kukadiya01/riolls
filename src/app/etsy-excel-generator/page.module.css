@@ -1,0 +1,180 @@
+.page {
+    min-height: 100vh;
+    padding: 8rem 2rem 4rem;
+    background-color: var(--background, #0A0A0A);
+    color: var(--foreground, #ffffff);
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    max-width: 900px;
+    width: 100%;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.eyebrow {
+    color: #C9A96E;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 300;
+    margin: 0 0 1rem;
+    font-family: var(--font-playfair, serif);
+}
+
+.subtitle {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.125rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.uploadArea {
+    border: 1px dashed rgba(201, 169, 110, 0.4);
+    border-radius: 12px;
+    padding: 4rem 2rem;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    margin-bottom: 2rem;
+}
+
+.uploadArea:hover,
+.uploadActive {
+    border-color: #C9A96E;
+    background: rgba(201, 169, 110, 0.05);
+}
+
+.uploadIcon {
+    margin: 0 auto 1.5rem;
+    color: #C9A96E;
+}
+
+.uploadText {
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+}
+
+.uploadHint {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.875rem;
+}
+
+.hiddenInput {
+    display: none;
+}
+
+.previewGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.previewCard {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.previewImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.removeBtn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 12px;
+}
+
+.removeBtn:hover {
+    background: #ff4444;
+    border-color: #ff4444;
+}
+
+.actionSection {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(201, 169, 110, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(201, 169, 110, 0.2);
+}
+
+.generateBtn {
+    background: #C9A96E;
+    color: #000;
+    border: none;
+    padding: 1rem 2.5rem;
+    font-size: 1.125rem;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.generateBtn:hover:not(:disabled) {
+    background: #d4b884;
+    transform: translateY(-1px);
+}
+
+.generateBtn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.statusMessage {
+    margin-top: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+}
+
+.statusError {
+    margin-top: 1rem;
+    color: #ff6b6b;
+    font-size: 0.95rem;
+}
