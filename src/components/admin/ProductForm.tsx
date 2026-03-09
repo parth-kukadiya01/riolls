@@ -44,6 +44,7 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
     // Image logic
     const [existingImages, setExistingImages] = useState<string[]>([]);
     const [newImages, setNewImages] = useState<File[]>([]);
+    const [newImageUrl, setNewImageUrl] = useState('');
     const [dragActive, setDragActive] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -137,6 +138,17 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
 
     const removeExistingImage = (index: number) => {
         setExistingImages(prev => prev.filter((_, i) => i !== index));
+    };
+
+    const handleAddImageUrl = () => {
+        if (!newImageUrl.trim()) return;
+        if (!newImageUrl.startsWith('http')) {
+            setError('Please enter a valid image URL (must start with http)');
+            return;
+        }
+        setExistingImages(prev => [...prev, newImageUrl.trim()]);
+        setNewImageUrl('');
+        setError('');
     };
 
     const generateSlug = () => {
@@ -258,6 +270,10 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
 
                 newImages.forEach(file => {
                     submitData.append('images', file);
+                });
+
+                existingImages.forEach(url => {
+                    submitData.append('imageUrls', url);
                 });
 
                 const res = await adminFetch(`/admin/products`, {
@@ -475,8 +491,23 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                 {/* Image Upload Area */}
                 <div className={styles.fullWidth}>
                     <label className={styles.label} style={{ marginBottom: '0.5rem', display: 'block' }}>
-                        {isEdit ? 'Add More Product Images' : 'Product Images'}
+                        {isEdit ? 'Product Images' : 'Product Images'}
                     </label>
+
+                    <div className={styles.formGroup} style={{ display: 'flex', gap: '10px', marginBottom: '1rem' }}>
+                        <input
+                            type="text"
+                            className={styles.input}
+                            placeholder="Or paste an image URL here..."
+                            value={newImageUrl}
+                            onChange={(e) => setNewImageUrl(e.target.value)}
+                            onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddImageUrl(); } }}
+                        />
+                        <button type="button" className={styles.secondaryBtn} onClick={handleAddImageUrl} style={{ whiteSpace: 'nowrap' }}>
+                            Add URL
+                        </button>
+                    </div>
+
                     <div
                         className={`${styles.uploadArea} ${dragActive ? styles.dragActive : ''}`}
                         onDragEnter={handleDrag}
@@ -514,7 +545,7 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                     )}
                 </div>
 
-                {isEdit && existingImages.length > 0 && (
+                {existingImages.length > 0 && (
                     <div className={styles.fullWidth}>
                         <label className={styles.label} style={{ marginBottom: '0.5rem', display: 'block' }}>Current Images</label>
                         <div className={styles.previewGrid}>
@@ -526,7 +557,7 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                             ))}
                         </div>
                         <p className={styles.uploadHint} style={{ marginTop: '0.5rem' }}>
-                            Upload new images above to add more. Remove current images to delete them completely.
+                            Upload new images or paste URLs above to add more. Remove current images to delete them completely.
                         </p>
                     </div>
                 )}

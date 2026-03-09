@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 
 // ── In-memory rate limiter (per IP, resets every window) ────────────────────
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT = 120;        // max requests per window
+//const RATE_LIMIT = 1200;        // max requests per window
 const RATE_WINDOW_MS = 60_000; // 1 minute window
 
-function checkRateLimit(ip: string): boolean {
+/*function checkRateLimit(ip: string): boolean {
     const now = Date.now();
     const entry = rateLimitMap.get(ip);
 
@@ -20,7 +20,7 @@ function checkRateLimit(ip: string): boolean {
 
     entry.count++;
     return true; // Allow
-}
+}*/
 
 // ── Known bad bot / automation user-agent signatures ───────────────────────
 const BOT_UA_PATTERNS = [
@@ -139,7 +139,7 @@ export function proxy(req: NextRequest) {
     }
 
     // 3. Rate limit — max 120 requests/minute per IP
-    if (!checkRateLimit(ip)) {
+    /*if (!checkRateLimit(ip)) {
         return new NextResponse('Too Many Requests', {
             status: 429,
             headers: {
@@ -148,7 +148,7 @@ export function proxy(req: NextRequest) {
                 'X-RateLimit-Limit': String(RATE_LIMIT),
             },
         });
-    }
+    }*/
 
     // 4. Admin route protection
     if (pathname.startsWith('/admin')) {

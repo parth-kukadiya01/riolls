@@ -12,6 +12,10 @@ export const metadata: Metadata = {
   title: { default: 'Riolls Jewels', template: '%s — Riolls Jewels' },
   description: 'Luxury handcrafted jewellery from the Riolls Jewels atelier. Engagement rings, fine jewellery, and bespoke commissions.',
   keywords: ['luxury jewellery', 'engagement rings', 'diamond rings', 'bespoke jewellery', 'Riolls Jewels'],
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/icon.png',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
