@@ -190,8 +190,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
-    padding: 1.25rem;
+    gap: 16px;
+    padding: 24px;
     border-top: 1px solid #eee;
 }
 
@@ -205,9 +205,52 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
     transition: opacity 0.2s;
+    border-radius: 4px;
 }
 
 .pageBtn:disabled {
-    opacity: 0.5;
+    opacity: 0.3;
     cursor: not-allowed;
+}
+
+.pageNumbers {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.pageNum {
+    font-size: 0.875rem;
+    color: #666;
+    background: none;
+    border: 1px solid transparent;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 4px;
+}
+
+.pageNum:hover {
+    background: #f5f5f5;
+    color: var(--dark);
+}
+
+.pageNumActive {
+    background: var(--dark);
+    color: white;
+    font-weight: 500;
+}
+
+.pageNumActive:hover {
+    background: var(--dark);
+    color: white;
+}
+
+.pageDots {
+    color: #999;
+    padding: 0 4px;
 }

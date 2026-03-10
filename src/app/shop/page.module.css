@@ -274,3 +274,33 @@
         gap: 12px;
     }
 }
+
+.showMoreContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(201, 169, 110, 0.1);
+}
+
+.showMoreBtn {
+    font-family: var(--font-sc);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--charcoal);
+    background: none;
+    border: 1px solid rgba(201, 169, 110, 0.3);
+    padding: 12px 32px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.showMoreBtn:hover:not(:disabled) {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.showMoreBtn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}

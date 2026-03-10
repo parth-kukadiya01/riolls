@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { adminFetch } from '@/lib/adminAuth';
 import styles from './page.module.css';
 
@@ -18,20 +19,47 @@ interface Product {
 }
 
 export default function AdminProducts() {
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const pathname = usePathname();
+
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
-    const [search, setSearch] = useState('');
-    const [page, setPage] = useState(1);
+    const [search, setSearch] = useState(searchParams.get('q') || '');
+    const [page, setPage] = useState(Number(searchParams.get('page')) || 1);
+    const [sort, setSort] = useState(searchParams.get('sort') || '-createdAt');
     const [totalPages, setTotalPages] = useState(1);
 
+    // AbortController ref for cancelling stale requests
+    const abortControllerRef = useRef<AbortController | null>(null);
+
+    // Sync state changes to URL
+    useEffect(() => {
+        const params = new URLSearchParams();
+        if (page > 1) params.set('page', page.toString());
+        if (search) params.set('q', search);
+        if (sort && sort !== '-createdAt') params.set('sort', sort);
+
+        const newUrl = `${pathname}${params.toString() ? `?${params.toString()}` : ''}`;
+        window.history.replaceState({ ...window.history.state, as: newUrl, url: newUrl }, '', newUrl);
+    }, [page, search, sort, pathname]);
+
     const fetchProducts = useCallback(async () => {
+        // Cancel any pending request
+        if (abortControllerRef.current) {
+            abortControllerRef.current.abort();
+        }
+
+        const abortController = new AbortController();
+        abortControllerRef.current = abortController;
+
         setLoading(true);
         try {
             // we use the public endpoint as there is no specific admin GET endpoint
-            let url = `/products?page=${page}&limit=10`;
+            let url = `/products?page=${page}&limit=10&sort=${sort}`;
             if (search) url += `&search=${encodeURIComponent(search)}`;
 
-            const res = await adminFetch(url);
+            const res = await adminFetch(url, { signal: abortController.signal });
             const json = await res.json();
 
             if (res.ok) {
@@ -42,12 +70,17 @@ export default function AdminProducts() {
                 console.error('Failed to fetch products', json);
                 setProducts([]);
             }
-        } catch (error) {
+        } catch (error: any) {
+            if (error.name === 'AbortError') {
+                return; // Ignore abort errors
+            }
             console.error('Error fetching products:', error);
         } finally {
-            setLoading(false);
+            if (abortControllerRef.current === abortController) {
+                setLoading(false);
+            }
         }
-    }, [page, search]);
+    }, [page, search, sort]);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -109,6 +142,21 @@ export default function AdminProducts() {
                         setPage(1); // Reset page on search
                     }}
                 />
+                <select
+                    className={styles.searchInput}
+                    style={{ maxWidth: '200px' }}
+                    value={sort}
+                    onChange={(e) => {
+                        setSort(e.target.value);
+                        setPage(1);
+                    }}
+                >
+                    <option value="-createdAt">New to Old (Newest First)</option>
+                    <option value="createdAt">Old to New (Oldest First)</option>
+                    <option value="-price">Price: High to Low</option>
+                    <option value="price">Price: Low to High</option>
+                    <option value="featured">Featured First</option>
+                </select>
             </div>
 
             <div className={styles.tableContainer}>
@@ -183,7 +231,28 @@ export default function AdminProducts() {
                         >
                             Previous
                         </button>
-                        <span style={{ fontSize: '0.875rem', color: '#666' }}>Page {page} of {totalPages}</span>
+
+                        <div className={styles.pageNumbers}>
+                            {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => {
+                                if (p === 1 || p === totalPages || Math.abs(p - page) <= 1) {
+                                    return (
+                                        <button
+                                            key={p}
+                                            className={`${styles.pageNum} ${p === page ? styles.pageNumActive : ''}`}
+                                            onClick={() => setPage(p)}
+                                            disabled={loading}
+                                        >
+                                            {p}
+                                        </button>
+                                    );
+                                }
+                                if (p === page - 2 || p === page + 2) {
+                                    return <span key={p} className={styles.pageDots}>...</span>;
+                                }
+                                return null;
+                            })}
+                        </div>
+
                         <button
                             className={styles.pageBtn}
                             disabled={page === totalPages || loading}

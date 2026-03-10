@@ -44,7 +44,7 @@ function ShopContent() {
         badge: (sp.get('badge')) || null,
         maxPrice: 20000,
     });
-    const [sort, setSort] = useState<'featured' | 'price' | '-price'>('featured');
+    const [sort, setSort] = useState<'featured' | 'price' | '-price' | '-createdAt' | 'createdAt'>('-createdAt');
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     // Re-read category and badge from URL params
@@ -55,6 +55,7 @@ function ShopContent() {
             if (f.cat === cat && f.badge === badge) return f;
             return { ...f, cat, badge };
         });
+        setPage(1);
     }, [sp]);
 
     // Fetch products whenever filters / sort / page change
@@ -72,19 +73,25 @@ function ShopContent() {
             .list(params)
             .then((res: any) => {
                 const items = Array.isArray(res.data) ? res.data : [];
-                setProducts(items);
+                setProducts(prev => page === 1 ? items : [...prev, ...items]);
                 setTotal(res.pagination?.total ?? 0);
 
             })
-            .catch(() => setProducts([]))
+            .catch(() => {
+                if (page === 1) setProducts([]);
+            })
             .finally(() => setLoading(false));
     }, [filters, sort, page]);
 
-    const toggle = <K extends keyof typeof filters>(key: K, val: (typeof filters)[K]) =>
+    const toggle = <K extends keyof typeof filters>(key: K, val: (typeof filters)[K]) => {
         setFilters(f => ({ ...f, [key]: f[key] === val ? null : val }));
+        setPage(1);
+    };
 
-    const clear = () =>
+    const clear = () => {
         setFilters({ cat: null, metal: null, metalColor: null, stone: null, badge: null, maxPrice: 20000 });
+        setPage(1);
+    };
 
     return (
         <div className={styles.page}>
@@ -179,7 +186,10 @@ function ShopContent() {
                             type="range"
                             min={0} max={20000} step={500}
                             value={filters.maxPrice}
-                            onChange={e => setFilters(f => ({ ...f, maxPrice: +e.target.value }))}
+                            onChange={e => {
+                                setFilters(f => ({ ...f, maxPrice: +e.target.value }));
+                                setPage(1);
+                            }}
                             className={styles.priceRange}
                         />
                         <span className={styles.priceRangeLabel}>
@@ -201,9 +211,14 @@ function ShopContent() {
                         <select
                             className={styles.sortSelect}
                             value={sort}
-                            onChange={e => setSort(e.target.value as typeof sort)}
+                            onChange={e => {
+                                setSort(e.target.value as typeof sort);
+                                setPage(1);
+                            }}
                         >
-                            <option value="featured">Featured</option>
+                            <option value="-createdAt">New to Old (Newest First)</option>
+                            <option value="createdAt">Old to New (Oldest First)</option>
+                            <option value="featured">Featured / Recommended</option>
                             <option value="price">Price: Low → High</option>
                             <option value="-price">Price: High → Low</option>
                         </select>
@@ -212,16 +227,16 @@ function ShopContent() {
                     {/* Active filter chips */}
                     {(filters.cat || filters.metal || filters.metalColor || filters.stone || filters.badge) && (
                         <div className={styles.chips}>
-                            {filters.cat && <span className={styles.chip} onClick={() => setFilters(f => ({ ...f, cat: null }))} style={{ textTransform: 'capitalize' }}>{filters.cat} ✕</span>}
-                            {filters.metal && <span className={styles.chip} onClick={() => setFilters(f => ({ ...f, metal: null }))} style={{ textTransform: 'capitalize' }}>{filters.metal} ✕</span>}
-                            {filters.metalColor && <span className={styles.chip} onClick={() => setFilters(f => ({ ...f, metalColor: null }))} style={{ textTransform: 'capitalize' }}>{filters.metalColor} ✕</span>}
-                            {filters.stone && <span className={styles.chip} onClick={() => setFilters(f => ({ ...f, stone: null }))} style={{ textTransform: 'capitalize' }}>{filters.stone} ✕</span>}
-                            {filters.badge && <span className={styles.chip} onClick={() => setFilters(f => ({ ...f, badge: null }))}>{filters.badge} ✕</span>}
+                            {filters.cat && <span className={styles.chip} onClick={() => toggle('cat', filters.cat)} style={{ textTransform: 'capitalize' }}>{filters.cat} ✕</span>}
+                            {filters.metal && <span className={styles.chip} onClick={() => toggle('metal', filters.metal)} style={{ textTransform: 'capitalize' }}>{filters.metal} ✕</span>}
+                            {filters.metalColor && <span className={styles.chip} onClick={() => toggle('metalColor', filters.metalColor)} style={{ textTransform: 'capitalize' }}>{filters.metalColor} ✕</span>}
+                            {filters.stone && <span className={styles.chip} onClick={() => toggle('stone', filters.stone)} style={{ textTransform: 'capitalize' }}>{filters.stone} ✕</span>}
+                            {filters.badge && <span className={styles.chip} onClick={() => toggle('badge', filters.badge)}>{filters.badge} ✕</span>}
                         </div>
                     )}
 
                     {/* Grid */}
-                    {loading ? (
+                    {loading && page === 1 ? (
                         <div className={styles.emptyState}><p>Loading collection…</p></div>
                     ) : products.length === 0 ? (
                         <div className={styles.emptyState}>
@@ -254,12 +269,16 @@ function ShopContent() {
                         </div>
                     )}
 
-                    {/* Pagination */}
-                    {!loading && total > 24 && (
-                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginTop: '2rem' }}>
-                            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}>← Prev</button>
-                            <span style={{ lineHeight: '2' }}>Page {page} of {Math.ceil(total / 24)}</span>
-                            <button onClick={() => setPage(p => p + 1)} disabled={page >= Math.ceil(total / 24)}>Next →</button>
+                    {/* Show More Button */}
+                    {products.length < total && (
+                        <div className={styles.showMoreContainer}>
+                            <button
+                                className={styles.showMoreBtn}
+                                onClick={() => setPage(p => p + 1)}
+                                disabled={loading}
+                            >
+                                {loading ? 'Loading...' : 'Show More Pieces'}
+                            </button>
                         </div>
                     )}
                 </div>
