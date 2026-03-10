@@ -30,43 +30,54 @@ function ShopContent() {
     const [page, setPage] = useState(1);
 
     const [filters, setFilters] = useState<{
-        cat: string | null;
-        metal: string | null;
-        metalColor: string | null;
-        stone: string | null;
-        badge: string | null;
+        cat: string[];
+        metal: string[];
+        metalColor: string[];
+        stone: string[];
+        badge: string[];
         maxPrice: number;
     }>({
-        cat: (sp.get('cat')) || null,
-        metal: null,
-        metalColor: null,
-        stone: (sp.get('stone')) || null,
-        badge: (sp.get('badge')) || null,
+        cat: sp.get('cat') ? [sp.get('cat')!] : [],
+        metal: [],
+        metalColor: [],
+        stone: sp.get('stone') ? [sp.get('stone')!] : [],
+        badge: sp.get('badge') ? [sp.get('badge')!] : [],
         maxPrice: 20000,
     });
-    const [sort, setSort] = useState<'featured' | 'price' | '-price' | '-createdAt' | 'createdAt'>('-createdAt');
-    const [sidebarOpen, setSidebarOpen] = useState(false);
 
-    // Re-read category and badge from URL params
+    const [sort, setSort] = useState<'featured' | 'price' | '-price'>('featured');
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [openSections, setOpenSections] = useState<string[]>(['category', 'metal-purity', 'metal-colour', 'stone']);
+
+    const toggleSection = (section: string) => {
+        setOpenSections(prev =>
+            prev.includes(section) ? prev.filter(s => s !== section) : [...prev, section]
+        );
+    };
+
+    // Re-read category and badge from URL params (initial load only)
     useEffect(() => {
         const cat = sp.get('cat') || sp.get('collection') || null;
         const badge = sp.get('badge') || null;
-        setFilters(f => {
-            if (f.cat === cat && f.badge === badge) return f;
-            return { ...f, cat, badge };
-        });
-        setPage(1);
-    }, [sp]);
+        if (cat || badge) {
+            setFilters(f => ({
+                ...f,
+                cat: cat ? [cat] : f.cat,
+                badge: badge ? [badge] : f.badge
+            }));
+        }
+    }, []);
 
     // Fetch products whenever filters / sort / page change
     useEffect(() => {
         setLoading(true);
-        const params: Record<string, string | number> = { page, limit: 24, sort };
-        if (filters.cat) params.category = filters.cat;
-        if (filters.metal) params.metal = filters.metal;
-        if (filters.metalColor) params.metalColor = filters.metalColor;
-        if (filters.stone) params.stone = filters.stone;
-        if (filters.badge) params.badge = filters.badge;
+        const params: any = { page, limit: 24, sort };
+
+        if (filters.cat.length > 0) params.category = filters.cat.join(',');
+        if (filters.metal.length > 0) params.metal = filters.metal.join(',');
+        if (filters.metalColor.length > 0) params.metalColor = filters.metalColor.join(',');
+        if (filters.stone.length > 0) params.stone = filters.stone.join(',');
+        if (filters.badge.length > 0) params.badge = filters.badge.join(',');
         if (filters.maxPrice < 20000) params.maxPrice = filters.maxPrice;
 
         productsApi
@@ -75,7 +86,6 @@ function ShopContent() {
                 const items = Array.isArray(res.data) ? res.data : [];
                 setProducts(prev => page === 1 ? items : [...prev, ...items]);
                 setTotal(res.pagination?.total ?? 0);
-
             })
             .catch(() => {
                 if (page === 1) setProducts([]);
@@ -83,14 +93,24 @@ function ShopContent() {
             .finally(() => setLoading(false));
     }, [filters, sort, page]);
 
-    const toggle = <K extends keyof typeof filters>(key: K, val: (typeof filters)[K]) => {
-        setFilters(f => ({ ...f, [key]: f[key] === val ? null : val }));
-        setPage(1);
+    const toggle = <K extends keyof typeof filters>(key: K, val: string) => {
+        setFilters(f => {
+            const current = f[key] as string[];
+            const next = current.includes(val)
+                ? current.filter(v => v !== val)
+                : [...current, val];
+            return { ...f, [key]: next };
+        });
     };
 
     const clear = () => {
-        setFilters({ cat: null, metal: null, metalColor: null, stone: null, badge: null, maxPrice: 20000 });
-        setPage(1);
+        setFilters({ cat: [], metal: [], metalColor: [], stone: [], badge: [], maxPrice: 20000 });
+    };
+
+    const METAL_COLORS_MAP: Record<string, string> = {
+        "Rose Gold": "linear-gradient(135deg, #e5b3a3, #d49a89)",
+        "White Gold": "linear-gradient(135deg, #e8e8e8, #d1d1d1)",
+        "Yellow Gold": "linear-gradient(135deg, #f4d03f, #c9a96e)"
     };
 
     return (
@@ -99,88 +119,105 @@ function ShopContent() {
             <div className={styles.breadcrumb}>
                 <span>Home</span><span className={styles.sep}>/</span>
                 <span>Shop</span>
-                {filters.cat && <><span className={styles.sep}>/</span><span style={{ textTransform: 'capitalize' }}>{filters.cat}</span></>}
+                {filters.cat.length === 1 && <><span className={styles.sep}>/</span><span style={{ textTransform: 'capitalize' }}>{filters.cat[0]}</span></>}
             </div>
 
             <div className={styles.layout}>
                 {/* Sidebar */}
                 <aside className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarOpen : ''}`}>
+                    {sidebarOpen && <button className={styles.closeSidebar} onClick={() => setSidebarOpen(false)}>✕</button>}
+
                     <div className={styles.sidebarHeader}>
                         <span className={styles.sidebarTitle}>Filters</span>
-                        <button className={styles.clearAll} onClick={clear}>Clear All</button>
                     </div>
 
-                    <div className={styles.filterGroup}>
-                        <span className={styles.filterLabel}>Category</span>
-                        {DB_CATEGORIES.map(c => (
-                            <label key={c.slug} className={styles.filterItem}>
-                                <input type="checkbox" checked={filters.cat === c.slug} onChange={() => toggle('cat', c.slug)} />
-                                <span style={{ textTransform: 'capitalize' }}>{c.name}</span>
-                            </label>
-                        ))}
+                    {/* Category Accordion */}
+                    <div className={styles.filterAccordion}>
+                        <button className={styles.accordionHeader} onClick={() => toggleSection('category')}>
+                            <span className={styles.accordionTitle}>Category</span>
+                            <span className={`${styles.accordionIcon} ${openSections.includes('category') ? styles.accordionIconOpen : ''}`}>▼</span>
+                        </button>
+                        <div className={`${styles.accordionContent} ${openSections.includes('category') ? styles.accordionContentOpen : ''}`}>
+                            {DB_CATEGORIES.map(c => (
+                                <label key={c.slug} className={styles.filterItem}>
+                                    <input type="checkbox" checked={filters.cat.includes(c.slug)} onChange={() => toggle('cat', c.slug)} />
+                                    <span style={{ textTransform: 'capitalize' }}>{c.name}</span>
+                                </label>
+                            ))}
+                        </div>
                     </div>
 
-                    <div className={styles.filterGroup}>
-                        <span className={styles.filterLabel}>Metal Purity</span>
-                        {DB_METALS.map((m: string) => (
-                            <label key={m} className={styles.filterItem}>
-                                <input type="checkbox" checked={filters.metal === m} onChange={() => toggle('metal', m)} />
-                                <span style={{ textTransform: 'capitalize' }}>{m}</span>
-                            </label>
-                        ))}
+                    {/* Metal Purity Accordion */}
+                    <div className={styles.filterAccordion}>
+                        <button className={styles.accordionHeader} onClick={() => toggleSection('metal-purity')}>
+                            <span className={styles.accordionTitle}>Metal Purity</span>
+                            <span className={`${styles.accordionIcon} ${openSections.includes('metal-purity') ? styles.accordionIconOpen : ''}`}>▼</span>
+                        </button>
+                        <div className={`${styles.accordionContent} ${openSections.includes('metal-purity') ? styles.accordionContentOpen : ''}`}>
+                            {DB_METALS.map((m: string) => (
+                                <label key={m} className={styles.filterItem}>
+                                    <input type="checkbox" checked={filters.metal.includes(m)} onChange={() => toggle('metal', m)} />
+                                    <span>{m}</span>
+                                </label>
+                            ))}
+                        </div>
                     </div>
 
-                    <div className={styles.filterGroup}>
-                        <span className={styles.filterLabel}>Metal Colour</span>
-                        {DB_METAL_COLORS.map((mc: string) => (
-                            <label key={mc} className={styles.filterItem}>
-                                <input type="checkbox" checked={filters.metalColor === mc} onChange={() => toggle('metalColor', mc)} />
-                                <span style={{ textTransform: 'capitalize' }}>{mc}</span>
-                            </label>
-                        ))}
+                    {/* Metal Colour Accordion - Visual Swatches */}
+                    <div className={styles.filterAccordion}>
+                        <button className={styles.accordionHeader} onClick={() => toggleSection('metal-colour')}>
+                            <span className={styles.accordionTitle}>Metal Colour</span>
+                            <span className={`${styles.accordionIcon} ${openSections.includes('metal-colour') ? styles.accordionIconOpen : ''}`}>▼</span>
+                        </button>
+                        <div className={`${styles.accordionContent} ${openSections.includes('metal-colour') ? styles.accordionContentOpen : ''}`}>
+                            <div className={styles.swatchGrid}>
+                                {DB_METAL_COLORS.map((mc: string) => (
+                                    <div key={mc} className={styles.swatchItem} onClick={() => toggle('metalColor', mc)}>
+                                        <div
+                                            className={`${styles.swatch} ${filters.metalColor.includes(mc) ? styles.swatchActive : ''}`}
+                                            style={{ background: METAL_COLORS_MAP[mc] || '#ccc' }}
+                                            title={mc}
+                                        />
+                                        <span className={styles.swatchLabel}>{mc.split(' ')[0]}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
 
-                    <div className={styles.filterGroup}>
-                        <span className={styles.filterLabel}>Stone</span>
-                        {DB_STONES.map((s: string) => (
-                            <label key={s} className={styles.filterItem}>
-                                <input type="checkbox" checked={filters.stone === s} onChange={() => toggle('stone', s)} />
-                                <span style={{ textTransform: 'capitalize' }}>{s}</span>
-                            </label>
-                        ))}
+                    {/* Stone Accordion */}
+                    <div className={styles.filterAccordion}>
+                        <button className={styles.accordionHeader} onClick={() => toggleSection('stone')}>
+                            <span className={styles.accordionTitle}>Stone</span>
+                            <span className={`${styles.accordionIcon} ${openSections.includes('stone') ? styles.accordionIconOpen : ''}`}>▼</span>
+                        </button>
+                        <div className={`${styles.accordionContent} ${openSections.includes('stone') ? styles.accordionContentOpen : ''}`}>
+                            {DB_STONES.map((s: string) => (
+                                <label key={s} className={styles.filterItem}>
+                                    <input type="checkbox" checked={filters.stone.includes(s)} onChange={() => toggle('stone', s)} />
+                                    <span>{s}</span>
+                                </label>
+                            ))}
+                        </div>
                     </div>
 
-                    <div className={styles.filterGroup}>
-                        <span className={styles.filterLabel}>Collections</span>
-                        {['Celestine Collection', 'Aurora Series', 'Tempest Line'].map((c: string) => (
-                            <label key={c} className={styles.filterItem}>
-                                <input type="checkbox" checked={filters.badge === c} onChange={() => toggle('badge', c)} />
-                                <span>{c}</span>
-                            </label>
-                        ))}
+                    {/* Collections & Occasions */}
+                    <div className={styles.filterAccordion}>
+                        <button className={styles.accordionHeader} onClick={() => toggleSection('collections')}>
+                            <span className={styles.accordionTitle}>Collections</span>
+                            <span className={`${styles.accordionIcon} ${openSections.includes('collections') ? styles.accordionIconOpen : ''}`}>▼</span>
+                        </button>
+                        <div className={`${styles.accordionContent} ${openSections.includes('collections') ? styles.accordionContentOpen : ''}`}>
+                            {['New In', 'Best Seller', 'Bridal & Engagement', 'High Jewellery'].map((b: string) => (
+                                <label key={b} className={styles.filterItem}>
+                                    <input type="checkbox" checked={filters.badge.includes(b)} onChange={() => toggle('badge', b)} />
+                                    <span>{b}</span>
+                                </label>
+                            ))}
+                        </div>
                     </div>
 
-                    <div className={styles.filterGroup}>
-                        <span className={styles.filterLabel}>By Occasion</span>
-                        {['Bridal & Engagement', 'Anniversary Gifts', 'High Jewellery'].map((o: string) => (
-                            <label key={o} className={styles.filterItem}>
-                                <input type="checkbox" checked={filters.badge === o} onChange={() => toggle('badge', o)} />
-                                <span>{o}</span>
-                            </label>
-                        ))}
-                    </div>
-
-                    <div className={styles.filterGroup}>
-                        <span className={styles.filterLabel}>Specials</span>
-                        {['New In', 'Last Piece', 'Best Seller'].map((b: string) => (
-                            <label key={b} className={styles.filterItem}>
-                                <input type="checkbox" checked={filters.badge === b} onChange={() => toggle('badge', b)} />
-                                <span>{b}</span>
-                            </label>
-                        ))}
-                    </div>
-
-                    <div className={styles.filterGroup}>
+                    <div className={styles.filterGroup} style={{ marginTop: '32px' }}>
                         <span className={styles.filterLabel}>Price Range</span>
                         <input
                             type="range"
@@ -196,6 +233,10 @@ function ShopContent() {
                             Up to ${filters.maxPrice.toLocaleString()}
                         </span>
                     </div>
+
+                    <button className={styles.clearAll} onClick={clear} style={{ width: '100%', marginTop: '40px', padding: '12px', border: '1px solid var(--gold)', color: 'var(--gold)' }}>
+                        Clear All Filters
+                    </button>
                 </aside>
 
                 {/* Main */}
@@ -203,10 +244,10 @@ function ShopContent() {
                     {/* Toolbar */}
                     <div className={styles.toolbar}>
                         <div className={styles.toolbarLeft}>
-                            <button className={styles.filterToggle} onClick={() => setSidebarOpen(o => !o)}>
-                                {sidebarOpen ? '✕ Filters' : '⊞ Filters'}
+                            <button className={styles.filterToggle} onClick={() => setSidebarOpen(true)}>
+                                ⊞ Filters
                             </button>
-                            <span className={styles.resultCount}>{loading ? '…' : `${total} pieces`}</span>
+                            <span className={styles.resultCount}>{loading ? 'Checking Pieces...' : `${total} Products`}</span>
                         </div>
                         <select
                             className={styles.sortSelect}
@@ -216,32 +257,31 @@ function ShopContent() {
                                 setPage(1);
                             }}
                         >
-                            <option value="-createdAt">New to Old (Newest First)</option>
-                            <option value="createdAt">Old to New (Oldest First)</option>
-                            <option value="featured">Featured / Recommended</option>
-                            <option value="price">Price: Low → High</option>
-                            <option value="-price">Price: High → Low</option>
+                            <option value="featured">Recommended</option>
+                            <option value="-createdAt">Newest First</option>
+                            <option value="price">Price: Low to High</option>
+                            <option value="-price">Price: High to Low</option>
                         </select>
                     </div>
 
                     {/* Active filter chips */}
-                    {(filters.cat || filters.metal || filters.metalColor || filters.stone || filters.badge) && (
+                    {(filters.cat.length > 0 || filters.metal.length > 0 || filters.metalColor.length > 0 || filters.stone.length > 0 || filters.badge.length > 0) && (
                         <div className={styles.chips}>
-                            {filters.cat && <span className={styles.chip} onClick={() => toggle('cat', filters.cat)} style={{ textTransform: 'capitalize' }}>{filters.cat} ✕</span>}
-                            {filters.metal && <span className={styles.chip} onClick={() => toggle('metal', filters.metal)} style={{ textTransform: 'capitalize' }}>{filters.metal} ✕</span>}
-                            {filters.metalColor && <span className={styles.chip} onClick={() => toggle('metalColor', filters.metalColor)} style={{ textTransform: 'capitalize' }}>{filters.metalColor} ✕</span>}
-                            {filters.stone && <span className={styles.chip} onClick={() => toggle('stone', filters.stone)} style={{ textTransform: 'capitalize' }}>{filters.stone} ✕</span>}
-                            {filters.badge && <span className={styles.chip} onClick={() => toggle('badge', filters.badge)}>{filters.badge} ✕</span>}
+                            {filters.cat.map(v => <span key={v} className={styles.chip} onClick={() => toggle('cat', v)}>{v} ✕</span>)}
+                            {filters.metal.map(v => <span key={v} className={styles.chip} onClick={() => toggle('metal', v)}>{v} ✕</span>)}
+                            {filters.metalColor.map(v => <span key={v} className={styles.chip} onClick={() => toggle('metalColor', v)}>{v} ✕</span>)}
+                            {filters.stone.map(v => <span key={v} className={styles.chip} onClick={() => toggle('stone', v)}>{v} ✕</span>)}
+                            {filters.badge.map(v => <span key={v} className={styles.chip} onClick={() => toggle('badge', v)}>{v} ✕</span>)}
                         </div>
                     )}
 
                     {/* Grid */}
-                    {loading && page === 1 ? (
-                        <div className={styles.emptyState}><p>Loading collection…</p></div>
+                    {loading && products.length === 0 ? (
+                        <div className={styles.emptyState}><p>Curating Collection…</p></div>
                     ) : products.length === 0 ? (
                         <div className={styles.emptyState}>
-                            <p>No pieces match your filters.</p>
-                            <button className={styles.clearBtn} onClick={clear}>Clear Filters</button>
+                            <p>No pieces match your current filters.</p>
+                            <button className={styles.clearBtn} onClick={clear}>Clear All Filters</button>
                         </div>
                     ) : (
                         <div className={styles.grid}>
@@ -251,10 +291,10 @@ function ShopContent() {
                                     slug: p.slug,
                                     name: p.name,
                                     category: p.category?.slug ?? p.category ?? '',
-                                    price: (filters.metal === '9k' ? p.price9k :
-                                        filters.metal === '14k' ? p.price14k :
-                                            filters.metal === '18k' ? p.price18k :
-                                                filters.metal === '22k' ? p.price22k : null) ?? p.price,
+                                    price: (filters.metal.includes('9k') ? p.price9k :
+                                        filters.metal.includes('14k') ? p.price14k :
+                                            filters.metal.includes('18k') ? p.price18k :
+                                                filters.metal.includes('22k') ? p.price22k : null) ?? p.price,
                                     metal: p.metal,
                                     stone: p.stone,
                                     badge: p.badge,
