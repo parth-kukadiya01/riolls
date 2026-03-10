@@ -26,10 +26,24 @@ export default function ProtectedImage({
     loading = "lazy",
     ...rest
 }: ProtectedImageProps) {
+    // Safely encode the URL, handling potential unicode characters
+    let encodedUrl = '';
+    try {
+        if (src) {
+            encodedUrl = btoa(unescape(encodeURIComponent(src)));
+        }
+    } catch (e) {
+        console.warn('Failed to encode image URL', e);
+        // Fallback
+    }
+
+    // Skip proxy for relative URLs since absolute URL is needed by fetch()
+    const isRelative = src ? src.startsWith('/') : false;
+
     // Encode the real URL so it's not visible to users
-    const proxiedSrc = unprotected || !src
+    const proxiedSrc = unprotected || !src || isRelative || !encodedUrl
         ? src
-        : `/api/image?url=${btoa(src)}`;
+        : `/api/image?url=${encodedUrl}`;
 
     const blockEvent = (e: React.SyntheticEvent) => {
         e.preventDefault();
@@ -61,5 +75,12 @@ export default function ProtectedImage({
  */
 export function proxyImageUrl(src: string): string {
     if (!src) return src;
-    return `/api/image?url=${btoa(src)}`;
+    const isRelative = src.startsWith('/');
+    if (isRelative) return src;
+
+    try {
+        return `/api/image?url=${btoa(unescape(encodeURIComponent(src)))}`;
+    } catch {
+        return src;
+    }
 }

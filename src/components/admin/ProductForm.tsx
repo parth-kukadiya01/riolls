@@ -212,6 +212,12 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                 }
 
                 // Actually, I can construct the payload:
+                // Auto-include any URL typed in the input but not yet "Added"
+                let finalImages = [...existingImages];
+                if (newImageUrl.trim().startsWith('http')) {
+                    finalImages.push(newImageUrl.trim());
+                }
+
                 const payload = {
                     ...formData,
                     price: formData.price ? parseFloat(formData.price) : null,
@@ -226,7 +232,7 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                     weight: formData.weight ? parseFloat(formData.weight) : null,
                     additionalCharge: formData.additionalCharge ? parseFloat(formData.additionalCharge) : 0,
                     availableMetals: formData.availableMetals.split(',').map(m => m.trim()).filter(Boolean),
-                    images: [...existingImages, ...uploadedImageUrls] // Combine existing and newly uploaded URLs
+                    images: [...finalImages, ...uploadedImageUrls] // Combine existing and newly uploaded URLs
                 };
 
                 const res = await adminFetch(`/admin/products/${initialData._id}`, {
@@ -272,7 +278,12 @@ export default function ProductForm({ initialData = null, isEdit = false }: Prod
                     submitData.append('images', file);
                 });
 
-                existingImages.forEach(url => {
+                let finalExisting = [...existingImages];
+                if (newImageUrl.trim().startsWith('http')) {
+                    finalExisting.push(newImageUrl.trim());
+                }
+
+                finalExisting.forEach(url => {
                     submitData.append('imageUrls', url);
                 });
 
