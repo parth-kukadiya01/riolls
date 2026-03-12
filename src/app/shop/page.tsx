@@ -45,7 +45,7 @@ function ShopContent() {
         maxPrice: 20000,
     });
 
-    const [sort, setSort] = useState<'featured' | 'price' | '-price'>('featured');
+    const [sort, setSort] = useState<'featured' | 'price' | '-price' | '-createdAt' | 'createdAt'>('featured');
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [openSections, setOpenSections] = useState<string[]>(['category', 'metal-purity', 'metal-colour', 'stone']);
 
