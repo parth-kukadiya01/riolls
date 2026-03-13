@@ -1,60 +1,62 @@
-'use client';
-
+import type { Metadata } from 'next';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { useParams, notFound } from 'next/navigation';
-import { blogApi, newsletterApi } from '@/lib/api';
+import { notFound } from 'next/navigation';
+import NewsletterForm from './NewsletterForm';
 import styles from './page.module.css';
 
-function Stars({ n }: { n: number }) {
-    return <span style={{ color: '#C9A96E', letterSpacing: '2px' }}>{'★'.repeat(n)}{'☆'.repeat(5 - n)}</span>;
+const API_URL = process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1';
+
+async function getPost(slug: string) {
+    try {
+        const res = await fetch(`${API_URL}/blog/${slug}`, { next: { revalidate: 3600 } });
+        if (!res.ok) return null;
+        const json = await res.json();
+        return json.data ?? null;
+    } catch {
+        return null;
+    }
 }
 
-export default function BlogPostPage() {
-    const params = useParams();
-    const slug = params?.slug as string;
-
-    const [post, setPost] = useState<any>(null);
-    const [status, setStatus] = useState<'loading' | 'found' | 'notfound'>('loading');
-    const [email, setEmail] = useState('');
-    const [subscribed, setSubscribed] = useState(false);
-
-    useEffect(() => {
-        if (!slug) return;
-        blogApi
-            .getBySlug(slug)
-            .then((res: any) => {
-                if (res.data) { setPost(res.data); setStatus('found'); }
-                else setStatus('notfound');
-            })
-            .catch(() => setStatus('notfound'));
-    }, [slug]);
-
-    const handleSubscribe = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try { await newsletterApi.subscribe(email); setSubscribed(true); setEmail(''); } catch { }
+export async function generateMetadata(
+    { params }: { params: Promise<{ slug: string }> }
+): Promise<Metadata> {
+    const { slug } = await params;
+    const post = await getPost(slug);
+    if (!post) return { title: 'Article Not Found' };
+    return {
+        title: post.title,
+        description: post.excerpt,
+        alternates: { canonical: `https://riolls.com/blog/${post.slug}` },
+        openGraph: {
+            type: 'article',
+            title: post.title,
+            description: post.excerpt,
+            url: `https://riolls.com/blog/${post.slug}`,
+            ...(post.image && { images: [{ url: post.image, width: 1200, height: 630, alt: post.title }] }),
+            ...(post.date && { publishedTime: post.date }),
+            ...(post.updatedAt && { modifiedTime: post.updatedAt }),
+            ...(post.author?.name && { authors: [post.author.name] }),
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: post.title,
+            description: post.excerpt,
+            ...(post.image && { images: [post.image] }),
+        },
     };
+}
 
-    const formatDate = (iso?: string) =>
-        iso ? new Date(iso).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+function formatDate(iso?: string) {
+    if (!iso) return '';
+    return new Date(iso).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+}
 
-    if (status === 'loading') {
-        return (
-            <div style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'var(--nav-height) 0 0' }}>
-                <div className={styles.skeletonCard} style={{ width: '100%', maxWidth: '720px', height: '60vh', margin: '0 auto' }} />
-            </div>
-        );
-    }
-
-    if (status === 'notfound' || !post) {
-        return (
-            <div style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingTop: 'var(--nav-height)', gap: '1.5rem', textAlign: 'center' }}>
-                <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 300, fontSize: '2.5rem', color: 'var(--charcoal)' }}>Article Not Found</h1>
-                <p style={{ color: 'var(--stone)' }}>This article may have been moved or removed.</p>
-                <Link href="/blog" style={{ color: 'var(--rose)', textDecoration: 'underline' }}>← Back to The Journal</Link>
-            </div>
-        );
-    }
+export default async function BlogPostPage(
+    { params }: { params: Promise<{ slug: string }> }
+) {
+    const { slug } = await params;
+    const post = await getPost(slug);
+    if (!post) notFound();
 
     return (
         <>
@@ -83,7 +85,6 @@ export default function BlogPostPage() {
             {/* Article body */}
             <article className={styles.postBody}>
                 <div className={styles.postContent}>
-                    {/* Render content — support both HTML and plain paragraphs */}
                     {post.content ? (
                         post.content.startsWith('<') ? (
                             <div dangerouslySetInnerHTML={{ __html: post.content }} />
@@ -111,27 +112,8 @@ export default function BlogPostPage() {
                 )}
             </article>
 
-            {/* Newsletter */}
-            <section className={styles.newsletter}>
-                <h2 className={styles.newsletterH2}>Never miss a story.</h2>
-                <p className={styles.newsletterSub}>New articles, collection drops, and exclusive atelier access — delivered monthly.</p>
-                {subscribed ? (
-                    <p style={{ color: '#7a6a5a', fontStyle: 'italic' }}>Thank you for subscribing!</p>
-                ) : (
-                    <form className={styles.newsletterForm} onSubmit={handleSubscribe}>
-                        <input
-                            type="email"
-                            placeholder="Your email address"
-                            className={styles.newsletterInput}
-                            value={email}
-                            onChange={e => setEmail(e.target.value)}
-                            autoComplete="email"
-                            required
-                        />
-                        <button type="submit" className={styles.newsletterBtn}>Subscribe</button>
-                    </form>
-                )}
-            </section>
+            {/* Newsletter — client component (needs form state) */}
+            <NewsletterForm />
 
             {/* Back link */}
             <div style={{ textAlign: 'center', padding: '2rem' }}>

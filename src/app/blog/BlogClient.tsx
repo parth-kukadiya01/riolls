@@ -22,6 +22,7 @@ export default function BlogClient() {
             .then((res: any) => {
                 const items = Array.isArray(res.data) ? res.data : [];
                 setPosts(items);
+                // Extract unique categories dynamically from the loaded posts if 'All' is selected
                 if (activecat === 'All') {
                     const uniqueCats = Array.from(new Set(items.map((p: any) => p.category).filter(Boolean)));
                     setCategories(['All', ...(uniqueCats as string[])]);
@@ -115,6 +116,27 @@ export default function BlogClient() {
                     </div>
                 )}
             </section>
+
+            {/* Newsletter strip */}
+            {/* <section className={styles.newsletter}>
+                <h2 className={styles.newsletterH2}>Never miss a story.</h2>
+                <p className={styles.newsletterSub}>New articles, collection drops, and exclusive atelier access — delivered to your inbox monthly.</p>
+                {subscribed ? (
+                    <p style={{ color: '#7a6a5a', fontStyle: 'italic' }}>Thank you for subscribing!</p>
+                ) : (
+                    <form className={styles.newsletterForm} onSubmit={handleSubscribe}>
+                        <input
+                            type="email"
+                            placeholder="Your email address"
+                            className={styles.newsletterInput}
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                            required
+                        />
+                        <button type="submit" className={styles.newsletterBtn}>Subscribe</button>
+                    </form>
+                )}
+            </section> */}
         </>
     );
 }

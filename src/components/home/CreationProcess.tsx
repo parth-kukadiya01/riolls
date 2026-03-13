@@ -89,7 +89,7 @@ export default function CreationProcess() {
                                 alt="Our Creation Process"
                                 fill
                                 className={styles.image}
-                                unoptimized
+                                sizes="(max-width: 768px) 100vw, 50vw"
                             />
                         </div>
                     </div>

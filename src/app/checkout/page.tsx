@@ -38,17 +38,27 @@ export default function CheckoutPage() {
 
             if (getToken()) {
                 await ordersApi.place({
-                    contact: { firstName: form.firstName, lastName: form.lastName, email: form.email, phone: form.phone },
-                    delivery: { address1: form.address1, address2: form.address2, city: form.city, postcode: form.postcode, country: form.country },
-                    deliveryMethod: form.delivery,
-                    deliveryCost: deliveryCost,
+                    contactInfo: { firstName: form.firstName, lastName: form.lastName, email: form.email, phone: form.phone },
+                    deliveryDetails: { 
+                        address: `${form.address1}${form.address2 ? ', ' + form.address2 : ''}`, 
+                        city: form.city, 
+                        state: form.city, // Backend requires state, using city as fallback if not in form
+                        country: form.country, 
+                        pincode: form.postcode,
+                        method: form.delivery
+                    },
                     items: items.map(item => ({
                         productId: item.product._id,
+                        name: (item.product as any).name || 'Unknown',
+                        price: (item.product as any).price || 0,
                         quantity: item.quantity,
-                        size: item.size,
-                        metal: item.metal,
-                        stoneSize: item.stoneSize,
-                        engraving: item.engraving,
+                        image: (item.product as any).images?.[0] || null,
+                        customizations: {
+                            size: item.size,
+                            metal: item.metal,
+                            stoneSize: item.stoneSize,
+                            engraving: item.engraving,
+                        }
                     })),
                 });
                 await clearCart();

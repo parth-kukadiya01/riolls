@@ -203,7 +203,7 @@ export default function AdminDashboard() {
                             const val = data.revenueChart.data[idx];
                             const heightPercentage = Math.max((val / maxChartValue) * 100, 5);
                             return (
-                                <div key={label} className={styles.chartBarWrapper}>
+                                <div key={`${label}-${idx}`} className={styles.chartBarWrapper}>
                                     <div
                                         className={styles.chartBar}
                                         style={{ height: `${heightPercentage}%` }}

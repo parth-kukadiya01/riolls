@@ -50,9 +50,9 @@
 .links li a,
 .linkItem {
     font-family: var(--font-sc);
-    font-size: 10px;
+    font-size: 14px;
     letter-spacing: 0.18em;
-    color: var(--stone);
+    color: var(--charcoal);
     text-decoration: none;
     transition: color 0.2s;
     cursor: pointer;
@@ -63,7 +63,7 @@
 
 .links li a:hover,
 .linkItem:hover {
-    color: var(--charcoal);
+    color: var(--stone);
 }
 
 .chevron {

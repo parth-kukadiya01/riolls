@@ -5,9 +5,12 @@ const isDev = process.env.NODE_ENV === "development";
 // Next.js 16 + Turbopack requires 'unsafe-eval' in both dev AND production
 // (its runtime uses new Function() for dynamic imports and module loading).
 // Note: 'unsafe-inline' is the higher-risk directive; 'unsafe-eval' is unavoidable with Next.js.
-const scriptSrc = isDev
-  ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com https://accounts.google.com"
-  : "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com https://accounts.google.com";
+const scriptSrc = "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com https://accounts.google.com";
+
+// Allow localhost API connections in dev only; production connects to HTTPS/WSS only
+const connectSrc = isDev
+  ? "connect-src 'self' http://localhost:8000 http://localhost:* https: wss:"
+  : "connect-src 'self' https: wss:";
 
 
 const securityHeaders = [
@@ -67,8 +70,8 @@ const securityHeaders = [
       "img-src 'self' data: blob: https: http:",
       // Media: allow all HTTPS sources (Cloudinary, Pexels, any CDN) + blob
       "media-src 'self' https: blob:",
-      // Connect: allow all HTTPS + WSS + localhost
-      "connect-src 'self' http://localhost:8000 http://localhost:* https: wss:",
+      // Connect: localhost only in dev; HTTPS + WSS in production
+      connectSrc,
       // Frames: allow Google Maps embed + Google Sign-In
       "frame-src 'self' https://www.google.com https://maps.google.com https://google.com https://accounts.google.com",
       // Prevent object/embed tags
@@ -90,6 +93,18 @@ const nextConfig: NextConfig = {
         headers: securityHeaders,
       },
     ];
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
   },
   // Prevent exposing Next.js version in headers
   poweredByHeader: false,

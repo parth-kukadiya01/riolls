@@ -1,5 +1,5 @@
 # Riolls Jewels — robots.txt
-# Allow legitimate search engines only
+# Allow legitimate search engines and AI crawlers only
 
 User-agent: Googlebot
 Allow: /
@@ -7,7 +7,21 @@ Disallow: /admin/
 Disallow: /api/
 Disallow: /checkout/
 Disallow: /profile/
-Disallow: /checkout
+
+User-agent: Googlebot-Extended
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /profile/
+
+# Google secondary crawler (used for AI training and Google Lens)
+User-agent: GoogleOther
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /profile/
 
 User-agent: Bingbot
 Allow: /
@@ -20,10 +34,41 @@ User-agent: Applebot
 Allow: /
 Disallow: /admin/
 Disallow: /api/
+Disallow: /checkout/
+Disallow: /profile/
 
-# Block all other bots / scrapers by default
+User-agent: GPTBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /profile/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /profile/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /profile/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /checkout/
+Disallow: /profile/
+
+# Block scrapers and unknown bots
 User-agent: *
 Disallow: /
 
 # Sitemap
 Sitemap: https://riolls.com/sitemap.xml
+LLMs-txt: https://riolls.com/llms.txt

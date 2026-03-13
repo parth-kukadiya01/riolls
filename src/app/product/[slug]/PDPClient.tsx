@@ -289,7 +289,7 @@ export default function PDPClient({ product }: { product: Product }) {
                     {/* Accordion */}
                     <div className={styles.accordion}>
                         {[
-                            { id: 'specs', title: 'Specifications', body: `Stone: ${product.stone_detail}. Metal: 18k gold. Handcrafted in London.` },
+                            { id: 'specs', title: 'Specifications', body: `Stone: ${product.stone_detail}. Metal: 18k gold. Handcrafted in Surat, India.` },
                             { id: 'delivery', title: 'Delivery & Returns', body: 'Free insured worldwide delivery within 7-10 working days. Returns accepted within 30 days.' },
                             { id: 'care', title: 'Care Instructions', body: 'Store in the provided pouch. Clean gently with a soft cloth. Avoid exposure to harsh chemicals.' },
                         ].map(acc => (

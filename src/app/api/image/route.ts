@@ -75,7 +75,7 @@ export async function GET(req: NextRequest) {
             status: 200,
             headers: {
                 'Content-Type': contentType,
-                'Cache-Control': 'private, no-store, no-cache, must-revalidate',
+                'Cache-Control': 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800',
                 'Content-Disposition': 'inline',
                 'X-Frame-Options': 'SAMEORIGIN',
                 'Cross-Origin-Resource-Policy': 'same-origin',

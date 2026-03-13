@@ -1,6 +1,5 @@
 'use client';
 
-import type { Metadata } from 'next';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import ProductCard from '@/components/ui/ProductCard';
@@ -78,8 +77,8 @@ export default function HomePage() {
                     muted
                     loop
                     playsInline
-                    preload="metadata"
-                    poster="https://res.cloudinary.com/dl6cdbdzl/video/upload/so_0/v1772650014/14788078_2560_1440_30fps_ilmluc.jpg"
+                    preload="none"
+                    poster="https://res.cloudinary.com/dl6cdbdzl/video/upload/so_0,f_webp,q_auto,w_1920/v1772650014/14788078_2560_1440_30fps_ilmluc.jpg"
                 />
                 {/* Gradient overlay for legibility */}
                 <div className={styles.heroOverlay} />
@@ -199,10 +198,33 @@ export default function HomePage() {
             {/* ── AI Studio Banner ──────────────────── */}
             <section className={styles.aiBanner}>
                 <div className={styles.aiBannerLeft}>
-                    <span className={styles.eyebrow} style={{ color: 'rgba(245,240,232,0.5)' }}>Intelligent Craftsmanship</span>
-                    <h2 className={styles.aiH2}>Envision the masterpiece<br />you deserve.</h2>
-                    <p className={styles.aiBannerBody}>Experience the future of high jewellery. Let our AI studio guide you in translating your finest visions into a precise design brief — meticulously brought to life by our master goldsmiths.</p>
-                    <Link href="/ai-studio/step-1" className={styles.aiCta}>Begin Your Legacy ✦</Link>
+                    <span className={styles.eyebrow} style={{ color: 'rgba(245,240,232,0.5)' }}>Riolls AI Studio · AI Jewellery Designer</span>
+                    <h2 className={styles.aiH2}>You imagine it.<br />AI designs it.<br />We craft it in gold.</h2>
+                    <p className={styles.aiBannerBody}>Describe your dream jewellery in plain words — no design experience needed. Our AI generates three photorealistic concepts, and our master goldsmiths in Surat handcraft your chosen design in real gold with GIA-certified diamonds. The most personal way to own fine jewellery has finally arrived.</p>
+                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
+                        {['Engagement rings', 'Wedding bands', 'Custom pendants', 'Iced-out chains'].map(tag => (
+                            <span key={tag} style={{
+                                fontSize: '0.7rem',
+                                letterSpacing: '0.1em',
+                                textTransform: 'uppercase',
+                                color: 'rgba(201,169,110,0.7)',
+                                border: '1px solid rgba(201,169,110,0.2)',
+                                padding: '0.3rem 0.75rem',
+                            }}>{tag}</span>
+                        ))}
+                    </div>
+                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                        <Link href="/ai-studio/step-1" className={styles.aiCta}>Begin Designing ✦</Link>
+                        <Link href="/ai-studio" style={{
+                            fontSize: '0.8rem',
+                            letterSpacing: '0.08em',
+                            color: 'rgba(201,169,110,0.7)',
+                            textDecoration: 'none',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.3rem',
+                        }}>How it works →</Link>
+                    </div>
                 </div>
                 {/* Cinematic video panel */}
                 <div className={styles.aiBannerRight}>

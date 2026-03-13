@@ -1,18 +1,102 @@
-'use client';
-
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import styles from './page.module.css';
+import JsonLd from '@/components/seo/JsonLd';
+
+export const metadata: Metadata = {
+    title: 'About Riolls Jewels — Heritage, Craftsmanship & Our Story',
+    description: 'Founded in 2008 in Surat, India, Riolls Jewels creates 100% handcrafted luxury jewellery using ethically sourced gold and GIA-certified diamonds. Discover our story.',
+    alternates: { canonical: 'https://riolls.com/about' },
+};
 
 // Admin can easily swap these image URLs later from a CMS or local public folder
 const ABOUT_IMAGES = {
-    hero: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='500'%3E%3Crect width='100%25' height='100%25' fill='%23EFEFEF'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23A0A0A0' font-family='sans-serif' font-size='14'%3EAdmin Image 1 (Hero)%3C/text%3E%3C/svg%3E",
-    craft: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='750'%3E%3Crect width='100%25' height='100%25' fill='%23E6E6E6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23A0A0A0' font-family='sans-serif' font-size='14'%3EAdmin Image 2 (Craftsmanship)%3C/text%3E%3C/svg%3E",
-    gold: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='750'%3E%3Crect width='100%25' height='100%25' fill='%23E6E6E6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23A0A0A0' font-family='sans-serif' font-size='14'%3EAdmin Image 3 (Gold)%3C/text%3E%3C/svg%3E"
+    hero: "https://res.cloudinary.com/dl6cdbdzl/image/upload/v1773388587/1_o0oowq.png",
+    craft: "https://res.cloudinary.com/dl6cdbdzl/image/upload/v1773388686/In_Mexico_a_Family_Focused_on_Twists_of_Silver_Filigree_esztyn.jpg",
+    gold: "https://res.cloudinary.com/dl6cdbdzl/image/upload/v1773388694/Jaubalet_Paris_Joaillerie_lwtgkn.jpg"
+};
+
+const aboutSchema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+        {
+            '@type': 'AboutPage',
+            '@id': 'https://riolls.com/about#webpage',
+            url: 'https://riolls.com/about',
+            name: 'About Riolls Jewels — Heritage, Craftsmanship & Our Story',
+            description: 'Founded in 2008 in Surat, India, Riolls Jewels creates 100% handcrafted luxury jewellery using ethically sourced gold and GIA-certified diamonds. Learn about the brand\'s heritage, craftsmanship philosophy, and commitment to ethical sourcing.',
+            breadcrumb: {
+                '@type': 'BreadcrumbList',
+                itemListElement: [
+                    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://riolls.com' },
+                    { '@type': 'ListItem', position: 2, name: 'About', item: 'https://riolls.com/about' },
+                ],
+            },
+            about: { '@id': 'https://riolls.com/#organization' },
+            mainEntity: { '@id': 'https://riolls.com/#organization' },
+        },
+        {
+            '@type': 'Organization',
+            '@id': 'https://riolls.com/#organization',
+            name: 'Riolls Jewels',
+            alternateName: 'Riolls',
+            url: 'https://riolls.com',
+            foundingDate: '2008',
+            foundingLocation: {
+                '@type': 'Place',
+                name: 'Surat, Gujarat, India',
+                description: 'Diamond Capital of the World',
+            },
+            description: 'Riolls Jewels is a luxury handcrafted jewellery atelier established in 2008 in Surat, Gujarat, India — the Diamond Capital of the World. The brand specialises in 100% handmade fine jewellery, including engagement rings, wedding rings, and bespoke commissions, using GIA, IGI, and SGL certified conflict-free diamonds and ethically sourced gold. Every piece is shaped entirely by a single master goldsmith and is never machine-cast. Riolls delivers worldwide to India, Dubai, the UK, the USA, and beyond, with full insurance and a certificate of authenticity on every piece.',
+            logo: {
+                '@type': 'ImageObject',
+                url: 'https://riolls.com/icon.png',
+                width: 512,
+                height: 512,
+            },
+            image: 'https://res.cloudinary.com/dl6cdbdzl/image/upload/v1772124653/Riolls_jewels_t4kryx.png',
+            sameAs: [
+                'https://www.instagram.com/riollsjewels',
+            ],
+            address: {
+                '@type': 'PostalAddress',
+                addressLocality: 'Surat',
+                addressRegion: 'Gujarat',
+                addressCountry: 'IN',
+            },
+            contactPoint: {
+                '@type': 'ContactPoint',
+                contactType: 'customer service',
+                availableLanguage: ['English', 'Hindi', 'Gujarati'],
+                url: 'https://riolls.com/contact',
+            },
+            knowsAbout: [
+                'Handcrafted jewellery',
+                'Diamond engagement rings',
+                'Bespoke jewellery commissions',
+                'GIA diamond certification',
+                'Fine goldsmithing',
+                'Ethical diamond sourcing',
+                'Surat jewellery tradition',
+            ],
+            hasOfferCatalog: {
+                '@type': 'OfferCatalog',
+                name: 'Riolls Jewellery Collections',
+                itemListElement: [
+                    { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Engagement Rings', url: 'https://riolls.com/engagement-rings' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Wedding Rings', url: 'https://riolls.com/wedding-rings' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Bespoke Commissions', url: 'https://riolls.com/bespoke' } },
+                    { '@type': 'Offer', itemOffered: { '@type': 'SoftwareApplication', name: 'AI Jewellery Studio', url: 'https://riolls.com/ai-studio' } },
+                ],
+            },
+        },
+    ],
 };
 
 export default function AboutPage() {
     return (
         <div className={styles.page} style={{ paddingTop: 'var(--nav-height)' }}>
+            <JsonLd data={aboutSchema} />
             {/* ── Hero ── */}
             <section className={styles.hero}>
                 <div className={styles.heroInner}>
@@ -25,7 +109,7 @@ export default function AboutPage() {
             <section className={styles.imageSection}>
                 <div className={styles.fullImageWrapper}>
                     <Image
-                        src={"https://res.cloudinary.com/dl6cdbdzl/image/upload/v1772124653/Riolls_jewels_t4kryx.png"}
+                        src={ABOUT_IMAGES.hero}
                         alt="About Riolls"
                         fill
                         className={styles.fullImage}
@@ -36,6 +120,25 @@ export default function AboutPage() {
 
             {/* ── Content ── */}
             <section className={styles.content}>
+
+                {/* GEO: Key Facts block — AI-extractable structured facts */}
+                <div className={styles.textBlockCenter} style={{ marginBottom: '0' }}>
+                    <h2 className={styles.sectionTitle}>Riolls Jewels — Key Facts</h2>
+                    <p className={styles.text} style={{ marginBottom: '1.5rem' }}>
+                        Riolls Jewels is a luxury handcrafted jewellery atelier based in Surat, Gujarat, India — the Diamond Capital of the World. Since our founding in 2008, we have specialised in 100% handmade fine jewellery, including engagement rings, wedding rings, bespoke commissions, and fine gold pieces, serving discerning clients across India, Dubai, the United Kingdom, the United States, and worldwide.
+                    </p>
+                    <ul className={styles.list} style={{ textAlign: 'left', maxWidth: '600px', margin: '0 auto 2rem' }}>
+                        <li><strong>Founded:</strong> 2008 — 18 years of uncompromising craftsmanship</li>
+                        <li><strong>Location:</strong> Surat, Gujarat, India (Diamond Capital of the World)</li>
+                        <li><strong>Speciality:</strong> 100% handcrafted fine jewellery — every piece shaped by a single master goldsmith, never machine-cast</li>
+                        <li><strong>Diamond Certifications:</strong> GIA (Gemological Institute of America), IGI (International Gemological Institute), SGL (Solitaire Gemological Laboratories)</li>
+                        <li><strong>Gold Purity:</strong> 9k, 14k, 18k, and 22k gold in yellow, white, and rose gold</li>
+                        <li><strong>Bespoke Lead Time:</strong> 8 to 12 weeks from consultation to delivery</li>
+                        <li><strong>Delivery:</strong> Worldwide — fully insured and tracked, including to India, Dubai, UK, USA, and beyond</li>
+                        <li><strong>Hallmarking:</strong> All pieces hallmarked and accompanied by a certificate of authenticity</li>
+                        <li><strong>Ethical Sourcing:</strong> Conflict-free diamonds and responsibly sourced gold from certified mines</li>
+                    </ul>
+                </div>
 
                 {/* Intro */}
                 <div className={styles.textBlockCenter}>
@@ -53,7 +156,7 @@ export default function AboutPage() {
                     <div className={styles.splitText}>
                         <h2 className={styles.sectionTitle}>Our Journey and Vision</h2>
                         <p className={styles.text}>
-                            Founded in 2008, Riolls was born from a desire to blend tradition with modern life. Our founder envisioned a brand where age-old techniques meet contemporary style, making luxury wearable every day. Over two decades later, we remain true to that vision.
+                            Founded in 2008, Riolls was born from a desire to blend tradition with modern life. Our founder envisioned a brand where age-old techniques meet contemporary style, making luxury wearable every day. Eighteen years later, we remain true to that vision.
                         </p>
                         <p className={styles.text}>
                             We cherish our roots in classic craftsmanship while embracing the dreams of a vibrant community. Each year of experience deepens our commitment to quality, authenticity, and heartfelt service.
@@ -69,7 +172,7 @@ export default function AboutPage() {
                     </div>
                     <div className={styles.splitImage}>
                         <Image
-                            src={"https://res.cloudinary.com/dl6cdbdzl/image/upload/v1772123328/In_Mexico_a_Family_Focused_on_Twists_of_Silver_Filigree_ohuo6h.jpg"}
+                            src={ABOUT_IMAGES.craft}
                             alt="Craftsmanship"
                             fill
                             className={styles.image}
@@ -99,7 +202,7 @@ export default function AboutPage() {
                     </div>
                     <div className={styles.splitImage}>
                         <Image
-                            src={"https://res.cloudinary.com/dl6cdbdzl/image/upload/v1772123321/Jaubalet_Paris_Joaillerie_tukwhe.jpg"}
+                            src={ABOUT_IMAGES.gold}
                             alt="Responsibly Sourced Gold"
                             fill
                             className={styles.image}
