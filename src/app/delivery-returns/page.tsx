@@ -1,7 +1,24 @@
-'use client';
-
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import styles from './page.module.css';
+
+export const metadata: Metadata = {
+    title: 'Delivery & Returns',
+    description: 'Learn about Riolls Jewels delivery, shipping, and returns policy. Complimentary insured shipping within India, worldwide delivery, 48-hour returns window, and 7-day exchange privilege.',
+    alternates: { canonical: 'https://riolls.com/delivery-returns' },
+    openGraph: {
+        title: 'Delivery & Returns — Riolls Jewels',
+        description: 'Complimentary insured shipping within India, worldwide delivery, 7-day exchange privilege, and refined returns policy from Riolls Jewels.',
+        url: 'https://riolls.com/delivery-returns',
+        images: [{ url: 'https://res.cloudinary.com/dl6cdbdzl/image/upload/v1772124653/Riolls_jewels_t4kryx.png', width: 1200, height: 630, alt: 'Riolls Jewels — Delivery & Returns' }],
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Delivery & Returns — Riolls Jewels',
+        description: 'Free insured shipping in India, worldwide delivery, 7-day exchange privilege.',
+        images: ['https://res.cloudinary.com/dl6cdbdzl/image/upload/v1772124653/Riolls_jewels_t4kryx.png'],
+    },
+};
 
 export default function DeliveryReturnsPage() {
     return (

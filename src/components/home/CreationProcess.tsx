@@ -85,7 +85,7 @@ export default function CreationProcess() {
                     <div className={`${styles.imageColumn} ${isVisible ? styles.imageAnimateIn : ''}`}>
                         <div className={styles.imageWrapper}>
                             <Image
-                                src="https://res.cloudinary.com/dl6cdbdzl/image/upload/v1771992601/kateryna-hliznitsova-ceSCZzjTReg-unsplash_zjqcr7.jpg"
+                                src="https://res.cloudinary.com/dl6cdbdzl/image/upload/v1773423990/Honoring_Heritage_Craftsmanship_version_1_iltnsk.png"
                                 alt="Our Creation Process"
                                 fill
                                 className={styles.image}

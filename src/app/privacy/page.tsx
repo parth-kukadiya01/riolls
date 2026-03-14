@@ -1,5 +1,17 @@
+import type { Metadata } from 'next';
 import styles from './page.module.css';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+    title: 'Privacy Policy',
+    description: 'Read the Riolls Jewels Privacy Policy. Learn how we collect, use, and protect your personal information when you shop with us online.',
+    alternates: { canonical: 'https://riolls.com/privacy' },
+    openGraph: {
+        title: 'Privacy Policy — Riolls Jewels',
+        description: 'Read the Riolls Jewels Privacy Policy. Your data is handled with the highest standards of security and confidentiality.',
+        url: 'https://riolls.com/privacy',
+    },
+};
 
 export default function PrivacyPolicy() {
     return (

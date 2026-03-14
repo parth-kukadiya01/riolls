@@ -1,7 +1,18 @@
-'use client';
-
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import styles from './page.module.css';
+
+export const metadata: Metadata = {
+    title: 'Terms & Conditions',
+    description: 'Read the Riolls Jewels Conditions of Use. Our commitment to quality, bespoke commissions, shipping, returns, and intellectual property rights.',
+    alternates: { canonical: 'https://riolls.com/terms' },
+    openGraph: {
+        title: 'Terms & Conditions — Riolls Jewels',
+        description: 'Read the Riolls Jewels Conditions of Use — quality, bespoke commissions, shipping, returns, and intellectual property.',
+        url: 'https://riolls.com/terms',
+    },
+};
+
 
 export default function TermsAndConditions() {
     return (

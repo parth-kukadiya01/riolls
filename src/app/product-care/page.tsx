@@ -1,7 +1,25 @@
-'use client';
-
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import styles from './page.module.css';
+
+export const metadata: Metadata = {
+    title: 'Jewellery Care',
+    description: 'Learn how to care for your Riolls Jewels pieces. Expert tips for cleaning gold and diamond jewellery, safe storage, maintenance of diamond settings, and caring for your jewellery box.',
+    alternates: { canonical: 'https://riolls.com/product-care' },
+    openGraph: {
+        title: 'Jewellery Care Guide — Riolls Jewels',
+        description: 'Expert tips for cleaning, storing, and maintaining your luxury handcrafted jewellery from Riolls Jewels.',
+        url: 'https://riolls.com/product-care',
+        images: [{ url: 'https://res.cloudinary.com/dl6cdbdzl/image/upload/v1772124653/Riolls_jewels_t4kryx.png', width: 1200, height: 630, alt: 'Riolls Jewels Jewellery Care' }],
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Jewellery Care Guide — Riolls Jewels',
+        description: 'Expert tips for cleaning, storing, and maintaining your luxury jewellery.',
+        images: ['https://res.cloudinary.com/dl6cdbdzl/image/upload/v1772124653/Riolls_jewels_t4kryx.png'],
+    },
+};
+
 
 export default function ProductCarePage() {
     return (

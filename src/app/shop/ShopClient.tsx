@@ -2,6 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useState, useEffect, Suspense } from 'react';
+import Image from 'next/image';
 import ProductCard from '@/components/ui/ProductCard';
 import { productsApi, categoriesApi } from '@/lib/api';
 import styles from './page.module.css';
@@ -20,6 +21,21 @@ const DB_METALS = ["9k", "14k", "18k", "22k"];
 const DB_METAL_COLORS = ["Rose Gold", "White Gold", "Yellow Gold"];
 
 const DB_STONES = ["Diamond", "Lab Diamond", "Moissanite", "CZ"];
+
+const DB_BIRTHSTONES = [
+    { name: 'JAN - Garnet', slug: 'garnet', icon: '/icons/menu/jan.png' },
+    { name: 'FEB - Amethyst', slug: 'amethyst', icon: '/icons/menu/feb.png' },
+    { name: 'MAR - Aquamarine', slug: 'aquamarine', icon: '/icons/menu/march.png' },
+    { name: 'APR - Diamond', slug: 'diamond', icon: '/icons/menu/apr.png' },
+    { name: 'MAY - Emerald', slug: 'emerald', icon: '/icons/menu/may.png' },
+    { name: 'JUN - Pearl', slug: 'pearl', icon: '/icons/menu/june.png' },
+    { name: 'JUL - Ruby', slug: 'ruby', icon: '/icons/menu/jul.png' },
+    { name: 'AUG - Peridot', slug: 'peridot', icon: '/icons/menu/aug.png' },
+    { name: 'SEP - Sapphire', slug: 'sapphire', icon: '/icons/menu/sep.png' },
+    { name: 'OCT - Pink Tourmaline', slug: 'tourmaline', icon: '/icons/menu/Oct-Pink-Tourmaline.png' },
+    { name: 'NOV - Citrine', slug: 'citrine', icon: '/icons/menu/nov.png' },
+    { name: 'DEC - Topaz', slug: 'blue-topaz', icon: '/icons/menu/dec.png' },
+];
 
 function ShopContent() {
     const sp = useSearchParams();
@@ -123,9 +139,10 @@ function ShopContent() {
             </div>
 
             <div className={styles.layout}>
-                {/* Sidebar */}
+                {/* Sidebar Drawer */}
+                <div className={`${styles.sidebarOverlay} ${sidebarOpen ? styles.sidebarOverlayOpen : ''}`} onClick={() => setSidebarOpen(false)} />
                 <aside className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarOpen : ''}`}>
-                    {sidebarOpen && <button className={styles.closeSidebar} onClick={() => setSidebarOpen(false)}>✕</button>}
+                    <button className={styles.closeSidebar} onClick={() => setSidebarOpen(false)}>✕</button>
 
                     <div className={styles.sidebarHeader}>
                         <span className={styles.sidebarTitle}>Filters</span>
@@ -201,6 +218,24 @@ function ShopContent() {
                         </div>
                     </div>
 
+                    {/* Birthstone Accordion */}
+                    <div className={styles.filterAccordion}>
+                        <button className={styles.accordionHeader} onClick={() => toggleSection('birthstone')}>
+                            <span className={styles.accordionTitle}>Birthstone</span>
+                            <span className={`${styles.accordionIcon} ${openSections.includes('birthstone') ? styles.accordionIconOpen : ''}`}>▼</span>
+                        </button>
+                        <div className={`${styles.accordionContent} ${openSections.includes('birthstone') ? styles.accordionContentOpen : ''}`}>
+                            <div className={styles.birthstoneGrid}>
+                                {DB_BIRTHSTONES.map(b => (
+                                    <div key={b.slug} className={`${styles.birthstoneItem} ${filters.stone.includes(b.slug) ? styles.birthstoneActive : ''}`} onClick={() => toggle('stone', b.slug)}>
+                                        <Image src={b.icon} alt={b.name} width={24} height={24} className={styles.birthstoneIcon} />
+                                        <span className={styles.birthstoneLabel}>{b.name.split(' - ')[0]}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
                     {/* Collections & Occasions */}
                     <div className={styles.filterAccordion}>
                         <button className={styles.accordionHeader} onClick={() => toggleSection('collections')}>
@@ -244,24 +279,26 @@ function ShopContent() {
                     {/* Toolbar */}
                     <div className={styles.toolbar}>
                         <div className={styles.toolbarLeft}>
+                            <span className={styles.resultCount}>{loading ? 'Checking Pieces...' : `${total} Products`}</span>
+                        </div>
+                        <div className={styles.toolbarRight}>
                             <button className={styles.filterToggle} onClick={() => setSidebarOpen(true)}>
                                 ⊞ Filters
                             </button>
-                            <span className={styles.resultCount}>{loading ? 'Checking Pieces...' : `${total} Products`}</span>
+                            <select
+                                className={styles.sortSelect}
+                                value={sort}
+                                onChange={e => {
+                                    setSort(e.target.value as typeof sort);
+                                    setPage(1);
+                                }}
+                            >
+                                <option value="featured">Recommended</option>
+                                <option value="-createdAt">Newest First</option>
+                                <option value="price">Price: Low to High</option>
+                                <option value="-price">Price: High to Low</option>
+                            </select>
                         </div>
-                        <select
-                            className={styles.sortSelect}
-                            value={sort}
-                            onChange={e => {
-                                setSort(e.target.value as typeof sort);
-                                setPage(1);
-                            }}
-                        >
-                            <option value="featured">Recommended</option>
-                            <option value="-createdAt">Newest First</option>
-                            <option value="price">Price: Low to High</option>
-                            <option value="-price">Price: High to Low</option>
-                        </select>
                     </div>
 
                     {/* Active filter chips */}

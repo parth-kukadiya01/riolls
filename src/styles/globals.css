@@ -53,7 +53,9 @@
     /* Layout */
     --max-width: 1440px;
     --gutter: 40px;
-    --nav-height: 72px;
+    --header-height: 72px;
+    --secondary-nav-height: 48px;
+    --nav-height: calc(var(--header-height) + var(--secondary-nav-height));
     --space-xl: 64px;
     --space-lg: 48px;
     --space-md: 32px;
@@ -335,6 +337,8 @@ body.admin-mode .page-content {
         --space-xl: 32px;
         --space-lg: 24px;
         --space-md: 16px;
+        --header-height: 64px;
+        --secondary-nav-height: 0px;
         --nav-height: 64px;
 
         /* Very small screens — keep text readable but compact */

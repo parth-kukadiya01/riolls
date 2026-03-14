@@ -1,5 +1,24 @@
+import type { Metadata } from 'next';
 import styles from './page.module.css';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+    title: 'Careers',
+    description: 'Join the Riolls Jewels atelier — explore open vacancies in jewellery design, technology, marketing, and finance. Shape the future of modern luxury jewellery from Surat, India.',
+    alternates: { canonical: 'https://riolls.com/careers' },
+    openGraph: {
+        title: 'Careers at Riolls Jewels',
+        description: 'Join our atelier of craftspeople, creatives, and innovators. Explore current vacancies at Riolls Jewels — luxury handcrafted jewellery from Surat, India.',
+        url: 'https://riolls.com/careers',
+        images: [{ url: 'https://res.cloudinary.com/dl6cdbdzl/image/upload/v1772124653/Riolls_jewels_t4kryx.png', width: 1200, height: 630, alt: 'Careers at Riolls Jewels' }],
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Careers at Riolls Jewels',
+        description: 'Join our atelier of craftspeople, creatives, and innovators. Explore current vacancies.',
+        images: ['https://res.cloudinary.com/dl6cdbdzl/image/upload/v1772124653/Riolls_jewels_t4kryx.png'],
+    },
+};
 
 export default function CareersPage() {
     const vacancies = [

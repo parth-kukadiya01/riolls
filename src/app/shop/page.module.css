@@ -21,22 +21,61 @@
 }
 
 .layout {
-    display: grid;
-    grid-template-columns: 260px 1fr;
-    gap: 0;
+    display: block;
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 var(--gutter);
 }
 
+.sidebarOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+    z-index: 2999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
+}
+
+.sidebarOverlayOpen {
+    opacity: 1;
+    visibility: visible;
+}
+
 .sidebar {
-    padding: 24px 24px 24px 0;
-    border-right: 1px solid rgba(201, 169, 110, 0.12);
-    position: sticky;
-    top: var(--nav-height);
-    height: fit-content;
-    max-height: calc(100vh - var(--nav-height));
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 360px;
+    height: 100vh;
+    background: var(--white);
+    z-index: 3000;
+    padding: 40px 32px;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.05);
     overflow-y: auto;
+}
+
+.sidebarOpen {
+    transform: translateX(0);
+}
+
+.closeSidebar {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: var(--stone);
+    transition: color 0.2s;
+}
+
+.closeSidebar:hover {
+    color: var(--gold);
 }
 
 .sidebarHeader {
@@ -116,7 +155,7 @@
 }
 
 .main {
-    padding: 24px 0 24px 32px;
+    padding: 24px 0;
 }
 
 .toolbar {
@@ -132,14 +171,22 @@
     gap: 20px;
 }
 
+.toolbarRight {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 .filterToggle {
-    display: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-family: var(--font-sc);
     font-size: 11px;
     letter-spacing: 0.15em;
-    color: var(--stone);
+    color: var(--charcoal);
     padding: 8px 16px;
-    border: 1px solid rgba(201, 169, 110, 0.2);
+    border: 1px solid rgba(201, 169, 110, 0.3);
     background: none;
     cursor: pointer;
     transition: all 0.2s;
@@ -289,6 +336,46 @@
     transform: scale(1.1);
 }
 
+.birthstoneGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    padding: 8px 0;
+}
+
+.birthstoneItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 8px 4px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.birthstoneItem:hover {
+    background: var(--cream);
+}
+
+.birthstoneActive {
+    border-color: var(--gold);
+    background: var(--cream);
+}
+
+.birthstoneIcon {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.birthstoneLabel {
+    font-family: var(--font-sc);
+    font-size: 8px;
+    letter-spacing: 0.05em;
+    color: var(--stone);
+    text-align: center;
+}
+
 .grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -325,45 +412,9 @@
 }
 
 @media (max-width: 1024px) {
-    .layout {
-        grid-template-columns: 1fr;
-        padding: 0 20px;
-    }
-
     .sidebar {
-        display: none;
-        position: fixed;
-        left: 0;
-        top: 0;
         width: 100%;
-        height: 100vh;
-        z-index: 2000;
-        background: var(--white);
-        padding: 24px;
-        overflow-y: auto;
-    }
-
-    .sidebarOpen {
-        display: block;
-    }
-
-    .closeSidebar {
-        position: absolute;
-        top: 24px;
-        right: 24px;
-        font-size: 24px;
-        background: none;
-        border: none;
-        cursor: pointer;
-        color: var(--charcoal);
-    }
-
-    .main {
-        padding: 24px 0;
-    }
-
-    .filterToggle {
-        display: block;
+        max-width: 400px;
     }
 
     .grid {

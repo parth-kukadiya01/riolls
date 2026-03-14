@@ -1,6 +1,25 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './page.module.css';
+
+export const metadata: Metadata = {
+    title: 'Size Guide',
+    description: 'Find your perfect fit with the Riolls Jewels size guide. Ring size charts (UK, US, EU), bracelet sizing, and necklace length guide for luxury handcrafted jewellery.',
+    alternates: { canonical: 'https://riolls.com/size-guide' },
+    openGraph: {
+        title: 'Jewellery Size Guide — Riolls Jewels',
+        description: 'Find your perfect fit. Ring, bracelet, and necklace size charts from Riolls Jewels — luxury handcrafted jewellery from Surat, India.',
+        url: 'https://riolls.com/size-guide',
+        images: [{ url: 'https://res.cloudinary.com/dl6cdbdzl/image/upload/v1772124653/Riolls_jewels_t4kryx.png', width: 1200, height: 630, alt: 'Riolls Jewels Size Guide' }],
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Jewellery Size Guide — Riolls Jewels',
+        description: 'Ring, bracelet, and necklace size charts. Find your perfect fit with Riolls Jewels.',
+        images: ['https://res.cloudinary.com/dl6cdbdzl/image/upload/v1772124653/Riolls_jewels_t4kryx.png'],
+    },
+};
 
 const IMAGES = {
     hero: "https://res.cloudinary.com/dl6cdbdzl/image/upload/v1771997169/buddy-an-bUQZomnihtI-unsplash_gfm2y4.jpg",
